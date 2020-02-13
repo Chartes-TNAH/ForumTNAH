@@ -1,0 +1,23 @@
+{%extends './base.html'%}
+
+{%block app_content%}
+<h1>Inscription</h1>
+<form class="form" method="POST" action="{{url_for('connexion')}}">
+  <div>
+    <label for="register-login">Nom d'utilisateur</label>
+    <div>
+      <input type="text" id="register-login" name="user_name" placeholder="Nom d'utilisateur pour se connecter">
+    </div>
+  </div>
+  <div>
+    <label for="register-password">Mot de passe</label>
+    <div>
+      <input type="password" id="register-password" placeholder="Mot de passe" name="user_password">
+    </div>
+  </div>
+  <div>
+    <button type="submit">Connexion</button>
+    <a href="{{url_for('inscription')}}">Créer un compte</a>
+  </div>
+</form>
+{%endblock%}

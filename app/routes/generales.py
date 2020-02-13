@@ -1,9 +1,16 @@
 from ..app import app, db, login
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import login_user, current_user, logout_user
+from datetime import datetime
 from ..modeles.utilisateurs import User
 from ..modeles.donnees import Post
 
+# mettre à jour la date de visite dans la base de données
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.user_last_seen = datetime.utcnow()
+        db.session.commit()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])

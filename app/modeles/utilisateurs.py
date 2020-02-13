@@ -99,6 +99,12 @@ class User(UserMixin, db.Model):
         """
         return self.id
 
+    # met à jour la date de dernière visite dès lors qu'une action est effectuée sur le profil
+    def ping(self):
+        self.user_last_seen=datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
 @login.user_loader
 def get_user_by_id(id):
         return User.query.get(int(id))

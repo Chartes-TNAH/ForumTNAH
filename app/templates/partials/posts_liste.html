@@ -1,0 +1,18 @@
+<div class="col-sm-7">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" style="width:10%;">Utilisateur</th>
+            <th scope="col" style="width:40%;">Discussion</th>
+            <th scope="col">Création</th>
+            <th scope="col">Réponses</th>
+            <th scope="col">Dernière réponse</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for post in posts%}
+        {%include 'partials/post.html'%}
+        {%endfor%}
+        </tbody>
+    </table>
+</div>

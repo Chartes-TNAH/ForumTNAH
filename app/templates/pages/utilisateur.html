@@ -1,0 +1,17 @@
+{%extends './base.html'%}
+
+{%block app_content%}
+
+<div class="row">
+    <div class="col-sm-8">
+        {%include 'partials/infos_generales_utilisateur.html'%}
+        <!-- inclure ici le bloc des compétences -->
+    </div>
+</div>
+
+<div class="row">
+    {%include 'partials/posts_liste.html'%}
+    <!-- inclure ici le bloc du CV -->
+</div>
+
+{% endblock %}

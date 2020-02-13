@@ -5,12 +5,14 @@ from datetime import datetime
 from ..modeles.utilisateurs import User
 from ..modeles.donnees import Post
 
+
 # mettre à jour la date de visite dans la base de données
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.user_last_seen = datetime.utcnow()
         db.session.commit()
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
@@ -46,6 +48,7 @@ def inscription():
     else:
         return render_template('pages/inscription.html', nom="Inscription")
 
+
 @app.route("/connexion", methods=["POST", "GET"])
 def connexion():
     """ Route gérant les connexions
@@ -67,7 +70,10 @@ def connexion():
             flash("Les identifiants n'ont pas été reconnus", "error")
 
     return render_template("pages/connexion.html")
+
+
 login.login_view = 'connexion'
+
 
 @app.route("/deconnexion", methods=["POST", "GET"])
 def deconnexion():
@@ -75,3 +81,9 @@ def deconnexion():
         logout_user()
     flash("Vous êtes déconnecté", "info")
     return redirect(url_for('home'))
+
+
+@app.route('/utilisateur/<user_name>')
+def utilisateur(user_name):
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
+    return render_template("pages/utilisateur.html", nom=user_name, user=utilisateur)

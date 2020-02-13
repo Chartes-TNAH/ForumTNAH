@@ -1,0 +1,27 @@
+<div class="container">
+<table class="table table-borderless">
+    <tr>
+        <td style="width:45%;">
+            <h1>{{ user.user_name }}</h1>
+
+            {%if user.user_firstname%}
+            <p>{{user.user_firstname}} {%if user.user_surname%}{{user.user_surname}}{%endif%}</p>
+            {%endif%}
+
+            {%if user.user_promotion_date%}
+            <p>Promotion {{user.user_promotion_date}}</p>
+            {%endif%}
+
+            {%if user.user_description%}
+            <p>{{user.user_description}}</p>
+            {%endif%}
+
+        </td>
+        <td style="width:45%;">
+            {%if user.user_last_seen%}
+            <p>Dernière activité le : {{user.user_last_seen}} (GMT)</p>
+            {%endif%}
+        </td>
+    </tr>
+</table>
+    </div>

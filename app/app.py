@@ -12,7 +12,8 @@ app = Flask(
     template_folder=templates,
     static_folder=statics
 )
+
 # On configure le secret
 app.config['SECRET_KEY'] = SECRET_KEY
 
-from . import routes
+from .routes import generales

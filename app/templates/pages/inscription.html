@@ -1,42 +1,37 @@
-{% extends "./base.html" %}
+{%extends './base.html'%}
 
-{% block app_content %}
-
-<h1>Inscription</h1>
-<p>Complétez le formulaire et cliquez sur "S'inscrire".</p>
-<form method="POST" action="{{url_for('inscription')}}">
-  <div>
-    <label for="register-login">Nom d'utilisateur</label>
-    <div>
-      <input type="text" id="register-login" name="user_name" placeholder="Nom d'utilisateur pour se connecter">
+{%block app_content%}
+<h1 class="titre_form">Créer un compte au ForumTNAH</h1>
+<form class="big_form" action="" method="POST" novalidate>
+    {{form.hidden_tag()}}
+    <div class="form-group">
+        {{form.username.label}}<br>
+        {{form.username(size=32)}}<br>
+        {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-  <div>
-    <label for="register-nom">Nom</label>
-    <div>
-      <input type="text" class="form-control" id="register-nom" placeholder="Votre nom" name="user_surname">
+    <div class="form-group">
+        {{form.email.label}}<br>
+        {{form.email(size=64)}}<br>
+        {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-    <div>
-    <label for="register-prenom">Prénom</label>
-    <div>
-      <input type="text" id="register-prenom" placeholder="Votre prénom" name="user_firstname">
+    <div class="form-group">
+        {{form.password.label}}<br>
+        {{form.password(size=32)}}<br>
+        {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-  <div>
-    <label for="register-email">Email</label>
-    <div>
-      <input type="email" id="register-email" placeholder="email@example.com" name="user_mail">
+    <div class="form-group">
+        {{form.password2.label}}<br>
+        {{form.password2(size=32)}}<br>
+        {% for error in form.password2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-  <div>
-    <label for="register-password">Mot de passe</label>
-    <div>
-      <input type="password" id="register-password" placeholder="Mot de passe" name="user_password">
-    </div>
-  </div>
-  <div>
-    <button type="submit">S'inscrire</button>
-  </div>
+    <div class="form-group">{{form.submit()}}</div>
 </form>
-{% endblock %}
+{%endblock%}

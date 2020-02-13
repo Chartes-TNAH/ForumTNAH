@@ -1,9 +1,10 @@
 from ..app import app, db, login
 from flask import render_template, flash, redirect, request, url_for
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
-from ..modeles.utilisateurs import User
-from ..modeles.donnees import Post
+from werkzeug.urls import url_parse
+from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm
+from ..modeles.donnees import Post, User
 
 
 # mettre à jour la date de visite dans la base de données
@@ -27,26 +28,21 @@ def home():
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
     """
-    Route permettant d'afficher le formulaire d'inscription
-    :return: template de la page d'inscription' avec le formulaire
+    Route permettant l'inscription d'un nouvel utilisateur
+    :return: template de la page d'inscription avec le formulaire
     """
-    # en cas de réussite d'envoi du formulaire
-    if request.method == 'POST':
-        statut, donnees = User.creer(
-            user_name=request.form.get("user_name", None),
-            user_mail=request.form.get("user_mail", None),
-            user_firstname=request.form.get("user_firstname", None),
-            user_surname=request.form.get("user_surname", None),
-            user_password=request.form.get("user_password", None)
-        )
-        if statut is True:
-            flash("Vous êtes désormais inscrit. Connectez-vous.", "success")
-            return redirect(url_for('home'))
-        else:
-            flash("Plusieurs erreurs sont survenues: " + ",".join(donnees), "error")
-            return render_template("pages/inscription.html", nom="Inscription")
-    else:
-        return render_template('pages/inscription.html', nom="Inscription")
+    if current_user.is_authenticated:
+        return redirect('home')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(user_name = form.username.data,
+                    user_mail = form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Inscription enregistrée')
+        return redirect(url_for('connexion'))
+    return render_template('pages/inscription.html', nom="Inscription", form=form)
 
 
 @app.route("/connexion", methods=["POST", "GET"])
@@ -56,23 +52,19 @@ def connexion():
     if current_user.is_authenticated is True:
         flash("Vous êtes déjà connecté", "info")
         return redirect("/")
-    # Si on est en POST, cela veut dire que le formulaire a été envoyé
-    if request.method == "POST":
-        utilisateur = User.identification(
-            user_name=request.form.get("user_name", None),
-            password=request.form.get("user_password", None)
-        )
-        if utilisateur:
-            flash("Connexion effectuée", "success")
-            login_user(utilisateur)
-            return redirect("/")
-        else:
-            flash("Les identifiants n'ont pas été reconnus", "error")
-
-    return render_template("pages/connexion.html")
-
-
-login.login_view = 'connexion'
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(user_name=form.user_name.data).first()
+        if user is None or not user.check_password(form.user_password.data):
+            flash('Nom d\'utilisateur ou mot de passe incorrect')
+            return redirect(url_for('connexion'))
+        login_user(user, remember=form.remember_me.data)
+        flash("Vous êtes maintenant connecté.")
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('home')
+        return redirect(next_page)
+    return render_template('pages/connexion.html', form=form)
 
 
 @app.route("/deconnexion", methods=["POST", "GET"])
@@ -87,3 +79,33 @@ def deconnexion():
 def utilisateur(user_name):
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     return render_template("pages/utilisateur.html", nom=user_name, user=utilisateur)
+
+
+@app.route('/editer_profil', methods=['GET', 'POST'])
+@login_required
+def editer_profil():
+    """
+    Route permettant de modifier ses données personnelles
+    :return: template de la page d'édition du profil avec le formulaire
+    """
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.user_name = form.user_name.data
+        current_user.user_firstname = form.user_firstname.data
+        current_user.user_surname = form.user_surname.data
+        current_user.user_mail = form.user_mail.data
+        current_user.user_promotion_date = form.user_promotion_date.data
+        current_user.user_birthyear = form.user_birthyear.data
+        current_user.user_description = form.user_description.data
+        db.session.commit()
+        flash("Modifications enregistrées")
+        return redirect(url_for('utilisateur', user_name=current_user.user_name))
+    elif request.method == 'GET':
+        form.user_name.data = current_user.user_name
+        form.user_description.data = current_user.user_description
+        form.user_firstname.data = current_user.user_firstname
+        form.user_surname.data = current_user.user_surname
+        form.user_promotion_date.data = current_user.user_promotion_date
+        form.user_mail.data = current_user.user_mail
+        form.user_birthyear.data = current_user.user_birthyear
+    return render_template('pages/editer.html', nom="Editer le profil", form=form)

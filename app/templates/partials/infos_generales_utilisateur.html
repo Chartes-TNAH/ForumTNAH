@@ -21,6 +21,12 @@
             {%if user.user_last_seen%}
             <p>Dernière activité le : {{user.user_last_seen}} (GMT)</p>
             {%endif%}
+
+            {%if user == current_user%}
+            <p>
+                <a class="btn btn-primary" href="{{url_for('editer_profil')}}">Mettre à jour mon profil</a>
+            </p>
+            {%endif%}
         </td>
     </tr>
 </table>

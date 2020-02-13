@@ -1,0 +1,64 @@
+{%extends './base.html'%}
+
+{%block app_content%}
+<h1>Mise à jour du profil</h1>
+<p>Veuillez réécrire toutes les informations sous peine de les perdre lors de la mise à jour.</p>
+<form class="big_form" action="" method="POST">
+    {{form.hidden_tag()}}
+    <div class="form-group">
+        {{form.user_name.label}}<br>
+        {{form.user_name(size=32)}}<br>
+        {% for error in form.user_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{form.user_firstname.label}}<br>
+        {{form.user_firstname(size=32)}}<br>
+        {% for error in form.user_firstname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{form.user_surname.label}}<br>
+        {{form.user_surname(size=32)}}<br>
+        {% for error in form.user_surname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{form.user_promotion_date.label}}<br>
+        {{form.user_promotion_date(size=9)}}<br>
+        {% for error in form.user_promotion_date.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+  <div class="form-group">
+        {{form.user_mail.label}}<br>
+        {{form.user_mail(size=4)}}<br>
+        {% for error in form.user_mail.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+  <div class="form-group">
+        {{form.user_birthyear.label}}<br>
+        {{form.user_birthyear(size=4)}}<br>
+        {% for error in form.user_birthyear.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{form.user_description.label}}<br>
+        {{form.user_description(cols=50, rows=4)}}<br>
+        {% for error in form.user_description.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="form-group">{{form.submit()}}</div>
+</form>
+{%endblock%}

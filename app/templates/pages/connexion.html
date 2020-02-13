@@ -1,23 +1,25 @@
 {%extends './base.html'%}
 
 {%block app_content%}
-<h1>Inscription</h1>
-<form class="form" method="POST" action="{{url_for('connexion')}}">
-  <div>
-    <label for="register-login">Nom d'utilisateur</label>
-    <div>
-      <input type="text" id="register-login" name="user_name" placeholder="Nom d'utilisateur pour se connecter">
+<h1 class="titre_form">Me connecter au ForumTNAH</h1>
+<form class="big_form" action="" method="post" novalidate>
+    {{form.hidden_tag()}}
+    <div class="form-group">
+        {{form.user_name.label}}<br>
+        {{form.user_name(size=32)}}<br>
+        {% for error in form.user_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-  <div>
-    <label for="register-password">Mot de passe</label>
-    <div>
-      <input type="password" id="register-password" placeholder="Mot de passe" name="user_password">
+    <div class=""form-group>
+        {{form.user_password.label}}<br>
+        {{form.user_password(size=32)}}<br>
+        {% for error in form.user_password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </div>
-  </div>
-  <div>
-    <button type="submit">Connexion</button>
-    <a href="{{url_for('inscription')}}">Créer un compte</a>
-  </div>
+    <div class="form-group">{{form.remember_me()}} {{form.remember_me.label}}</div>
+    <div class="form-group">{{form.submit()}}</div>
 </form>
+<p style="margin-left:25px;">Nouvel utilisateur? <a href="{{url_for('home')}}">Créer un compte</a></p>
 {%endblock%}

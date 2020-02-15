@@ -1,5 +1,5 @@
 from ..app import app, db, login
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
@@ -128,6 +128,25 @@ def editer_profil():
     return render_template('pages/editer.html',
                            nom="Editer le profil",
                            form=form)
+
+@app.route('/editer_post/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editer_post(id):
+    """
+    Route permettant de modifier ses propres posts
+    """
+    post = Post.query.get_or_404(id)
+    if current_user != post.auteur:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.post_message = form.message.data
+        db.session.add(post)
+        db.session.commit()
+        flash("Le post a bien été mis à jour")
+        return redirect(url_for('post', id=post.post_id))
+    form.message.data = post.post_message
+    return render_template('pages/editer_post.html', form=form)
 
 @app.route('/fil', methods=['GET', 'POST'])
 def poster():

@@ -33,16 +33,6 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
     )
 
-    def avatar(self, size):
-        digest = md5(self.user_mail.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
-
-    def set_password(self, password):
-        self.user_password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.user_password_hash, password)
-
     def get_id(self):
         """
         Retourne l'id de l'objet utilisé
@@ -51,11 +41,38 @@ class User(UserMixin, db.Model):
         """
         return self.id
 
+    def avatar(self, size):
+        """
+        Fonction permettant de récupérer le lien vers la photo Gravatar de l'utilisateur à partir de son adresse mail;
+        une icone neutre si l'utilisateur n'a pas de profil Gravatar
+        """
+        digest = md5(self.user_mail.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+
+    #gestion des mots de passe
+    def set_password(self, password):
+        self.user_password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.user_password_hash, password)
+
     # met à jour la date de dernière visite dès lors qu'une action est effectuée sur le profil
     def ping(self):
         self.user_last_seen=datetime.utcnow()
         db.session.add(self)
         db.session.commit()
+
+    #gestion des fonctions de suivis des utilisateurs entre eux
+    def follow(self,user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)

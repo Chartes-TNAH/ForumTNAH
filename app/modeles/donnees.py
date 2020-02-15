@@ -3,6 +3,8 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from markdown import markdown
+import bleach
 
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -91,6 +93,19 @@ class Post(db.Model):
     post_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     post_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    html = db.Column(db.Text)
+
+    @staticmethod
+    def au_changement(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i',
+                        'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        target.html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True
+        ))
+
+db.event.listen(Post.post_message, 'set', Post.au_changement)
 
 
 @login.user_loader

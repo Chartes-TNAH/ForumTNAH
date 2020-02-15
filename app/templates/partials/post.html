@@ -7,7 +7,11 @@
         </td>
         <td>
             <b>{{post.post_titre}}</b><br/>
+            {%if post.html%}
+            {{post.html | safe}}
+            {%else%}
             {{post.post_message}}
+            {%endif%}
         </td>
         <td>
             {{post.post_date}}

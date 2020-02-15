@@ -139,7 +139,6 @@ def suivre(user_name):
     flash('Vous suivez désormais {}!'.format(user_name))
     return redirect(url_for('utilisateur', user_name=user_name))
 
-
 @app.route('/ne_plus_suivre/<user_name>')
 @login_required
 def ne_plus_suivre(user_name):

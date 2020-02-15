@@ -29,7 +29,15 @@
             <p>
                 <a class="btn btn-primary" href="{{url_for('editer_profil')}}">Mettre à jour mon profil</a>
             </p>
+            {%elif not current_user.is_following(user)%}
+            <p>
+                <a href="{{ url_for('suivre', user_name=user.user_name) }}">Suivre</a>
+            </p>
+            {% else %}
+            <p><a href="{{ url_for('ne_plus_suivre', user_name=user.user_name) }}">Ne plus suivre</a></p>
             {%endif%}
+
+            <p>{{ user.followers.count() }} suivent, {{ user.followed.count() }} suivies</p>
         </td>
     </tr>
 </table>

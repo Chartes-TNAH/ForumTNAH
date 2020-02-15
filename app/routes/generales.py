@@ -140,11 +140,13 @@ def editer_post(id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        post.post_titre = form.titre.data
         post.post_message = form.message.data
         db.session.add(post)
         db.session.commit()
         flash("Le post a bien été mis à jour")
         return redirect(url_for('post', id=post.post_id))
+    form.titre.data = post.post_titre
     form.message.data = post.post_message
     return render_template('pages/editer_post.html', form=form)
 

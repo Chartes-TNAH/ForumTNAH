@@ -22,5 +22,10 @@
             <a href="{{url_for('post', id=post.post_id)}}">
                 <span class="label label-default">Permalien</span>
             </a>
+            {%if current_user == post.auteur%}
+            <a href="{{url_for('editer_post', id=post.post_id)}}">
+                <span class="label label-default">Mettre à jour</span>
+            </a>
+            {%endif%}
         </td>
     </tr>

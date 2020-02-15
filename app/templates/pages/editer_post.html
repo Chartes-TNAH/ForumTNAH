@@ -2,7 +2,24 @@
 
 {% block app_content %}
 <h1>Editer </h1>
-<div>{{form}}</div>
-{{super()}}
-{{pagedown.include_pagedown()}}
+<form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.titre.label }}<br>
+            {{ form.titre(size=70) }}<br>
+            {% for error in form.titre.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        {{super()}}
+        {{pagedown.include_pagedown()}}
+        <p>
+            {{ form.message.label }}<br>
+            {{ form.message(cols=70, rows=7) }}<br>
+            {% for error in form.message.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
 {%endblock%}

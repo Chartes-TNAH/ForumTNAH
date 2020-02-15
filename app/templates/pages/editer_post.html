@@ -1,0 +1,8 @@
+{% extends "./base.html" %}
+
+{% block app_content %}
+<h1>Editer </h1>
+<div>{{form}}</div>
+{{super()}}
+{{pagedown.include_pagedown()}}
+{%endblock%}

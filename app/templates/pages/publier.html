@@ -11,9 +11,11 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        {{super()}}
+        {{pagedown.include_pagedown()}}
         <p>
             {{ form.message.label }}<br>
-            {{ form.message(cols=70, rows=4) }}<br>
+            {{ form.message(cols=70, rows=7) }}<br>
             {% for error in form.message.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

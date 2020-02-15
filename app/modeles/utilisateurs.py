@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError, TextAreaField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
-from app.modeles.donnees import User, Post
+from wtforms.validators import DataRequired, Email, EqualTo
+from app.modeles.donnees import User
+from flask_pagedown.fields import PageDownField
 
 class LoginForm(FlaskForm):
     user_name = StringField('Nom d\'utilisateur', validators=[DataRequired()])
@@ -38,5 +39,5 @@ class EditProfileForm(FlaskForm):
 
 class PostForm(FlaskForm):
     titre = StringField('Titre de la discussion', validators=[DataRequired()])
-    message = TextAreaField("Quel est votre message?", validators=[DataRequired()])
+    message = PageDownField("Ecrivez ici votre message (MarkDown possible)", validators=[DataRequired()])
     submit = SubmitField('Envoyer')

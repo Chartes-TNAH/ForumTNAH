@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 import os
 from .constantes import SECRET_KEY
+from flask_pagedown import PageDown
 
 # définition des chemins
 chemin_actuel =os.path.dirname(os.path.abspath(__file__))
@@ -30,5 +31,8 @@ migrate = Migrate(app, db)
 
 # pour la gestion des utilisateurs
 login = LoginManager(app)
+
+#pour la saisie en MarkDown
+pagedown = PageDown(app)
 
 from .routes import generales

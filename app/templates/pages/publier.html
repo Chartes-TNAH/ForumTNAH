@@ -22,9 +22,5 @@
     </form>
 
     <h2>Mes anciennes discussions</h2>
-    {% for post in posts %}
-    <p>
-    {{ post.auteur.user_name }} a écrit le {{post.post_date}}: <b>{{ post.post_titre }}</b><br/>{{ post.post_message }}
-    </p>
-    {% endfor %}
+        {%include 'partials/posts_liste.html'%}
 {% endblock %}

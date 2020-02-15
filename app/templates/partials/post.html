@@ -1,11 +1,15 @@
     <tr valign="top">
         <td style="text-align:center;">
-            <a href="{{url_for('utilisateur', user_name=post.author.user_name)}}">
-                <img src="{{post.author.avatar(36)}}"><br>
-                {{post.author.user_name}}
+            <a href="{{url_for('utilisateur', user_name=post.auteur.user_name)}}">
+                <img src="{{post.auteur.avatar(36)}}"><br>
+                {{post.auteur.user_name}}
             </a>
         </td>
         <td>
+            <b>{{post.post_titre}}</b><br/>
             {{post.post_message}}
+        </td>
+        <td>
+            {{post.post_date}}
         </td>
     </tr>

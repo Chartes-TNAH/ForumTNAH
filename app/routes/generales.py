@@ -151,7 +151,9 @@ def post(id):
     Fonction renvoyant le template Post avec un seul post désigné par l'id: permet de créer des liens permanents pour partager
     """
     post = Post.query.get_or_404(id)
-    return render_template('post.html', posts=[post])
+    return render_template('pages/post.html',
+                           nom='Post',
+                           posts=[post])
 
 @app.route('/suivre/<user_name>')
 @login_required

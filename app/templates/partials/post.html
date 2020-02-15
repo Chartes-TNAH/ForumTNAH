@@ -16,4 +16,11 @@
         <td>
             {{post.post_date}}
         </td>
+        <td></td>
+        <td></td>
+        <td>
+            <a href="{{url_for('post', id=post.post_id)}}">
+                <span class="label label-default">Permalien</span>
+            </a>
+        </td>
     </tr>

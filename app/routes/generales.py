@@ -122,3 +122,35 @@ def poster():
         return redirect(url_for('poster'))
     posts = Post.query.order_by(Post.post_date.desc()).all()
     return render_template('pages/publier.html', nom="Publier", form=form, posts=posts)
+
+
+@app.route('/suivre/<user_name>')
+@login_required
+def suivre(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    if user is None:
+        flash('L\'utilisateur {} n\'a pas été trouvé'.format(user_name))
+        return redirect(url_for('home'))
+    if user == current_user:
+        flash('Vous ne pouvez pas vous suivre vous-même')
+        return redirect(url_for('utilisateur', user_name=user_name))
+    current_user.follow(user)
+    db.session.commit()
+    flash('Vous suivez désormais {}!'.format(user_name))
+    return redirect(url_for('utilisateur', user_name=user_name))
+
+
+@app.route('/ne_plus_suivre/<user_name>')
+@login_required
+def ne_plus_suivre(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    if user is None:
+        flash('L\'utilisateur {} n\'a pas été trouvé'.format(user_name))
+        return redirect(url_for('home'))
+    if user == current_user:
+        flash('Vous ne pouvez pas ne plus vous suivre')
+        return redirect(url_for('utilisateur', user_name=user_name))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('Vous ne suivez plus {} désormais.'.format(user_name))
+    return redirect(url_for('utilisateur', user_name=user_name))

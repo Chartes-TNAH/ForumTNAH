@@ -18,6 +18,7 @@ Ce projet a été réalisé dans le cadre de l'évaluation du cours Python. Il e
 
 * Installer Python3
 * Cloner ce dépôt Git
-* Installer et configurer un environnement virtuel avec Python3
+* Installer, configurer et lancer un environnement virtuel avec Python3
 * Installer les requirements.txt
+* Lors du premier lancement, initialiser la base de données avec `flask db init`, `flask db migrate` et enfin `flask db upgrade`
 * Lancer l'application avec la commande `python3 run.py`

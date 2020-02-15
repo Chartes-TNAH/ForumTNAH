@@ -74,6 +74,16 @@ class User(UserMixin, db.Model):
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 
+    def followed_posts(self):
+        """
+        Fonction permettant de récupérer les posts des personnes suivies
+        """
+        followed = Post.query.join(
+            followers, (followers.c.followed_id == Post.post_auteur)).filter(
+                followers.c.follower_id == self.id)
+        miens = Post.query.filter_by(post_auteur=self.id)
+        return followed.union(miens).order_by(Post.post_date.desc())
+
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     post_titre = db.Column(db.String(70))

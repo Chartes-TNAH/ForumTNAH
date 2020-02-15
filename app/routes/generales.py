@@ -78,7 +78,8 @@ def deconnexion():
 @app.route('/utilisateur/<user_name>')
 def utilisateur(user_name):
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
-    return render_template("pages/utilisateur.html", nom=user_name, user=utilisateur)
+    posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    return render_template("pages/utilisateur.html", nom=user_name, user=utilisateur, posts=posts)
 
 
 @app.route('/editer_profil', methods=['GET', 'POST'])

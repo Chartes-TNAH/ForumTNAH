@@ -5,6 +5,7 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm, PostForm
 from ..modeles.donnees import Post, User
+from ..constantes import POSTS_PAR_PAGE
 
 
 # mettre à jour la date de visite dans la base de données
@@ -22,7 +23,8 @@ def home():
 	Route permettant l'affichage de la page d'accueil
 	:return: template de la page d'accueil
 	"""
-    return render_template("pages/home.html", nom="Accueil")
+    return render_template("pages/home.html",
+                           nom="Accueil")
 
 
 @app.route('/inscription', methods=['GET', 'POST'])
@@ -42,7 +44,9 @@ def inscription():
         db.session.commit()
         flash('Inscription enregistrée')
         return redirect(url_for('connexion'))
-    return render_template('pages/inscription.html', nom="Inscription", form=form)
+    return render_template('pages/inscription.html',
+                           nom="Inscription",
+                           form=form)
 
 
 @app.route("/connexion", methods=["POST", "GET"])
@@ -64,7 +68,9 @@ def connexion():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('home')
         return redirect(next_page)
-    return render_template('pages/connexion.html', form=form)
+    return render_template('pages/connexion.html',
+                           nom='Connexion',
+                           form=form)
 
 
 @app.route("/deconnexion", methods=["POST", "GET"])
@@ -77,9 +83,19 @@ def deconnexion():
 
 @app.route('/utilisateur/<user_name>')
 def utilisateur(user_name):
+    page = request.args.get("page", 1)
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
-    posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
-    return render_template("pages/utilisateur.html", nom=user_name, user=utilisateur, posts=posts)
+    posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+    next_url = url_for('utilisateur', user_name=user_name, page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('utilisateur', user_name=user_name, page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template("pages/utilisateur.html",
+                           nom=user_name,
+                           user=utilisateur,
+                           posts=posts.items,
+                           next_url=next_url,
+                           prev_url=prev_url)
 
 
 @app.route('/editer_profil', methods=['GET', 'POST'])
@@ -109,7 +125,9 @@ def editer_profil():
         form.user_promotion_date.data = current_user.user_promotion_date
         form.user_mail.data = current_user.user_mail
         form.user_birthyear.data = current_user.user_birthyear
-    return render_template('pages/editer.html', nom="Editer le profil", form=form)
+    return render_template('pages/editer.html',
+                           nom="Editer le profil",
+                           form=form)
 
 @app.route('/fil', methods=['GET', 'POST'])
 def poster():
@@ -121,7 +139,10 @@ def poster():
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
     posts = Post.query.order_by(Post.post_date.desc()).all()
-    return render_template('pages/publier.html', nom="Publier", form=form, posts=posts)
+    return render_template('pages/publier.html',
+                           nom="Publier",
+                           form=form,
+                           posts=posts)
 
 
 @app.route('/suivre/<user_name>')

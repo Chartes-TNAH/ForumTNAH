@@ -15,4 +15,13 @@
         {%endfor%}
         </tbody>
     </table>
+
+    <!-- gestion de la pagination -->
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Suivants</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Anciens</a>
+    {% endif %}
+
 </div>

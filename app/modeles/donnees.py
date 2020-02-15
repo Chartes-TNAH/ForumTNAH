@@ -4,6 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
 
+followers = db.Table('followers',
+                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+                     )
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +25,13 @@ class User(UserMixin, db.Model):
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     posts = db.relationship("Post", backref='auteur', lazy='dynamic')
+
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
+    )
 
     def avatar(self, size):
         digest = md5(self.user_mail.lower().encode('utf-8')).hexdigest()

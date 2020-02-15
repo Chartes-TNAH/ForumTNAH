@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, request, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
-from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm
+from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm, PostForm
 from ..modeles.donnees import Post, User
 
 
@@ -109,3 +109,15 @@ def editer_profil():
         form.user_mail.data = current_user.user_mail
         form.user_birthyear.data = current_user.user_birthyear
     return render_template('pages/editer.html', nom="Editer le profil", form=form)
+
+@app.route('/fil', methods=['GET', 'POST'])
+def poster():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(post_titre=form.titre.data, post_message=form.message.data, auteur=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash("Votre message est maintenant publié")
+        return redirect(url_for('poster'))
+    posts = Post.query.order_by(Post.post_date.desc()).all()
+    return render_template('pages/publier.html', nom="Publier", form=form, posts=posts)

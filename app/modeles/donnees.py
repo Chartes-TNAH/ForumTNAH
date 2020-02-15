@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     user_description = db.Column(db.String(140))
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
-    posts = db.relationship("Post", backref='author', lazy='dynamic')
+    posts = db.relationship("Post", backref='auteur', lazy='dynamic')
 
     def set_password(self, password):
         self.user_password_hash = generate_password_hash(password)
@@ -43,12 +43,11 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
-    post_statuse = db.Column(db.Boolean)
+    post_titre = db.Column(db.String(70))
     post_message = db.Column(db.Text)
-    post_markdown = db.Column(db.Boolean)
     post_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    creator = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @login.user_loader

@@ -35,3 +35,8 @@ class EditProfileForm(FlaskForm):
     user_promotion_date = StringField('Promotion (année du diplôme)')
     user_description = TextAreaField('Description')
     submit = SubmitField('Mettre à jour')
+
+class PostForm(FlaskForm):
+    titre = StringField('Titre de la discussion', validators=[DataRequired()])
+    message = TextAreaField("Quel est votre message?", validators=[DataRequired()])
+    submit = SubmitField('Envoyer')

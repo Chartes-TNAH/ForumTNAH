@@ -1,0 +1,30 @@
+{% extends "./base.html" %}
+
+{% block app_content %}
+    <h1>{{ current_user.user_name }}, commence ici une discussion!</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.titre.label }}<br>
+            {{ form.titre(size=70) }}<br>
+            {% for error in form.titre.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.message.label }}<br>
+            {{ form.message(cols=70, rows=4) }}<br>
+            {% for error in form.message.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+    <h2>Mes anciennes discussions</h2>
+    {% for post in posts %}
+    <p>
+    {{ post.auteur.user_name }} a écrit le {{post.post_date}}: <b>{{ post.post_titre }}</b><br/>{{ post.post_message }}
+    </p>
+    {% endfor %}
+{% endblock %}

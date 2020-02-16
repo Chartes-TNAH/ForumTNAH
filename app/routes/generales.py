@@ -185,7 +185,7 @@ def post(id):
         return redirect(url_for('post', id=post.post_id))
 
     page = request.args.get('page', 1, type=int)
-    comments = utilisateur.comments.order_by(Comment.comment_date.asc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
+    comments = utilisateur.comments.order_by(Comment.comment_date.desc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
     next_url = url_for('post', id=post.post_id, page=comments.next_num) \
         if comments.has_next else None
     prev_url = url_for('post', id=post.post_id, page=comments.prev_num) \

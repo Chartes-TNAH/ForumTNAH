@@ -11,6 +11,13 @@
 
 <div class="row">
     {%include 'partials/posts_liste.html'%}
+    <!-- gestion de la pagination -->
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Suivants</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Anciens</a>
+    {% endif %}
     <!-- inclure ici le bloc du CV -->
 </div>
 

@@ -43,5 +43,5 @@ class PostForm(FlaskForm):
     submit = SubmitField('Envoyer')
 
 class CommentForm(FlaskForm):
-    message = PageDownField("Commentez", validators=[DataRequired()])
+    message = PageDownField("Votre commentaire", validators=[DataRequired()])
     submit = SubmitField('Commenter')

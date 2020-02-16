@@ -86,6 +86,11 @@ def utilisateur(user_name):
     page = request.args.get("page", 1)
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+
+    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    for post in liste_posts:
+        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+
     next_url = url_for('utilisateur', user_name=user_name, page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('utilisateur', user_name=user_name, page=posts.prev_num) \
@@ -93,6 +98,7 @@ def utilisateur(user_name):
     return render_template("pages/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
+                           dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
                            next_url=next_url,
                            prev_url=prev_url)
@@ -173,6 +179,7 @@ def post(id):
     """
     post = Post.query.get_or_404(id)
     utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
+    dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
 
     form = CommentForm()
     if form.validate_on_submit():
@@ -194,6 +201,7 @@ def post(id):
     return render_template('pages/post.html',
                            nom='Post',
                            posts=[post],
+                           dernier_commentaire=dernier_commentaire,
                            form=form,
                            comments=comments.items,
                            next_url=next_url,

@@ -177,7 +177,7 @@ def post(id):
     form = CommentForm()
     if form.validate_on_submit():
         comment = Comment(comment_message=form.message.data,
-                          comment_post=post.post_message,
+                          comment_post=post.post_id,
                           comment_auteur=current_user.id)
         db.session.add(comment)
         db.session.commit()

@@ -87,6 +87,7 @@ def utilisateur(user_name):
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
 
+    # pour afficher la date du dernier commentaire
     liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
     for post in liste_posts:
         dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
@@ -166,8 +167,16 @@ def poster():
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
     posts = Post.query.order_by(Post.post_date.desc()).all()
+
+    # pour afficher la date du dernier commentaire
+    utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
+    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    for post in liste_posts:
+        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+
     return render_template('pages/publier.html',
                            nom="Publier",
+                           dernier_commentaire=dernier_commentaire,
                            form=form,
                            posts=posts)
 

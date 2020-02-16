@@ -6,10 +6,12 @@ from hashlib import md5
 from markdown import markdown
 import bleach
 
+
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
                      db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
                      )
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,6 +29,8 @@ class User(UserMixin, db.Model):
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     posts = db.relationship("Post", backref='auteur', lazy='dynamic')
+
+    comments = db.relationship('Comment', backref='auteur', lazy='dynamic')
 
     followed = db.relationship(
         'User', secondary=followers,
@@ -86,15 +90,17 @@ class User(UserMixin, db.Model):
         miens = Post.query.filter_by(post_auteur=self.id)
         return followed.union(miens).order_by(Post.post_date.desc())
 
+
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     post_titre = db.Column(db.String(70))
     post_message = db.Column(db.Text)
     post_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    html = db.Column(db.Text)
 
     post_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    html = db.Column(db.Text)
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
     @staticmethod
     def au_changement(target, value, oldvalue, initiator):
@@ -106,6 +112,28 @@ class Post(db.Model):
         ))
 
 db.event.listen(Post.post_message, 'set', Post.au_changement)
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment_message = db.Column(db.Text)
+    comment_html = db.Column(db.Text)
+    comment_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    comment_desactive = db.Column(db.Boolean)
+
+    comment_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comment_post = db.Column(db.Integer, db.ForeignKey('post.post_id'))
+
+    @staticmethod
+    def au_changement(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i',
+                        'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        target.html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True
+        ))
+
+db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 
 
 @login.user_loader

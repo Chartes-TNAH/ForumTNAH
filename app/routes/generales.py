@@ -3,9 +3,9 @@ from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
-from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm, PostForm
-from ..modeles.donnees import Post, User
-from ..constantes import POSTS_PAR_PAGE
+from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm
+from ..modeles.donnees import Post, User, Comment
+from ..constantes import POSTS_PAR_PAGE, COMMENTS_PAR_PAGE
 
 
 # mettre à jour la date de visite dans la base de données
@@ -86,6 +86,12 @@ def utilisateur(user_name):
     page = request.args.get("page", 1)
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+
+    # pour afficher la date du dernier commentaire
+    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    for post in liste_posts:
+        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+
     next_url = url_for('utilisateur', user_name=user_name, page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('utilisateur', user_name=user_name, page=posts.prev_num) \
@@ -93,6 +99,7 @@ def utilisateur(user_name):
     return render_template("pages/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
+                           dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
                            next_url=next_url,
                            prev_url=prev_url)
@@ -160,21 +167,54 @@ def poster():
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
     posts = Post.query.order_by(Post.post_date.desc()).all()
+
+    # pour afficher la date du dernier commentaire
+    utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
+    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    for post in liste_posts:
+        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+
     return render_template('pages/publier.html',
                            nom="Publier",
+                           dernier_commentaire=dernier_commentaire,
                            form=form,
                            posts=posts)
 
 
-@app.route('/post/<int:id>')
+@app.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
     """
     Fonction renvoyant le template Post avec un seul post désigné par l'id: permet de créer des liens permanents pour partager
     """
     post = Post.query.get_or_404(id)
+    utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
+    dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(comment_message=form.message.data,
+                          comment_post=post.post_id,
+                          comment_auteur=current_user.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Votre commentaire a été publié")
+        return redirect(url_for('post', id=post.post_id))
+
+    page = request.args.get('page', 1, type=int)
+    comments = utilisateur.comments.order_by(Comment.comment_date.desc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
+    next_url = url_for('post', id=post.post_id, page=comments.next_num) \
+        if comments.has_next else None
+    prev_url = url_for('post', id=post.post_id, page=comments.prev_num) \
+        if comments.has_prev else None
+
     return render_template('pages/post.html',
                            nom='Post',
-                           posts=[post])
+                           posts=[post],
+                           dernier_commentaire=dernier_commentaire,
+                           form=form,
+                           comments=comments.items,
+                           next_url=next_url,
+                           prev_url=prev_url)
 
 @app.route('/suivre/<user_name>')
 @login_required

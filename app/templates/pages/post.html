@@ -2,4 +2,29 @@
 
 {% block app_content %}
 {%include 'partials/posts_liste.html'%}
+
+<h4>Commenter ce post</h4>
+<form action="" method="post">
+        {{ form.hidden_tag() }}
+        {{super()}}
+        {{pagedown.include_pagedown()}}
+        <p>
+            {{ form.message.label }}<br>
+            {{ form.message(cols=70, rows=7) }}<br>
+            {% for error in form.message.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{%for comment in comments%}
+{%include 'partials/comments.html'%}
+{%endfor%}
+<!-- gestion de la pagination -->
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Suivants</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Anciens</a>
+    {% endif %}
 {%endblock%}

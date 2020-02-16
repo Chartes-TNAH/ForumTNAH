@@ -16,11 +16,14 @@
         <td>
             {{post.post_date}}
         </td>
-        <td></td>
-        <td></td>
+        <td>{{ post.comments.count() }}</td>
+        <td>{{dernier_commentaire.comment_date}}</td>
         <td>
             <a href="{{url_for('post', id=post.post_id)}}">
                 <span class="label label-default">Permalien</span>
+            </a>
+            <a href="{{url_for('post', id=post.post_id)}}">
+                <span class="label label-default">Commenter</span>
             </a>
             {%if current_user == post.auteur%}
             <a href="{{url_for('editer_post', id=post.post_id)}}">

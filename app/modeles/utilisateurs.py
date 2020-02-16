@@ -41,3 +41,7 @@ class PostForm(FlaskForm):
     titre = StringField('Titre de la discussion', validators=[DataRequired()])
     message = PageDownField("Ecrivez ici votre message (MarkDown possible)", validators=[DataRequired()])
     submit = SubmitField('Envoyer')
+
+class CommentForm(FlaskForm):
+    message = PageDownField("Votre commentaire", validators=[DataRequired()])
+    submit = SubmitField('Commenter')

@@ -26,6 +26,9 @@
             <a href="{{url_for('editer_post', id=post.post_id)}}">
                 <span class="label label-default">Mettre à jour</span>
             </a>
+            <a href="{{ url_for('post', id=post.post_id) }}">
+                    <span class="label label-primary">{{ post.comments.count() }}Commentaires</span>
+                </a>
             {%endif%}
         </td>
     </tr>

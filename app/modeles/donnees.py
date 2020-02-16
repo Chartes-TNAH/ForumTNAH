@@ -119,7 +119,6 @@ class Comment(db.Model):
     comment_message = db.Column(db.Text)
     comment_html = db.Column(db.Text)
     comment_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    comment_desactive = db.Column(db.Boolean)
 
     comment_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
     comment_post = db.Column(db.Integer, db.ForeignKey('post.post_id'))

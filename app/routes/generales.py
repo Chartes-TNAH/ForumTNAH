@@ -92,18 +92,12 @@ def utilisateur(user_name):
     for post in liste_posts:
         dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
 
-    next_url = url_for('utilisateur', user_name=user_name, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('utilisateur', user_name=user_name, page=posts.prev_num) \
-        if posts.has_prev else None
     return render_template("pages/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
-                           pagination=posts,
-                           next_url=next_url,
-                           prev_url=prev_url)
+                           pagination=posts)
 
 
 @app.route('/editer_profil', methods=['GET', 'POST'])
@@ -203,19 +197,15 @@ def post(id):
 
     page = request.args.get('page', 1, type=int)
     comments = utilisateur.comments.order_by(Comment.comment_date.desc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
-    next_url = url_for('post', id=post.post_id, page=comments.next_num) \
-        if comments.has_next else None
-    prev_url = url_for('post', id=post.post_id, page=comments.prev_num) \
-        if comments.has_prev else None
 
     return render_template('pages/post.html',
                            nom='Post',
                            posts=[post],
+                           post=str(post.post_id),
                            dernier_commentaire=dernier_commentaire,
                            form=form,
                            comments=comments.items,
-                           next_url=next_url,
-                           prev_url=prev_url)
+                           pagination=comments)
 
 @app.route('/suivre/<user_name>')
 @login_required

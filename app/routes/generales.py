@@ -100,6 +100,13 @@ def utilisateur(user_name):
                            pagination=posts)
 
 
+@app.route('/explorer')
+def utilisateurs():
+    utilisateurs = User.query.all()
+    return render_template('pages/explorer.html',
+                           nom='Explorer',
+                           utilisateurs=utilisateurs)
+
 @app.route('/editer_profil', methods=['GET', 'POST'])
 @login_required
 def editer_profil():

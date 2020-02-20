@@ -101,6 +101,7 @@ def utilisateur(user_name):
                            user=utilisateur,
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
+                           pagination=posts,
                            next_url=next_url,
                            prev_url=prev_url)
 

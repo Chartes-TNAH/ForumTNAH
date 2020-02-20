@@ -1,6 +1,6 @@
 from warnings import warn
 
-POSTS_PAR_PAGE = 5
+POSTS_PAR_PAGE = 1
 COMMENTS_PAR_PAGE = 5
 
 SECRET_KEY = "JE SUIS UN SECRET !"

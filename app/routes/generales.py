@@ -100,6 +100,29 @@ def utilisateur(user_name):
                            pagination=posts)
 
 
+@app.route('/explorer')
+@login_required
+def utilisateurs():
+    utilisateurs = User.query.all()
+
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
+    dictionnaire_dates_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        dictionnaire_dates_posts[utilisateur.user_name] = str(derniere_date.post_date)
+
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de commentaire en valeur
+    dictionnaire_dates_comments = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
+        dictionnaire_dates_comments[utilisateur.user_name] = str(derniere_date.comment_date)
+
+    return render_template('pages/explorer.html',
+                           nom='Explorer',
+                           utilisateurs=utilisateurs,
+                           dates_posts=dictionnaire_dates_posts,
+                           dates_comments=dictionnaire_dates_comments)
+
 @app.route('/editer_profil', methods=['GET', 'POST'])
 @login_required
 def editer_profil():
@@ -166,8 +189,9 @@ def poster():
     # pour afficher la date du dernier commentaire
     utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
     liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    dernier_commentaire = "Pas encore de commentaires"
     for post in liste_posts:
-        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+            dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
 
     return render_template('pages/publier.html',
                            nom="Publier",

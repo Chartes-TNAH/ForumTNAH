@@ -1,0 +1,57 @@
+{%extends './base.html'%}
+
+{%block app_content%}
+<h1>Liste de tous les utilisateurs du <a href="{{url_for('home')}}">ForumTNAH</a></h1>
+
+<div class="col-12">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" style="width:10%;">Utilisateur</th>
+            <th scope="col" style="width:40%;">Nom/prénom</th>
+            <th scope="col">Promotion</th>
+            <th scope="col">Centres d'intérêts</th>
+            <th scope="col">Dernier post</th>
+            <th scope="col">Dernier commentaire</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for utilisateur in utilisateurs%}
+        <tr valign="top">
+            <td style="text-align:center;">
+                <a href="{{url_for('utilisateur', user_name=utilisateur.user_name)}}">
+                    <img src="{{utilisateur.avatar(36)}}"><br>
+                    {{utilisateur.user_name}}
+                </a>
+            </td>
+            <td>
+                {{utilisateur.user_firstname}} {{utilisateur.user_surname}}
+            </td>
+            <td>
+                {{utilisateur.user_promotion_date}}
+            </td>
+            <td>Mes centres d'intérêts</td>
+            <td>{{dates_posts[utilisateur.user_name]}}</td>
+            <td>{{dates_comments[utilisateur.user_name]}}</td>
+            <td>
+                <a href="{{url_for('utilisateur', user_name=utilisateur.user_name)}}">
+                <span class="label label-default">Profil</span>
+            </a>
+                <br>
+            <a href="{{ url_for('suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Suivre</span>
+            </a>
+                <br>
+            <a href="{{ url_for('ne_plus_suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Ne plus suivre</span>
+            </a>
+            </td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{%endblock%}

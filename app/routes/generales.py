@@ -189,8 +189,9 @@ def poster():
     # pour afficher la date du dernier commentaire
     utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
     liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    dernier_commentaire = "Pas encore de commentaires"
     for post in liste_posts:
-        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+            dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
 
     return render_template('pages/publier.html',
                            nom="Publier",

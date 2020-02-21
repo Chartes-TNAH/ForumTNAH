@@ -101,11 +101,20 @@ def utilisateur(user_name):
 
 
 @app.route('/explorer')
+@login_required
 def utilisateurs():
     utilisateurs = User.query.all()
+
+    #  dictionnaire avec nom de l'utilisateur en clé et la dernière date de post en valeur
+    dictionnaire_dates_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        dictionnaire_dates_posts[utilisateur.user_name] = str(derniere_date.post_date)
+
     return render_template('pages/explorer.html',
                            nom='Explorer',
-                           utilisateurs=utilisateurs)
+                           utilisateurs=utilisateurs,
+                           dates_posts = dictionnaire_dates_posts)
 
 @app.route('/editer_profil', methods=['GET', 'POST'])
 @login_required

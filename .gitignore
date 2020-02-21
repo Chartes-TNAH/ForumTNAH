@@ -1,6 +1,5 @@
 env/
 __pycache__/
-.flaskenv
 .idea/
 migrations/
 app.sqlite

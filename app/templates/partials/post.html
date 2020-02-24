@@ -17,7 +17,7 @@
             {{post.post_date}}
         </td>
         <td>{{ post.comments.count() }}</td>
-        <td>{{dernier_commentaire.comment_date}}</td>
+        <td>{{dernier_commentaire[post.post_id].comment_date}}</td>
         <td>
             <a href="{{url_for('post', id=post.post_id)}}">
                 <span class="label label-default">Permalien</span>

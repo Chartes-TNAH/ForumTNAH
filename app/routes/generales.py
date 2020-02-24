@@ -88,9 +88,11 @@ def utilisateur(user_name):
     posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
 
     # pour afficher la date du dernier commentaire
-    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
+    dernier_commentaire = {}
+    liste_posts = Post.query.all()
     for post in liste_posts:
-        dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+        last_comment = post.comments.order_by(Comment.comment_date.desc()).first()
+        dernier_commentaire[post.post_id] = last_comment
 
     return render_template("pages/utilisateur.html",
                            nom=user_name,
@@ -111,17 +113,17 @@ def utilisateurs():
         derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
         dictionnaire_dates_posts[utilisateur.user_name] = str(derniere_date.post_date)
 
-    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de commentaire en valeur
-    dictionnaire_dates_comments = {}
+    # pour afficher la date du dernier commentaire de l'utilisateur
+    dernier_commentaire = {}
     for utilisateur in utilisateurs:
         derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
-        dictionnaire_dates_comments[utilisateur.user_name] = str(derniere_date.comment_date)
+        dernier_commentaire[utilisateur.user_name] = str(derniere_date.comment_date)
 
     return render_template('pages/explorer.html',
                            nom='Explorer',
                            utilisateurs=utilisateurs,
                            dates_posts=dictionnaire_dates_posts,
-                           dates_comments=dictionnaire_dates_comments)
+                           dates_comments=dernier_commentaire)
 
 @app.route('/editer_profil', methods=['GET', 'POST'])
 @login_required
@@ -187,11 +189,11 @@ def poster():
     posts = Post.query.order_by(Post.post_date.desc()).all()
 
     # pour afficher la date du dernier commentaire
-    utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
-    liste_posts = utilisateur.posts.order_by(Post.post_date.desc()).all()
-    dernier_commentaire = "Pas encore de commentaires"
+    dernier_commentaire = {}
+    liste_posts = Post.query.all()
     for post in liste_posts:
-            dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
+        last_comment = post.comments.order_by(Comment.comment_date.desc()).first()
+        dernier_commentaire[post.post_id] = last_comment
 
     return render_template('pages/publier.html',
                            nom="Publier",

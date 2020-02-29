@@ -180,6 +180,33 @@ def editer_profil_cv():
                            nom="Editer mes expériences",
                            form=form)
 
+@app.route('/editer_profil/CV/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editer_cv(id):
+    cv = CV.query.get_or_404(id)
+    if current_user != cv.utilisateur:
+        abort(403)
+    form = CVForm()
+    if form.validate_on_submit():
+        cv.cv_nom_poste=form.cv_nom_poste.data
+        cv.cv_nom_employeur=form.cv_nom_employeur.data
+        cv.cv_ville=form.cv_ville.data
+        cv.cv_annee_debut=int(form.cv_annee_debut.data)
+        cv.cv_annee_fin=int(form.cv_annee_fin.data)
+        cv.utilisateur=current_user
+        db.session.add(cv)
+        db.session.commit()
+        flash("Cette expérience a bien été modifiée")
+        return redirect(url_for('utilisateur', user_name=current_user.user_name))
+    form.cv_nom_poste.data = cv.cv_nom_poste
+    form.cv_nom_employeur.data = cv.cv_nom_employeur
+    form.cv_ville.data = cv.cv_ville
+    form.cv_annee_debut.data = cv.cv_annee_debut
+    form.cv_annee_fin.data = cv.cv_annee_fin
+    return render_template('pages/editer_cv.html',
+                           nom="Editer mes expériences",
+                           form=form)
+
 @app.route('/editer_post/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editer_post(id):

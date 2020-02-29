@@ -23,10 +23,14 @@ class User(UserMixin, db.Model):
 
     user_mail = db.Column(db.String(120), index=True, unique=True)
     user_password_hash = db.Column(db.String(128))
+
     user_birthyear = db.Column(db.Integer)
     user_promotion_date = db.Column(db.String(9))
     user_description = db.Column(db.String(140))
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user_linkedin = db.Column(db.String(120))
+    user_github = db.Column(db.String(120))
 
     posts = db.relationship("Post", backref='auteur', lazy='dynamic')
 

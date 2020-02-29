@@ -2,7 +2,6 @@
 
 {%block app_content%}
 <h1>Mise à jour du profil</h1>
-<p>Veuillez réécrire toutes les informations sous peine de les perdre lors de la mise à jour.</p>
 <form class="big_form" action="" method="POST">
     {{form.hidden_tag()}}
     <div class="form-group">
@@ -38,8 +37,24 @@
 
   <div class="form-group">
         {{form.user_mail.label}}<br>
-        {{form.user_mail(size=4)}}<br>
+        {{form.user_mail(size=32)}}<br>
         {% for error in form.user_mail.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{form.user_linkedin.label}}<br>
+        {{form.user_linkedin(size=32)}}<br>
+        {% for error in form.user_linkedin.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{form.user_github.label}}<br>
+        {{form.user_github(size=32)}}<br>
+        {% for error in form.user_github.errors %}
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     </div>

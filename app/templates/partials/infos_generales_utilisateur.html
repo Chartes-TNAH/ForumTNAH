@@ -4,7 +4,7 @@
         <td>
             <img src="{{user.avatar(120)}}">
     </td>
-        <td style="width:45%;">
+        <td style="width:30%;">
             <h1>{{ user.user_name }}</h1>
 
             {%if user.user_firstname%}
@@ -20,7 +20,20 @@
             {%endif%}
 
         </td>
-        <td style="width:45%;">
+        <td style="width:30%;">
+            {%if user.user_linkedin%}
+            <a class="btn btn-link" href="{{user.user_linkedin}}">
+            <p>Lien vers le profil LinkedIn de {{user.user_name}}</p>
+            </a>
+            {%endif%}
+
+            {%if user.user_github%}
+            <a class="btn btn-link" href="{{user.user_github}}">
+            <p>Lien vers le profil GitHub de {{user.user_name}}</p>
+            </a>
+            {%endif%}
+        </td>
+        <td style="width:30%;">
             {%if user.user_last_seen%}
             <p>Dernière activité le : {{user.user_last_seen}} (GMT)</p>
             {%endif%}

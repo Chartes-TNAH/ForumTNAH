@@ -170,6 +170,7 @@ def editer_profil_cv():
                 cv_ville=form.cv_ville.data,
                 cv_annee_debut=int(form.cv_annee_debut.data),
                 cv_annee_fin=int(form.cv_annee_fin.data),
+                cv_description_poste=form.cv_description_poste.data,
                 utilisateur=current_user)
         db.session.add(cv)
         db.session.commit()
@@ -193,6 +194,7 @@ def editer_cv(id):
         cv.cv_ville=form.cv_ville.data
         cv.cv_annee_debut=int(form.cv_annee_debut.data)
         cv.cv_annee_fin=int(form.cv_annee_fin.data)
+        cv.cv_description_poste=form.cv_description_poste.data
         cv.utilisateur=current_user
         db.session.add(cv)
         db.session.commit()
@@ -203,6 +205,7 @@ def editer_cv(id):
     form.cv_ville.data = cv.cv_ville
     form.cv_annee_debut.data = cv.cv_annee_debut
     form.cv_annee_fin.data = cv.cv_annee_fin
+    form.cv_description_poste.data = cv.cv_description_poste
     return render_template('pages/editer_cv.html',
                            nom="Editer mes expériences",
                            form=form)

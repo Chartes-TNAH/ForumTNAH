@@ -54,5 +54,5 @@ class CVForm(FlaskForm):
     cv_ville = StringField('Nom de la ville', validators=[DataRequired()])
     cv_annee_debut = StringField("Année de début d'exercice", validators=[DataRequired()])
     cv_annee_fin = StringField("Année de fin d'exercice", validators=[DataRequired()])
-    cv_description_poste = PageDownField('Description des missions du poste')
+    cv_description_poste = TextAreaField('Description des missions du poste')
     submit = SubmitField('Enregistrer')

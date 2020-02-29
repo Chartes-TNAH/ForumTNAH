@@ -19,7 +19,7 @@
 
           {% if page != pagination.page %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('utilisateur', user_name=current_user.user_name, page=page) }}">{{page}}</a>
+                <a class="page-link" href="{{ url_for('utilisateur', user_name=user.user_name, page=page) }}">{{page}}</a>
             </li>
           {% else %}
             <li class="page-item active disabled">

@@ -47,3 +47,12 @@ class PostForm(FlaskForm):
 class CommentForm(FlaskForm):
     message = PageDownField("Votre commentaire", validators=[DataRequired()])
     submit = SubmitField('Commenter')
+
+class CVForm(FlaskForm):
+    cv_nom_poste = StringField('Dénomination du poste', validators=[DataRequired()])
+    cv_nom_employeur = StringField("Nom de l'entreprise ou du service", validators=[DataRequired()])
+    cv_ville = StringField('Nom de la ville', validators=[DataRequired()])
+    cv_date_debut = StringField("Date de début d'exercice", validators=[DataRequired()])
+    cv_date_fin = StringField("Date de fin d'exercice", validators=[DataRequired()])
+    cv_description_poste = PageDownField('Description des missions du poste')
+    submit = SubmitField('Enregistrer')

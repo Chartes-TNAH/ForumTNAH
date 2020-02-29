@@ -36,6 +36,8 @@ class User(UserMixin, db.Model):
 
     comments = db.relationship('Comment', backref='auteur', lazy='dynamic')
 
+    cvs = db.relationship("CV", backref='utilisateur', lazy='dynamic')
+
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -137,6 +139,17 @@ class Comment(db.Model):
         ))
 
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
+
+class CV(db.Model):
+    cv_id = db.Column(db.Integer, primary_key=True)
+    cv_nom_poste = db.Column(db.Text)
+    cv_nom_employeur = db.Column(db.Text)
+    cv_ville = db.Column(db.String(64))
+    cv_annee_debut = db.Column(db.Integer)
+    cv_annee_fin = db.Column(db.Integer)
+    cv_description_poste = db.Column(db.Text)
+
+    cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @login.user_loader

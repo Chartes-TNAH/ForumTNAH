@@ -1,0 +1,23 @@
+<div class="col-sm-7">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Nom du poste</th>
+            <th scope="col">Employeur</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Année de début</th>
+            <th scope="col">Année de fin</th>
+            <th scope="col">Description du poste</th>
+            <th scope="col">
+                <a class="btn btn-primary" href="{{url_for('editer_profil_cv')}}">Ajouter une expérience</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for cv in current_user.cvs%}
+        {%include 'partials/cv.html'%}
+        {%endfor%}
+        </tbody>
+    </table>
+
+</div>

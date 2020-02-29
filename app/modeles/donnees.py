@@ -149,7 +149,7 @@ class CV(db.Model):
     cv_annee_fin = db.Column(db.Integer)
     cv_description_poste = db.Column(db.Text)
 
-    utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
+    cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @login.user_loader

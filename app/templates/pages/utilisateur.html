@@ -16,7 +16,7 @@
 
 <div class="row">
     <p>Messages récents</p>
-    {%include 'partials/posts_liste.html'%}
+    {%include 'partials/posts/posts_liste.html'%}
     <!-- gestion de la pagination -->
     <nav aria-label="research-pagination">
   <ul class="pagination">
@@ -42,7 +42,6 @@
     {%- endfor %}
   </ul>
 </nav>
-    <!-- inclure ici le bloc du CV -->
 </div>
 
 {% endblock %}

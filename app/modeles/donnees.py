@@ -164,7 +164,7 @@ class Post(db.Model):
         Permet de convertir le MarkDown en HTML à chaque fois qu'un changement est effectué dans le champ html de la table
         """
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i',
-                        'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']7
+                        'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         # la fonction markdown fait une conversion en html; la fonction clean permet de nettoyer le code des balises qui ne sont pas dans
         # allowed_tags; linkify fait la conversion des URL en balises <a>
         target.html = bleach.linkify(bleach.clean(

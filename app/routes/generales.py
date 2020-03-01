@@ -102,31 +102,6 @@ def deconnexion():
     return redirect(url_for('home'))
 
 
-@app.route('/utilisateur/<user_name>')
-def utilisateur(user_name):
-    page = request.args.get("page", 1)
-    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
-    posts = utilisateur.posts.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
-
-    # pour afficher la date du dernier commentaire
-    dernier_commentaire = {}
-    liste_posts = Post.query.all()
-    for post in liste_posts:
-        last_comment = post.comments.order_by(Comment.comment_date.desc()).first()
-        dernier_commentaire[post.post_id] = last_comment
-
-    # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
-
-    return render_template("pages/utilisateur.html",
-                           nom=user_name,
-                           user=utilisateur,
-                           dernier_commentaire=dernier_commentaire,
-                           posts=posts.items,
-                           pagination=posts,
-                           cvs_classes=cvs_classes)
-
-
 @app.route('/explorer')
 @login_required
 def utilisateurs():
@@ -150,99 +125,6 @@ def utilisateurs():
                            dates_posts=dictionnaire_dates_posts,
                            dates_comments=dernier_commentaire)
 
-@app.route('/editer_profil', methods=['GET', 'POST'])
-@login_required
-def editer_profil():
-    """
-    Route permettant de modifier ses données personnelles
-    :return: template de la page d'édition du profil avec le formulaire
-    """
-    form = EditProfileForm()
-    if form.validate_on_submit():
-        current_user.user_name = form.user_name.data
-        current_user.user_firstname = form.user_firstname.data
-        current_user.user_surname = form.user_surname.data
-        current_user.user_mail = form.user_mail.data
-        current_user.user_promotion_date = form.user_promotion_date.data
-        current_user.user_birthyear = form.user_birthyear.data
-        current_user.user_description = form.user_description.data
-        current_user.user_linkedin = "https://www.linkedin.com/in/" + form.user_linkedin.data
-        current_user.user_github = "https://www.github.com/" + form.user_github.data
-        db.session.commit()
-        flash("Modifications enregistrées")
-        return redirect(url_for('utilisateur', user_name=current_user.user_name))
-    elif request.method == 'GET':
-        form.user_name.data = current_user.user_name
-        form.user_description.data = current_user.user_description
-        form.user_firstname.data = current_user.user_firstname
-        form.user_surname.data = current_user.user_surname
-        form.user_promotion_date.data = current_user.user_promotion_date
-        form.user_mail.data = current_user.user_mail
-        form.user_birthyear.data = current_user.user_birthyear
-        form.user_linkedin.data = current_user.user_linkedin.replace("https://www.linkedin.com/in/", "")
-        form.user_github.data = current_user.user_github.replace("https://www.github.com/", "")
-    return render_template('pages/editer.html',
-                           nom="Editer le profil",
-                           form=form)
-
-@app.route('/editer_profil/CV', methods=['GET', 'POST'])
-@login_required
-def editer_profil_cv():
-    form = CVForm()
-    if form.validate_on_submit():
-        cv = CV(cv_nom_poste=form.cv_nom_poste.data,
-                cv_nom_employeur=form.cv_nom_employeur.data,
-                cv_ville=form.cv_ville.data,
-                cv_annee_debut=int(form.cv_annee_debut.data),
-                cv_annee_fin=int(form.cv_annee_fin.data),
-                cv_description_poste=form.cv_description_poste.data,
-                utilisateur=current_user)
-        db.session.add(cv)
-        db.session.commit()
-        flash("Cette expérience a bien été ajoutée")
-        return redirect(url_for('utilisateur', user_name=current_user.user_name))
-
-     # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
-
-    return render_template('pages/editer_cv.html',
-                           nom="Editer mes expériences",
-                           cvs_classes=cvs_classes,
-                           form=form)
-
-@app.route('/editer_profil/CV/<int:id>', methods=['GET', 'POST'])
-@login_required
-def editer_cv(id):
-    cv = CV.query.get_or_404(id)
-    if current_user != cv.utilisateur:
-        abort(403)
-    form = CVForm()
-    if form.validate_on_submit():
-        cv.cv_nom_poste=form.cv_nom_poste.data
-        cv.cv_nom_employeur=form.cv_nom_employeur.data
-        cv.cv_ville=form.cv_ville.data
-        cv.cv_annee_debut=int(form.cv_annee_debut.data)
-        cv.cv_annee_fin=int(form.cv_annee_fin.data)
-        cv.cv_description_poste=form.cv_description_poste.data
-        cv.utilisateur=current_user
-        db.session.add(cv)
-        db.session.commit()
-        flash("Cette expérience a bien été modifiée")
-        return redirect(url_for('utilisateur', user_name=current_user.user_name))
-    form.cv_nom_poste.data = cv.cv_nom_poste
-    form.cv_nom_employeur.data = cv.cv_nom_employeur
-    form.cv_ville.data = cv.cv_ville
-    form.cv_annee_debut.data = cv.cv_annee_debut
-    form.cv_annee_fin.data = cv.cv_annee_fin
-    form.cv_description_poste.data = cv.cv_description_poste
-
-    # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
-
-    return render_template('pages/editer_cv.html',
-                           nom="Editer mes expériences",
-                           cvs_classes=cvs_classes,
-                           form=form)
 
 @app.route('/suivre/<user_name>')
 @login_required

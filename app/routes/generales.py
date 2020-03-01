@@ -58,8 +58,8 @@ def inscription():
         return redirect('home')
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(user_name = form.username.data,
-                    user_mail = form.email.data)
+        user = User(user_name=form.username.data,
+                    user_mail=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -115,12 +115,16 @@ def utilisateur(user_name):
         last_comment = post.comments.order_by(Comment.comment_date.desc()).first()
         dernier_commentaire[post.post_id] = last_comment
 
+    # classement des expériences par ordre chronologique dans cvs_classes
+    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+
     return render_template("pages/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
-                           pagination=posts)
+                           pagination=posts,
+                           cvs_classes=cvs_classes)
 
 
 @app.route('/explorer')
@@ -198,8 +202,12 @@ def editer_profil_cv():
         flash("Cette expérience a bien été ajoutée")
         return redirect(url_for('utilisateur', user_name=current_user.user_name))
 
+     # classement des expériences par ordre chronologique dans cvs_classes
+    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+
     return render_template('pages/editer_cv.html',
                            nom="Editer mes expériences",
+                           cvs_classes=cvs_classes,
                            form=form)
 
 @app.route('/editer_profil/CV/<int:id>', methods=['GET', 'POST'])
@@ -227,8 +235,13 @@ def editer_cv(id):
     form.cv_annee_debut.data = cv.cv_annee_debut
     form.cv_annee_fin.data = cv.cv_annee_fin
     form.cv_description_poste.data = cv.cv_description_poste
+
+    # classement des expériences par ordre chronologique dans cvs_classes
+    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+
     return render_template('pages/editer_cv.html',
                            nom="Editer mes expériences",
+                           cvs_classes=cvs_classes,
                            form=form)
 
 @app.route('/editer_post/<int:id>', methods=['GET', 'POST'])

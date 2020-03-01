@@ -141,8 +141,8 @@ def editer_profil():
         current_user.user_promotion_date = form.user_promotion_date.data
         current_user.user_birthyear = form.user_birthyear.data
         current_user.user_description = form.user_description.data
-        current_user.user_linkedin = form.user_linkedin.data
-        current_user.user_github = form.user_github.data
+        current_user.user_linkedin = "https://www.linkedin.com/in/" + form.user_linkedin.data
+        current_user.user_github = "https://www.github.com/" + form.user_github.data
         db.session.commit()
         flash("Modifications enregistrées")
         return redirect(url_for('utilisateur', user_name=current_user.user_name))
@@ -154,8 +154,8 @@ def editer_profil():
         form.user_promotion_date.data = current_user.user_promotion_date
         form.user_mail.data = current_user.user_mail
         form.user_birthyear.data = current_user.user_birthyear
-        form.user_linkedin.data = current_user.user_linkedin
-        form.user_github.data = current_user.user_github
+        form.user_linkedin.data = current_user.user_linkedin.replace("https://www.linkedin.com/in/", "")
+        form.user_github.data = current_user.user_github.replace("https://www.github.com/", "")
     return render_template('pages/editer.html',
                            nom="Editer le profil",
                            form=form)

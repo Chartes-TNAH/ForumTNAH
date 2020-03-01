@@ -240,7 +240,10 @@ def poster():
         db.session.commit()
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
-    posts = Post.query.order_by(Post.post_date.desc()).all()
+
+    # gestion de la pagination des posts
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
 
     # pour afficher la date du dernier commentaire
     dernier_commentaire = {}
@@ -253,7 +256,8 @@ def poster():
                            nom="Publier",
                            dernier_commentaire=dernier_commentaire,
                            form=form,
-                           posts=posts)
+                           posts=posts.items,
+                           pagination=posts)
 
 
 @app.route('/post/<int:id>', methods=['GET', 'POST'])

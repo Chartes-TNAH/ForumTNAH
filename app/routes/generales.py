@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm, CVForm
 from ..modeles.donnees import Post, User, Comment, CV
-from ..constantes import POSTS_PAR_PAGE, COMMENTS_PAR_PAGE
+from ..constantes import POSTS_PAR_PAGE, COMMENTS_PAR_PAGE, POSTS_PAR_PAGE_DISCUSSION
 
 
 # mettre à jour la date de visite dans la base de données
@@ -16,8 +16,8 @@ def before_request():
         db.session.commit()
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/home')
 def home():
     """
 	Route permettant l'affichage de la page d'accueil
@@ -26,6 +26,27 @@ def home():
     return render_template("pages/home.html",
                            nom="Accueil")
 
+@app.route('/discussions')
+def discussions():
+    """
+    Route permettant l'affichage de tous les posts du forum du plus récent au plus ancien.
+    """
+    # gestion de la pagination des posts
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE_DISCUSSION))
+
+    # pour afficher la date du dernier commentaire
+    dernier_commentaire = {}
+    liste_posts = Post.query.all()
+    for post in liste_posts:
+        last_comment = post.comments.order_by(Comment.comment_date.desc()).first()
+        dernier_commentaire[post.post_id] = last_comment
+
+    return render_template('pages/discussions.html',
+                           nom="Discussions",
+                           dernier_commentaire=dernier_commentaire,
+                           posts=posts.items,
+                           pagination=posts)
 
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
@@ -240,7 +261,10 @@ def poster():
         db.session.commit()
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
-    posts = Post.query.order_by(Post.post_date.desc()).all()
+
+    # gestion de la pagination des posts
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.post_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
 
     # pour afficher la date du dernier commentaire
     dernier_commentaire = {}
@@ -253,7 +277,8 @@ def poster():
                            nom="Publier",
                            dernier_commentaire=dernier_commentaire,
                            form=form,
-                           posts=posts)
+                           posts=posts.items,
+                           pagination=posts)
 
 
 @app.route('/post/<int:id>', methods=['GET', 'POST'])

@@ -1,0 +1,31 @@
+{% extends "./base.html" %}
+
+{%block app_content%}
+<h1>Les discussions en cours du <a href="{{url_for('home')}}">ForumTNAH</a></h1>
+{%include 'partials/posts_liste.html'%}
+<!-- gestion de la pagination -->
+    <nav aria-label="research-pagination">
+  <ul class="pagination">
+    {%- for page in pagination.iter_pages() %}
+        {% if page %}
+
+          {% if page != pagination.page %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('discussions',  page=page) }}">{{page}}</a>
+            </li>
+          {% else %}
+            <li class="page-item active disabled">
+              <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+            </li>
+          {% endif %}
+
+        {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">...</a>
+            </li>
+        {% endif %}
+
+    {%- endfor %}
+  </ul>
+</nav>
+{%endblock%}

@@ -78,8 +78,8 @@ def editer_profil():
         form.user_promotion_date.data = current_user.user_promotion_date
         form.user_mail.data = current_user.user_mail
         form.user_birthyear.data = current_user.user_birthyear
-        form.user_linkedin.data = current_user.user_linkedin.replace("https://www.linkedin.com/in/", "")
-        form.user_github.data = current_user.user_github.replace("https://www.github.com/", "")
+        form.user_linkedin.data = current_user.user_linkedin
+        form.user_github.data = current_user.user_github
     return render_template('pages/profil_utilisateur/editer.html',
                            nom="Editer le profil",
                            form=form)

@@ -1,34 +1,34 @@
     <tr valign="top">
         <td style="text-align:center;">
-            <a href="{{url_for('utilisateur', user_name=post.auteur.user_name)}}">
-                <img src="{{post.auteur.avatar(36)}}"><br>
-                {{post.auteur.user_name}}
+            <a href="{{ url_for('utilisateur', user_name=post.auteur.user_name) }}">
+                <img src="{{ post.auteur.avatar(36) }}"><br>
+                {{ post.auteur.user_name }}
             </a>
         </td>
         <td>
-            <b>{{post.post_titre}}</b><br/>
-            {%if post.html%}
-            {{post.html | safe}}
-            {%else%}
-            {{post.post_message}}
-            {%endif%}
+            <b>{{ post.post_titre }}</b><br/>
+            {% if post.html %}
+            {{ post.html | safe }}
+            {% else %}
+            {{ post.post_message }}
+            {% endif %}
         </td>
         <td>
             {{post.post_date}}
         </td>
         <td>{{ post.comments.count() }}</td>
-        <td>{{dernier_commentaire[post.post_id].comment_date}}</td>
+        <td>{{ post.comments.comment_date }}</td>
         <td>
-            <a href="{{url_for('post', id=post.post_id)}}">
+            <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Lien unique</span>
             </a>
-            <a href="{{url_for('post', id=post.post_id)}}">
+            <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Commenter</span>
             </a>
-            {%if current_user == post.auteur%}
-            <a href="{{url_for('editer_post', id=post.post_id)}}">
+            {% if current_user == post.auteur %}
+            <a href="{{ url_for('editer_post', id=post.post_id) }}">
                 <span class="label label-default">Mettre à jour</span>
             </a>
-            {%endif%}
+            {% endif %}
         </td>
     </tr>

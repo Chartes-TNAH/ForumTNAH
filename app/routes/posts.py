@@ -79,7 +79,8 @@ def editer_post(id):
     # remplissage des champs du formulaire
     form.titre.data = post.post_titre
     form.message.data = post.post_message
-    return render_template('pages/posts/editer_post.html', form=form)
+    return render_template('pages/posts/editer_post.html',
+                           form=form)
 
 
 @app.route('/post/<int:id>', methods=['GET', 'POST'])
@@ -95,8 +96,6 @@ def post(id):
     post = Post.query.get_or_404(id)
     # récupération de l'utilisateur
     utilisateur = User.query.filter_by(user_name=current_user.user_name).first_or_404()
-    # récupération du dernier_commentaire
-    dernier_commentaire = post.comments.order_by(Comment.comment_date.desc()).first()
 
     # utilisation du formulaire CommentForm
     form = CommentForm()
@@ -115,13 +114,12 @@ def post(id):
     # gestion de la pagination
     page = request.args.get('page', 1, type=int)
     # récupération des commentaires de l'utilisateur
-    comments = utilisateur.comments.order_by(Comment.comment_date.desc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
+    comments = post.comments.order_by(Comment.comment_date.desc()).paginate(page=int(page), per_page=int(COMMENTS_PAR_PAGE))
 
     return render_template('pages/posts/post.html',
                            nom='Post',
                            posts=[post],
-                           post=str(post.post_id),
-                           dernier_commentaire=dernier_commentaire,
+                           post=post.post_id,
                            form=form,
                            comments=comments.items,
                            pagination=comments)

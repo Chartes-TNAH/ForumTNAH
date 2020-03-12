@@ -6,6 +6,14 @@
     <div class="col-sm-8">
         {%include 'partials/profil_utilisateur/infos_generales_utilisateur.html'%}
     </div>
+    <div class="col-sm-4">
+        <p>Compétences de {{ user.user_name }}</p>
+        <ul>
+        {% for competence in user.competences %}
+        <li>{{ competence.competence_label }}</li>
+        {% endfor %}
+        </ul>
+    </div>
 </div>
 
 <div class="row">

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError, TextAreaField, RadioField
 from wtforms.validators import DataRequired, Email, EqualTo
 from app.modeles.donnees import User
 from flask_pagedown.fields import PageDownField
@@ -91,5 +91,15 @@ class CVForm(FlaskForm):
     cv_annee_debut = StringField("Année de début d'exercice", validators=[DataRequired()])
     cv_annee_fin = StringField("Année de fin d'exercice", validators=[DataRequired()])
     cv_description_poste = TextAreaField('Description des missions du poste')
+
+    submit = SubmitField('Enregistrer')
+
+# création de la classe du formaulaire pour le choix des compétences principales
+class CompetencesForm(FlaskForm):
+    competences = RadioField('competences', choices=[
+        ('1', 'IIIF'),
+        ('2', 'Python'),
+        ('3', "SQL")
+    ])
 
     submit = SubmitField('Enregistrer')

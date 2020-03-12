@@ -1,7 +1,7 @@
 from ..app import app, db
 from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
-from ..modeles.utilisateurs import EditProfileForm, CVForm
+from ..modeles.utilisateurs import EditProfileForm, CVForm, CompetencesForm
 from ..modeles.donnees import Post, User, Comment, CV
 from ..constantes import POSTS_PAR_PAGE
 
@@ -82,6 +82,30 @@ def editer_profil():
         form.user_github.data = current_user.user_github
     return render_template('pages/profil_utilisateur/editer.html',
                            nom="Editer le profil",
+                           form=form)
+
+@app.route('/editer_profil/competences', methods=['GET', 'POST'])
+@login_required
+def editer_competences():
+    """
+        Route permettant de modifier ses données personnelles de son profil
+        :return: template editer.html de la page d'édition du profil avec le formulaire
+        :rtype: template
+        """
+    # utilisation du formulaire de la classe EditProfileForm
+    form = CompetencesForm()
+    # validate_on_submit fonctionne avec la méthode POST
+    if form.validate_on_submit():
+        competence = form.competences.data
+        requete = 'INSERT INTO skills VALUES (' + str(current_user.id) + ',' + str(competence) + ')'
+        db.engine.execute(requete)
+        flash("Modifications enregistrées")
+        return redirect(url_for('utilisateur', user_name=current_user.user_name))
+    # permet l'affichage des données pré-existantes dans le formulaire
+    #elif request.method == 'GET':
+        #form.user_name.data = current_user.user_name
+    return render_template('pages/profil_utilisateur/editer_competences.html',
+                           nom="Editer les compétences",
                            form=form)
 
 

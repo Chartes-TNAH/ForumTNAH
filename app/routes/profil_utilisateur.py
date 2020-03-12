@@ -31,7 +31,7 @@ def utilisateur(user_name):
         dernier_commentaire[post.post_id] = last_comment
 
     # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+    cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,

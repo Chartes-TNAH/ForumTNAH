@@ -15,7 +15,9 @@ posts = 'INSERT INTO Post(post_titre, post_message, post_date, html, post_auteur
                       VALUES ("Un renseignement serait le bienvenu", "#Bonjour, voici mon titre \n Mon message ici.",\
                                 "2020-03-08 21:25:44.761000", "<h1>Bonjour, voici mon titre</h1><br/><p>Mon message ici</p>", 1),\
                       ("Un nouveau message sur le forum", "#Bonjour, voici un nouveau message \n Mon message ici.",\
-                        "2020-03-12 08:25:44.761000", "<h1>Bonjour, voici un nouveau message</h1><br/><p>Mon message ici</p>", 2)'
+                        "2020-03-12 08:25:44.761000", "<h1>Bonjour, voici un nouveau message</h1><br/><p>Mon message ici</p>", 2),\
+                      ("Quelque chose", "#RE \n Mon message ici.",\
+                        "2020-03-14 08:28:44.761000", "<h1>RE</h1><br/><p>Mon message ici</p>", 2)'
 
 comments = 'INSERT INTO Comment(comment_message, comment_html, comment_date, comment_auteur, comment_post)\
                           VALUES ("#Bonjour \n Mon commentaire est utile.", "<h1>Bonjour</h1><br/><p>Mon commentaire est utile</p>",\

@@ -7,11 +7,18 @@ from markdown import markdown
 import bleach
 
 
-# création de la table des followers
+# création de la table d'association des followers
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
                      db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
                      )
+
+# création de la table d'association des compétences des utilisateurs
+skills = db.Table('skills',
+                  db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                  db.Column('competence_id', db.Integer, db.ForeignKey('competences.competence_id'))
+                  )
+
 
 # création de la table user pour les informations sur l'utilisateur
 class User(UserMixin, db.Model):
@@ -46,6 +53,8 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
     )
+
+    competences = db.relationship('Competences', secondary=skills, backref=db.backref('utilisateur', lazy='dynamic'), lazy='dynamic')
 
     def get_id(self):
         """
@@ -213,6 +222,11 @@ class CV(db.Model):
     cv_description_poste = db.Column(db.Text)
 
     cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+# création de la table des compétences
+class Competences(db.Model):
+    competence_id = db.Column(db.Integer, primary_key=True)
+    competence_label = db.Column(db.String(48))
 
 
 @login.user_loader

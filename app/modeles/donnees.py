@@ -106,7 +106,7 @@ class User(UserMixin, db.Model):
         :return: None
         :rtype: None
         """
-        self.user_last_seen=datetime.utcnow()
+        self.user_last_seen = datetime.utcnow()
         db.session.add(self)
         db.session.commit()
 
@@ -222,6 +222,7 @@ class CV(db.Model):
     cv_description_poste = db.Column(db.Text)
 
     cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 # création de la table des compétences
 class Competences(db.Model):

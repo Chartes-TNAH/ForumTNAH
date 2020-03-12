@@ -33,5 +33,8 @@ cvs = 'INSERT INTO CV(cv_nom_poste, cv_nom_employeur, cv_ville, cv_annee_debut, 
                               ("Ingénieur", "Une entreprise", "Strasbourg", "2019","",\
                                "Je traite beaucoup de données en tant que prestataire dans les institutions", 2)'
 
-competences  ='INSERT INTO Competences(competence_label)\
+competences ='INSERT INTO Competences(competence_label)\
                 VALUES ("IIIF"), ("Python"), ("SQL") '
+
+skills = 'INSERT INTO skills\
+         VALUES (1, 1), (1, 3), (2, 2)'

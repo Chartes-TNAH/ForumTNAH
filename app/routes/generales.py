@@ -153,22 +153,22 @@ def utilisateurs():
     utilisateurs = User.query.all()
 
     # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
-    dictionnaire_dates_posts = {}
+    derniers_posts = {}
     for utilisateur in utilisateurs:
         derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
-        dictionnaire_dates_posts[utilisateur.user_name] = str(derniere_date.post_date)
+        derniers_posts[utilisateur.user_name] = derniere_date
 
     # pour afficher la date du dernier commentaire de l'utilisateur
-    dernier_commentaire = {}
+    derniers_commentaires = {}
     for utilisateur in utilisateurs:
         derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
-        dernier_commentaire[utilisateur.user_name] = str(derniere_date.comment_date)
+        derniers_commentaires[utilisateur.user_name] = derniere_date
 
     return render_template('pages/explorer.html',
                            nom='Explorer',
                            utilisateurs=utilisateurs,
-                           dates_posts=dictionnaire_dates_posts,
-                           dates_comments=dernier_commentaire)
+                           dates_posts=derniers_posts,
+                           dates_comments=derniers_commentaires)
 
 
 @app.route('/suivre/<user_name>')

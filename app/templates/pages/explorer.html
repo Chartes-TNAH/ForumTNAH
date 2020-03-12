@@ -32,8 +32,8 @@
                 {{utilisateur.user_promotion_date}}
             </td>
             <td>Mes centres d'intérêts</td>
-            <td>{{dates_posts[utilisateur.user_name]}}</td>
-            <td>{{dates_comments[utilisateur.user_name]}}</td>
+            <td>{{dates_posts[utilisateur.user_name].post_date}}</td>
+            <td>{{dates_comments[utilisateur.user_name].comment_date}}</td>
             <td>
                 <a href="{{url_for('utilisateur', user_name=utilisateur.user_name)}}">
                 <span class="label label-default">Profil</span>

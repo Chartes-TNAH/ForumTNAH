@@ -1,4 +1,5 @@
 from app.app import app, db
+from app.constantes import DEBUG
 from app.sql_initilisation import users, posts, comments, cvs
 
 if __name__ == "__main__":
@@ -8,4 +9,4 @@ if __name__ == "__main__":
     db.engine.execute(posts)
     db.engine.execute(comments)
     db.engine.execute(cvs)
-    app.run(debug=True)
+    app.run(debug=DEBUG)

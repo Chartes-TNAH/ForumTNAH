@@ -1,14 +1,9 @@
     <tr valign="top">
         <td style="text-align:center;">
-            {% if user_name %}
             <a href="{{ url_for('utilisateur', user_name=post.auteur.user_name) }}">
                 <img src="{{ post.auteur.avatar(36) }}"><br>
                 {{ post.auteur.user_name }}
             </a>
-            {% else %}
-            <img src="{{ post.auteur.avatar(36) }}"><br>
-            {{ post.auteur.user_name }}
-            {% endif %}
         </td>
         <td>
             <b>{{ post.post_titre }}</b><br/>
@@ -32,18 +27,12 @@
         <td>{{ post.comments.count() }}</td>
         <td>{{ post.comments.comment_date }}</td>
         <td>
-            {% if user_name %}
             <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Lien unique</span>
             </a>
             <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Commenter</span>
             </a>
-            {% else %}
-            <a href="{{url_for('connexion')}}">
-                <span class="label label-default">Se connecter</span>
-            </a>
-            {% endif %}
             {% if current_user == post.auteur %}
             <a href="{{ url_for('editer_post', id=post.post_id) }}">
                 <span class="label label-default">Mettre à jour</span>

@@ -35,7 +35,17 @@ def before_request():
 
 
 @app.route('/')
+def racine():
+    """
+    Route sur laquelle l'utilisateur arrive en ouvrant le site, il doit se connecter pour accéder au ForumTNAH
+    :return: template racine.html
+    :rtype: template
+    """
+    return render_template('pages/racine.html')
+
+
 @app.route('/home')
+@login_required
 def home():
     """
     Route permettant l'affichage de la page d'accueil
@@ -63,6 +73,7 @@ def home():
 
 
 @app.route('/discussions')
+@login_required
 def discussions():
     """
     Route permettant l'affichage de tous les posts du forum du plus récent au plus ancien.
@@ -89,6 +100,7 @@ def discussions():
                            pagination=posts)
 
 @app.route('/thematiques')
+@login_required
 def thematiques():
     """
     Route permettant l'affichage des thématiques des posts
@@ -110,6 +122,7 @@ def thematiques():
 
 
 @app.route('/thematiques/<thematique>')
+@login_required
 def thematique(thematique):
     """
     Route permettant l'affichage des posts en fonction du mot-clé demandé

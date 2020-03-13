@@ -1,0 +1,17 @@
+{%extends "./base.html"%}
+
+{%block app_content%}
+<h1>Pour accéder au site, il faut se connecter.</h1>
+
+<a href="{{url_for('connexion')}}">
+    <button type="button" class="btn btn-primary">
+        Se connecter
+    </button>
+</a>
+
+<a href="{{url_for('inscription')}}">
+    <button type="button" class="btn btn-primary">
+        S'inscrire
+    </button>
+</a>
+{% endblock %}

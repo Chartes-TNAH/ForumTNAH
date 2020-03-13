@@ -11,6 +11,11 @@
             {{ post.html | safe }}
             {% else %}
             {{ post.post_message }}
+            {% endif %}<
+        </td>
+        <td>
+            {% if post.post_indexation %}
+            {{ post.post_indexation}}
             {% endif %}
         </td>
         <td>

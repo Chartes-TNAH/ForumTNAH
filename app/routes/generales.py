@@ -5,6 +5,7 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment
+from ..modeles.tags_images import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
 
@@ -117,6 +118,7 @@ def discussions():
                            compteur_comments=compteur_comments,
                            mots_cles=liste_distincte)
 
+
 @app.route('/thematiques')
 @login_required
 def thematiques():
@@ -127,16 +129,20 @@ def thematiques():
     """
     # récupération de tous les posts
     posts = Post.query.all()
-    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
-    liste_distincte = []
+    # création d'un dictionnaire vide qui aura comme clé le mot clé et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
     for post in posts:
         # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
-        if post.post_indexation not in liste_distincte:
-            liste_distincte.append(post.post_indexation)
+        if post.post_indexation not in dictionnaire_distinct:
+            # récupération de l'image
+            image = get_first_image(post.post_indexation)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[post.post_indexation] = image
 
     return render_template('pages/thematiques/thematiques.html',
                            nom="Thématiques",
-                           sujets=liste_distincte)
+                           sujets=dictionnaire_distinct)
 
 
 @app.route('/thematiques/<thematique>')

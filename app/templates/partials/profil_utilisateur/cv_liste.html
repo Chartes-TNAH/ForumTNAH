@@ -8,9 +8,11 @@
             <th scope="col">Année de début</th>
             <th scope="col">Année de fin</th>
             <th scope="col">Description du poste</th>
+            {% if current_user == user %}
             <th scope="col">
-                <a class="btn btn-primary" href="{{url_for('editer_profil_cv')}}">Ajouter une expérience</a>
+                <a class="btn btn-primary" href="{{url_for('editer_profil_cv', user_name=user.user_name)}}">Ajouter une expérience</a>
             </th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>

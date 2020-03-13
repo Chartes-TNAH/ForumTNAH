@@ -31,7 +31,7 @@ def utilisateur(user_name):
         dernier_commentaire[post.post_id] = last_comment
 
     # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+    cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
@@ -42,14 +42,16 @@ def utilisateur(user_name):
                            cvs_classes=cvs_classes)
 
 
-@app.route('/editer_profil', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])
 @login_required
-def editer_profil():
+def editer_profil(user_name):
     """
     Route permettant de modifier ses données personnelles de son profil
     :return: template editer.html de la page d'édition du profil avec le formulaire
     :rtype: template
     """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # utilisation du formulaire de la classe EditProfileForm
     form = EditProfileForm()
     # validate_on_submit fonctionne avec la méthode POST
@@ -82,16 +84,19 @@ def editer_profil():
         form.user_github.data = current_user.user_github
     return render_template('pages/profil_utilisateur/editer.html',
                            nom="Editer le profil",
-                           form=form)
+                           form=form,
+                           user=utilisateur)
 
-@app.route('/editer_profil/competences', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>/competences', methods=['GET', 'POST'])
 @login_required
-def editer_competences():
+def editer_competences(user_name):
     """
         Route permettant de modifier ses données personnelles de son profil
         :return: template editer.html de la page d'édition du profil avec le formulaire
         :rtype: template
         """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # utilisation du formulaire de la classe EditProfileForm
     form = CompetencesForm()
     # validate_on_submit fonctionne avec la méthode POST
@@ -106,17 +111,20 @@ def editer_competences():
         #form.user_name.data = current_user.user_name
     return render_template('pages/profil_utilisateur/editer_competences.html',
                            nom="Editer les compétences",
-                           form=form)
+                           form=form,
+                           user=utilisateur)
 
 
-@app.route('/editer_profil/CV', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>/CV', methods=['GET', 'POST'])
 @login_required
-def editer_profil_cv():
+def editer_profil_cv(user_name):
     """
     Permet d'ajouter une expérience professionnelle sur son profil
     :return: template editer_cv.html
     :rtype: template
     """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # utilisation du formulaire de classe CVForm
     form = CVForm()
     # validate_on_submit fonctionne avec la méthode POST
@@ -128,7 +136,7 @@ def editer_profil_cv():
                 cv_annee_debut=int(form.cv_annee_debut.data),
                 cv_annee_fin=int(form.cv_annee_fin.data),
                 cv_description_poste=form.cv_description_poste.data,
-                utilisateur=current_user)
+                utilisateur=utilisateur)
         # ajout et commit des données dans la base de données
         db.session.add(cv)
         db.session.commit()
@@ -136,17 +144,18 @@ def editer_profil_cv():
         return redirect(url_for('utilisateur', user_name=current_user.user_name))
 
     # classement des expériences par ordre chronologique dans cvs_classes
-    cvs_classes = current_user.cvs.order_by(CV.cv_annee_debut.desc()).all()
+    cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
     return render_template('pages/profil_utilisateur/editer_cv.html',
                            nom="Editer mes expériences",
                            cvs_classes=cvs_classes,
-                           form=form)
+                           form=form,
+                           user=utilisateur)
 
 
-@app.route('/editer_profil/CV/<int:id>', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>/CV/<int:id>', methods=['GET', 'POST'])
 @login_required
-def editer_cv(id):
+def editer_cv(user_name, id):
     """
     Route permettant de modifier une expérience professionnelle, seulement si l'on est connecté et l'auteur de l'expérience
     :param id: id de l'expérience professionnelle
@@ -154,6 +163,8 @@ def editer_cv(id):
     :return: template editer_cv.html
     :rtype: template
     """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # récupération de l'expérience grâce à son id
     cv = CV.query.get_or_404(id)
     # vérification que l'utilisateur actuel est bien l'auteur de l'expérience
@@ -191,4 +202,5 @@ def editer_cv(id):
     return render_template('pages/profil_utilisateur/editer_cv.html',
                            nom="Editer mes expériences",
                            cvs_classes=cvs_classes,
-                           form=form)
+                           form=form,
+                           user=utilisateur)

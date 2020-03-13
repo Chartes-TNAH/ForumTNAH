@@ -62,7 +62,7 @@ def discussions():
 @app.route('/thematiques')
 def thematiques():
     """
-    Route permettant l'affichage des posts selon leur thématique
+    Route permettant l'affichage des thématiques des posts
     :return: template thematiques.html
     :rtype: template
     """
@@ -78,6 +78,23 @@ def thematiques():
     return render_template('pages/thematiques/thematiques.html',
                            nom="Thématiques",
                            sujets=liste_distincte)
+
+
+@app.route('/thematiques/<thematique>')
+def thematique(thematique):
+    """
+    Route permettant l'affichage des posts en fonction du mot-clé demandé
+    :param thematique: châine de caractère correspondant au mot-clé
+    :type thematique: str
+    :return: template thematique.html
+    :rtype: template
+    """
+    # récupération des posts correspondant à la thématique choisie
+    posts = Post.query.filter(Post.post_indexation == thematique).all()
+    
+    return render_template('pages/thematiques/thematique.html',
+                           nom=thematique,
+                           posts=posts)
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

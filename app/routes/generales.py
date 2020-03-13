@@ -9,6 +9,7 @@ from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
 
 # routes présentes dans l'ordre:
+# /racine
 # /home
 # /discussions
 # /thematiques
@@ -80,6 +81,20 @@ def discussions():
     :return: template discussions;html
     :rtype: template
     """
+    # comptage du nombre de posts
+    compteur_posts = Post.query.count()
+    # comptage du nombre de commentaires
+    compteur_comments = Comment.query.count()
+
+    # récupération de tous les posts
+    tous_posts = Post.query.all()
+    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
+    liste_distincte = []
+    for post in tous_posts:
+        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        if post.post_indexation not in liste_distincte:
+            liste_distincte.append(post.post_indexation)
+
     # gestion de la pagination des posts
     page = request.args.get('page', 1, type=int)
     # récupération des posts du forum, classés par date de création
@@ -97,7 +112,10 @@ def discussions():
                            nom="Discussions",
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
-                           pagination=posts)
+                           pagination=posts,
+                           compteur_posts=compteur_posts,
+                           compteur_comments=compteur_comments,
+                           mots_cles=liste_distincte)
 
 @app.route('/thematiques')
 @login_required

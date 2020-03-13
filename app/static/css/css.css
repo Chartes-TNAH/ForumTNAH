@@ -18,6 +18,8 @@ body{
 
 .stats_home{
     margin: 13px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 10px;
     border: 2px dotted #be122a;
     border-radius: 30px;

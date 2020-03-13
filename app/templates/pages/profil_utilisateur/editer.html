@@ -2,7 +2,7 @@
 
 {%block app_content%}
 <h1>Mise à jour du profil</h1>
-<a class="btn btn-primary" href="{{url_for('editer_profil_cv')}}">
+<a class="btn btn-primary" href="{{url_for('editer_profil_cv', user_name=user.user_name)}}">
     <p>Ajouter une expérience professionnelle</p>
 </a>
 <a class="btn btn-primary" href="{{url_for('editer_competences')}}">

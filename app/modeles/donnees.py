@@ -204,6 +204,7 @@ class Post(db.Model):
         :rtype: None
         """
         caracteres_interdits = " \"<>?./§,;:!%*µ£$+-=)°]}[{@\\`|(#~&"
+        chaine_nettoyee = string
         for caractere in caracteres_interdits:
             if caractere in string:
                 chaine_nettoyee = string.replace(caractere, "_")

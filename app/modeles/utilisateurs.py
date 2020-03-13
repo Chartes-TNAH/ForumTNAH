@@ -72,6 +72,7 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     titre = StringField('Titre de la discussion', validators=[DataRequired()])
     message = PageDownField("Ecrivez ici votre message (MarkDown possible)", validators=[DataRequired()])
+    indexation = StringField("Ecrivez ici un mot clé", validators=[DataRequired()])
 
     submit = SubmitField('Envoyer')
 

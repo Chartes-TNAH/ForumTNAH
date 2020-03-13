@@ -7,6 +7,18 @@ from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION
 
+# routes présentes dans l'ordre:
+# /home
+# /discussions
+# /thematiques
+# /thematique
+# /inscription
+# /connexion
+# /deconnexion
+# /utilisateurs
+# /suivre
+# /ne_plus_suivre
+
 
 # mise à jour de la date de visite dans la base de données dès que l'utilisateur fait une action
 @app.before_request
@@ -91,10 +103,22 @@ def thematique(thematique):
     """
     # récupération des posts correspondant à la thématique choisie
     posts = Post.query.filter(Post.post_indexation == thematique).all()
-    
+
+    # récupération de tous les posts du forum
+    post_liste = Post.query.all()
+
+    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
+    liste_distincte = []
+    for post in post_liste:
+        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        if post.post_indexation not in liste_distincte:
+            liste_distincte.append(post.post_indexation)
+
     return render_template('pages/thematiques/thematique.html',
                            nom=thematique,
-                           posts=posts)
+                           posts=posts,
+                           sujet=thematique,
+                           sujets=liste_distincte)
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

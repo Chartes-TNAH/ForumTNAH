@@ -220,6 +220,7 @@ def deconnexion():
 
 
 @app.route('/explorer')
+@login_required
 def utilisateurs():
     """
     Route permettant de voir tous les utilisateurs du forum

@@ -41,7 +41,17 @@ def home():
     :return: template home.html de la page d'accueil
     :rtype: template
     """
+    # comptage du nombre d'utilisateurs du forum
+    compteur_utilisateur = User.query.count()
+    # comptage du nombre de posts
+    compteur_posts = Post.query.count()
+    # comptage du nombre de commentaires
+    compteur_comments = Comment.query.count()
+
     return render_template("pages/home.html",
+                           compteur_utilisateur=compteur_utilisateur,
+                           compteur_posts=compteur_posts,
+                           compteur_comments=compteur_comments,
                            nom="Accueil")
 
 

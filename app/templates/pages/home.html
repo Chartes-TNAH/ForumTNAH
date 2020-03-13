@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3 liens_rapides_home">
+        <div class="col-sm-2 liens_rapides_home">
             <div class="text-center">
                         <span style="font-size: 48px; color: #be122a;">
                             <i class="fas fa-comments"></i>
@@ -14,7 +14,7 @@
                 <div class="text-center titre_raccourci">Discussions récentes</div>
             </a>
         </div>
-        <div class="col-sm-3 liens_rapides_home">
+        <div class="col-sm-2 liens_rapides_home">
             <div class="text-center">
                         <span style="font-size: 48px; color: #be122a;">
                             <i class="fas fa-list"></i>
@@ -24,7 +24,7 @@
                 <div class="text-center titre_raccourci">Thématiques</div>
             </a>
         </div>
-        <div class="col-sm-3 liens_rapides_home">
+        <div class="col-sm-2 liens_rapides_home">
             <div class="text-center">
                         <span style="font-size: 48px; color: #be122a;">
                             <i class="fas fa-user"></i>
@@ -34,8 +34,14 @@
                 <div class="text-center titre_raccourci">Utilisateurs</div>
             </a>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3 stats_home">
             <!-- ici les stats -->
+            <h5>Quelques chiffres à propos du ForumTNAH</h5>
+            <ul>
+                <li>{{ compteur_utilisateur }} utilisateurs</li>
+                <li>{{ compteur_posts }} messages publiés</li>
+                <li>{{ compteur_comments }} commentaires</li>
+            </ul>
         </div>
     </div>
     <div>

@@ -15,3 +15,10 @@ body{
     border: 2px solid #be122a;
     border-radius: 30px;
 }
+
+.stats_home{
+    margin: 13px;
+    padding-top: 10px;
+    border: 2px dotted #be122a;
+    border-radius: 30px;
+}

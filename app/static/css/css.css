@@ -1,0 +1,17 @@
+/* gestion des marges du body */
+
+body{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* pour la page d'accueil */
+
+.liens_rapides_home{
+    margin: 13px;
+    padding-bottom: 5px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}

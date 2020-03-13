@@ -34,3 +34,11 @@ body{
     border: 2px solid #be122a;
     border-radius: 30px;
 }
+
+.card{
+    width: 18rem;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}

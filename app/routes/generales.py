@@ -59,6 +59,26 @@ def discussions():
                            posts=posts.items,
                            pagination=posts)
 
+@app.route('/thematiques')
+def thematiques():
+    """
+    Route permettant l'affichage des posts selon leur thématique
+    :return: template thematiques.html
+    :rtype: template
+    """
+    # récupération de tous les posts
+    posts = Post.query.all()
+    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
+    liste_distincte = []
+    for post in posts:
+        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        if post.post_indexation not in liste_distincte:
+            liste_distincte.append(post.post_indexation)
+
+    return render_template('pages/thematiques/thematiques.html',
+                           nom="Thématiques",
+                           sujets=liste_distincte)
+
 
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():

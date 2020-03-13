@@ -2,10 +2,9 @@
 
 {%block app_content%}
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-9 ensemble_posts">
         <h1>Les discussions en cours du <a href="{{url_for('home')}}">ForumTNAH</a></h1>
         {%include 'partials/posts/posts_liste.html'%}
-        <!-- gestion de la pagination -->
         <nav aria-label="research-pagination">
             <ul class="pagination">
                 {%- for page in pagination.iter_pages() %}

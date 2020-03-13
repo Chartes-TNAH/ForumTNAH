@@ -24,3 +24,13 @@ body{
     border: 2px dotted #be122a;
     border-radius: 30px;
 }
+
+/* style du tableau comprenant les résultats de posts */
+
+.ensemble_posts{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}

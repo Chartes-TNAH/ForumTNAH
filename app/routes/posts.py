@@ -18,11 +18,12 @@ def poster():
     # validate_on_submit n'admet que les méthodes POST, PUT, PATCH et DELETE; ici la méthode est donc POST
     if form.validate_on_submit():
         # récupération des données du formulaire dans la variable post; ces données sont assignées à chacun des champs de la base de données
-        post = Post(post_titre=form.titre.data,
-                    post_message=form.message.data,
-                    auteur=current_user)
+        nouveau_post = Post(post_titre = form.titre.data,
+                    post_message = form.message.data,
+                    auteur = current_user)
+        nouveau_post.nettoyer_mot(form.indexation.data)
         # ajout et commit des données dans la base de données
-        db.session.add(post)
+        db.session.add(nouveau_post)
         db.session.commit()
         flash("Votre message est maintenant publié")
         return redirect(url_for('poster'))
@@ -71,6 +72,8 @@ def editer_post(id):
         # récupération des données du formulaire dans la variable post; ces données sont assignées à chacun des champs de la base de données
         post.post_titre = form.titre.data
         post.post_message = form.message.data
+        post.nettoyer_mot(form.indexation.data)
+
         # ajout et commit dans la base de données des modifications
         db.session.add(post)
         db.session.commit()
@@ -79,6 +82,7 @@ def editer_post(id):
     # remplissage des champs du formulaire
     form.titre.data = post.post_titre
     form.message.data = post.post_message
+    form.indexation.data = post.post_indexation
     return render_template('pages/posts/editer_post.html',
                            form=form)
 

@@ -12,7 +12,7 @@
 
 {% include 'partials/posts/posts_liste.html'%}
 
-    <div class="col-sm-5">
+    <div class="col-sm-2">
         <h3>Sujets sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h3>
         {% for sujet in sujets %}
             <a href="{{ url_for('thematique', thematique=sujet) }}">

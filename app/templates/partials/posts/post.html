@@ -29,10 +29,10 @@
         <td>
             <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Lien unique</span>
-            </a>
+            </a><br>
             <a href="{{ url_for('post', id=post.post_id) }}">
                 <span class="label label-default">Commenter</span>
-            </a>
+            </a><br>
             {% if current_user == post.auteur %}
             <a href="{{ url_for('editer_post', id=post.post_id) }}">
                 <span class="label label-default">Mettre à jour</span>

@@ -26,12 +26,12 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.slim.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
 <!-- style Javascript de Bootstrap -->
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <!-- FontAwesome -->
-<script src="https://kit.fontawesome.com/4b53f186b3.js" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/fontawesome.js') }}"></script>
 {% endblock %}
 
 {% block footer %}

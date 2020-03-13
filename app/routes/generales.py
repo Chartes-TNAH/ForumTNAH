@@ -268,8 +268,11 @@ def utilisateurs():
     :return: template explorer.html
     :rtype: template
     """
-    #récupération de l'ensemble des utilisateurs
+    # récupération de l'ensemble des utilisateurs
     utilisateurs = User.query.all()
+
+    # comptage du nombre d'utilisateurs
+    compteur_utilisateurs = User.query.count()
 
     # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
     derniers_posts = {}
@@ -287,7 +290,8 @@ def utilisateurs():
                            nom='Explorer',
                            utilisateurs=utilisateurs,
                            dates_posts=derniers_posts,
-                           dates_comments=derniers_commentaires)
+                           dates_comments=derniers_commentaires,
+                           compteur_utilisateurs=compteur_utilisateurs)
 
 
 @app.route('/suivre/<user_name>')

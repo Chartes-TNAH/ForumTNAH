@@ -87,14 +87,16 @@ def editer_profil(user_name):
                            form=form,
                            user=utilisateur)
 
-@app.route('/editer_profil/competences', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>/competences', methods=['GET', 'POST'])
 @login_required
-def editer_competences():
+def editer_competences(user_name):
     """
         Route permettant de modifier ses données personnelles de son profil
         :return: template editer.html de la page d'édition du profil avec le formulaire
         :rtype: template
         """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # utilisation du formulaire de la classe EditProfileForm
     form = CompetencesForm()
     # validate_on_submit fonctionne avec la méthode POST
@@ -109,7 +111,8 @@ def editer_competences():
         #form.user_name.data = current_user.user_name
     return render_template('pages/profil_utilisateur/editer_competences.html',
                            nom="Editer les compétences",
-                           form=form)
+                           form=form,
+                           user=utilisateur)
 
 
 @app.route('/editer_profil/<user_name>/CV', methods=['GET', 'POST'])

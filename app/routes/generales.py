@@ -140,9 +140,13 @@ def thematiques():
             # remplissage du dictionnaire
             dictionnaire_distinct[post.post_indexation] = image
 
+    # comptage du nombre de nombre de mots-clés
+    compteur_tags = len(dictionnaire_distinct)
+
     return render_template('pages/thematiques/thematiques.html',
                            nom="Thématiques",
-                           sujets=dictionnaire_distinct)
+                           sujets=dictionnaire_distinct,
+                           compteur_tags=compteur_tags)
 
 
 @app.route('/thematiques/<thematique>')

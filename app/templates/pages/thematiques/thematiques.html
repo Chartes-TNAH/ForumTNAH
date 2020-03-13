@@ -1,8 +1,14 @@
 {% extends './base.html' %}
 
 {% block app_content %}
-
+<div class="row">
+    <div class="col-sm-9">
 <h1>Thèmes présents sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h1>
+    </div>
+    <div class="col-sm-2 stats_home">
+            <p>Il y a {{ compteur_tags }} mots-clés.</p>
+    </div>
+</div>
 
 <div class="row">
 

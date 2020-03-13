@@ -2,6 +2,7 @@ from warnings import warn
 
 DEBUG = True
 
+POSTS_HASARD = 2
 POSTS_PAR_PAGE = 3
 POSTS_PAR_PAGE_DISCUSSION = 10
 COMMENTS_PAR_PAGE = 5

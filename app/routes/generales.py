@@ -5,7 +5,8 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment
-from ..constantes import POSTS_PAR_PAGE_DISCUSSION
+from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
+import random
 
 # routes présentes dans l'ordre:
 # /home
@@ -48,10 +49,16 @@ def home():
     # comptage du nombre de commentaires
     compteur_comments = Comment.query.count()
 
+    # choix de posts au hasard
+    posts = Post.query.all()
+    hasard = random.sample(posts, POSTS_HASARD)
+
     return render_template("pages/home.html",
                            compteur_utilisateur=compteur_utilisateur,
                            compteur_posts=compteur_posts,
                            compteur_comments=compteur_comments,
+                           posts=hasard,
+                           nb_posts=POSTS_HASARD,
                            nom="Accueil")
 
 

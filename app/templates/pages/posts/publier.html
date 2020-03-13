@@ -11,6 +11,13 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        <p>
+            {{ form.indexation.label }}<br>
+            {{ form.indexation(size=48) }}<br>
+            {% for error in form.indexation.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
         {{super()}}
         {{pagedown.include_pagedown()}}
         <p>

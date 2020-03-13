@@ -41,11 +41,17 @@ class User(UserMixin, db.Model):
     user_github = db.Column(db.String(120))
 
     # jointures avec les autres tables
-    posts = db.relationship("Post", backref='auteur', lazy='dynamic')
+    posts = db.relationship("Post",
+                            backref='auteur',
+                            lazy='dynamic')
 
-    comments = db.relationship('Comment', backref='auteur', lazy='dynamic')
+    comments = db.relationship('Comment',
+                               backref='auteur',
+                               lazy='dynamic')
 
-    cvs = db.relationship("CV", backref='utilisateur', lazy='dynamic')
+    cvs = db.relationship("CV",
+                          backref='utilisateur',
+                          lazy='dynamic')
 
     followed = db.relationship(
         'User', secondary=followers,
@@ -54,7 +60,10 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
     )
 
-    competences = db.relationship('Competences', secondary=skills, backref=db.backref('utilisateur', lazy='dynamic'), lazy='dynamic')
+    competences = db.relationship('Competences',
+                                  secondary=skills,
+                                  backref=db.backref('utilisateur', lazy='dynamic'),
+                                  lazy='dynamic')
 
     def get_id(self):
         """
@@ -153,18 +162,22 @@ class User(UserMixin, db.Model):
         miens = Post.query.filter_by(post_auteur=self.id)
         return followed.union(miens).order_by(Post.post_date.desc())
 
+
 # création de la table des posts
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     post_titre = db.Column(db.String(70))
     post_message = db.Column(db.Text)
     post_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    post_indexation = db.Column(db.String(24))
     html = db.Column(db.Text)
 
     # jointures avec les autres tables
     post_auteur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    comments = db.relationship('Comment',
+                               backref='post',
+                               lazy='dynamic')
 
     # gestion de la saisie MarkDown
     @staticmethod
@@ -180,6 +193,21 @@ class Post(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
+
+    # gestion des mots clés d'indexation
+    def nettoyer_mot(self, string):
+        """
+        Permet de nettoyer la chaîne de caractères envoyée de toute sa ponctauation pour tenter de normaliser un peu les mots
+        :param string: chaîne de caractères rentrée dans le formualire du mot clé
+        :type string: str
+        :return: None
+        :rtype: None
+        """
+        caracteres_interdits = " \"<>?./§,;:!%*µ£$+-=)°]}[{@\\`|(#~&"
+        for caractere in caracteres_interdits:
+            if caractere in string:
+                chaine_nettoyee = string.replace(caractere, "_")
+        self.post_indexation = chaine_nettoyee
 
 db.event.listen(Post.post_message, 'set', Post.au_changement)
 
@@ -207,6 +235,7 @@ class Comment(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
+
 
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 

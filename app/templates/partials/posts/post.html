@@ -11,6 +11,14 @@
             {{ post.html | safe }}
             {% else %}
             {{ post.post_message }}
+            {% endif %}<
+        </td>
+        <td>
+            {% if post.post_indexation %}
+            <span style="font-size: 12px; color: #be122a;">
+                <i class="fas fa-tag"></i>
+            </span>
+                {{ post.post_indexation}}
             {% endif %}
         </td>
         <td>

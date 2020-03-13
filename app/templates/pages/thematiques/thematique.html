@@ -1,0 +1,25 @@
+{% extends './base.html' %}
+
+{% block app_content %}
+
+<h1>Messages relatifs à
+    <span style="font-size: 30px; color: #be122a;">
+        <i class="fas fa-tag"></i>
+    </span>
+      {{ sujet }}</h1>
+
+<div class="row">
+
+{% include 'partials/posts/posts_liste.html'%}
+
+    <div class="col-sm-5">
+        <h3>Sujets sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h3>
+        {% for sujet in sujets %}
+            <a href="{{ url_for('thematique', thematique=sujet) }}">
+                <p>{{ sujet }}</p>
+            </a>
+        {% endfor%}
+    </div>
+</div>
+
+{% endblock %}

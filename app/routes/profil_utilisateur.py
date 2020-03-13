@@ -153,9 +153,9 @@ def editer_profil_cv(user_name):
                            user=utilisateur)
 
 
-@app.route('/editer_profil/CV/<int:id>', methods=['GET', 'POST'])
+@app.route('/editer_profil/<user_name>/CV/<int:id>', methods=['GET', 'POST'])
 @login_required
-def editer_cv(id):
+def editer_cv(user_name, id):
     """
     Route permettant de modifier une expérience professionnelle, seulement si l'on est connecté et l'auteur de l'expérience
     :param id: id de l'expérience professionnelle
@@ -163,6 +163,8 @@ def editer_cv(id):
     :return: template editer_cv.html
     :rtype: template
     """
+    # récupération de l'utilisateur à partir du paramètre fourni
+    utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
     # récupération de l'expérience grâce à son id
     cv = CV.query.get_or_404(id)
     # vérification que l'utilisateur actuel est bien l'auteur de l'expérience
@@ -200,4 +202,5 @@ def editer_cv(id):
     return render_template('pages/profil_utilisateur/editer_cv.html',
                            nom="Editer mes expériences",
                            cvs_classes=cvs_classes,
-                           form=form)
+                           form=form,
+                           user=utilisateur)

@@ -1,0 +1,17 @@
+{%extends './base.html'%}
+
+{%block app_content%}
+<h1>Vous n'êtes pas autorisé à accéder à cette page, connectez-vous pour pouvoir y accéder.</h1>
+
+<a href="{{url_for('connexion')}}">
+    <button type="button" class="btn btn-primary">
+        Se connecter
+    </button>
+</a>
+
+<a href="{{url_for('inscription')}}">
+    <button type="button" class="btn btn-primary">
+        S'inscrire
+    </button>
+</a>
+{%endblock%}

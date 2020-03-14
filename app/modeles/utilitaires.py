@@ -1,5 +1,63 @@
 import requests
 
+def normalisation(mot):
+    """
+    Fonction permettant de normaliser une chaîne de caractères pour améliorer le recoupement entre les mêmes mots
+    :param mot: chaîne de caractères correspondant au mot-clé
+    :type mot: str
+    :return: le mot normalisé
+    :rtype: str
+    """
+    # remplacement des lettres minuscules et majuscules accentuées par des lettres non accentuées
+    e = ["é","è","ê","ë", "È", "É", "Ê", "Ë"]
+    for lettre in e:
+        if lettre in mot:
+            mot = mot.replace(lettre, "e")
+
+    a = ["à", "â", "ä", "À", "Â", "Ä"]
+    for lettre in a:
+        if lettre in mot:
+            mot = mot.replace(lettre, "a")
+
+    i = ["Î", "Ï", "î", "ï"]
+    for lettre in i:
+        if lettre in mot:
+            mot = mot.replace(lettre, "i")
+
+    c = ["Ç", "ç"]
+    for lettre in c:
+        if lettre in mot:
+            mot = mot.replace(lettre, "c")
+
+    o = ["Ô", "ô", "ö", "Ö"]
+    for lettre in o:
+        if lettre in mot:
+            mot = mot.replace(lettre, "o")
+
+    oe = ["Œ", "œ"]
+    for lettre in oe:
+        if lettre in mot:
+            mot = mot.replace(lettre, "oe")
+
+    ae = ["Æ", "æ"]
+    for lettre in ae:
+        if lettre in mot:
+            mot = mot.replace(lettre, "ae")
+
+    u = ["ü", "û", "ù", "Ù", "Û", "Ü"]
+    for lettre in u:
+        if lettre in mot:
+            mot = mot.replace(lettre, "u")
+
+    y = ["ÿ", "Ÿ"]
+    for lettre in y:
+        if lettre in mot:
+            mot = mot.replace(lettre, "y")
+
+    # transformation du mot en majuscules
+    mot_normalise = mot.upper()
+
+    return mot_normalise
 
 def get_first_image(tag):
     """
@@ -9,6 +67,9 @@ def get_first_image(tag):
     :return: une url
     :rtype: str
     """
+
+    # normalisation du mot entré
+    tag = normalisation(tag)
 
     r = requests.get("https://api.qwant.com/api/search/images",
         params={

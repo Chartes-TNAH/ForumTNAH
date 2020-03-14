@@ -5,10 +5,10 @@ Le ForumTNAH est une application web permettant des discussions entre anciens é
 ## Description des fonctionnalités du ForumTNAH
 
 Plusieurs fonctionnalités sont proposées:
-* publication de messages visibles par tous, avec possibilités de commentaires
-* création de comptes utilisateurs donnant la possibilité de renseigner son CV, ses liens (mail, GitHub, LinkedIn)
-* possibilité de saisie en MarkDown des messages
-* envoi de messages privés
+* publication de messages visibles par tous, avec possibilité de commentaires
+* indexation des messages et recherche de messages par thème
+* création de comptes utilisateurs donnant la possibilité de renseigner ses expériences, ses compétences, ses liens (mail, GitHub, LinkedIn) et des informations sur la scolarité à l'EnC
+* possibilité de saisie en MarkDown des messages et des commentaires
 
 ## Développement de l'application
 
@@ -17,7 +17,7 @@ Ce projet a été réalisé dans le cadre de l'évaluation du cours Python. Il e
 ## Lancement du ForumTNAH
 
 * Installer Python3
-* Cloner ce dépôt Git
-* Installer, configurer et lancer un environnement virtuel avec Python3
-* Installer les requirements.txt
+* Cloner ce dépôt Git: `git clone https://github.com/MaximeChallon/ForumTNAH.git`
+* Installer, configurer et lancer un environnement virtuel avec Python3: `virtualenv -p python3 env` pour l'installation, `source env/bin/activate` pour le lancement
+* Installer les requirements.txt: `pip install requirements.txt`
 * Lancer l'application avec la commande `python3 run.py`

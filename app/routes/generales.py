@@ -220,6 +220,7 @@ def competence(competence):
     :return: template competence.html
     :rtype: template
     """
+    # récupération de la classe de la compétence
     competence_donnee = Competences.query.filter(Competences.competence_label == competence).all()
 
     # récupération des utilisateurs correspondant à la compétence choisie

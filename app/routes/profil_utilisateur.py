@@ -45,6 +45,9 @@ def utilisateur(user_name):
     # comptage du nombre d'expériences
     compteur_experiences = utilisateur.cvs.count()
 
+    # comptage du nombre de posts de l'utilisateur
+    compteur_posts = utilisateur.posts.count()
+
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
@@ -53,6 +56,7 @@ def utilisateur(user_name):
                            pagination=posts,
                            cvs_classes=cvs_classes,
                            compteur_experiences=compteur_experiences,
+                           compteur_posts=compteur_posts,
                            lieux=dictionnaire_lieux)
 
 

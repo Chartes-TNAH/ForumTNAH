@@ -7,7 +7,7 @@
         {% include 'partials/profil_utilisateur/infos_generales_utilisateur.html' %}
     </div>
     <div class="col-sm-3 stats_home">
-        <p>Compétences de {{ user.user_name }}</p>
+        <h5>Compétences de {{ user.user_name }}</h5>
         <ul>
             {% for competence in user.competences %}
             <li>{{ competence.competence_label }}</li>
@@ -17,12 +17,12 @@
 </div>
 
 {% if cvs_classes %}
-<div class="row experiences">
-    <div class="col-sm-9">
-        <p>Expériences professionnelles</p>
+<div class="row ensemble_posts">
+    <div class="col-sm-9 experiences" style="text-align: center;">
+        <h5>Expériences professionnelles</h5>
         {% include 'partials/profil_utilisateur/cv_liste.html' %}
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 stats_home" style="text-align: center;">
         <h5>Quelques chiffres à propos des expériences de {{ user.user_name }}</h5>
         <ul>
             <li>{{ compteur_experiences }} expériences</li>
@@ -37,9 +37,10 @@
 </div>
 {% endif %}
 
+{% if posts %}
 <div class="row ensemble_posts">
-    <div class="col-sm-12">
-        <p>Messages récents</p>
+    <div class="col-sm-9">
+        <h5>Messages récents</h5>
         {% include 'partials/posts/posts_liste.html' %}
         <nav aria-label="research-pagination">
             <ul class="pagination">
@@ -66,6 +67,13 @@
             </ul>
         </nav>
     </div>
+    <div class="col-sm-2 stats_home" style="text-align: center;">
+        <h5>Quelques chiffres à propos des messages de {{ user.user_name }}</h5>
+        <ul>
+            <li>{{ compteur_posts }} messages</li>
+        </ul>
+    </div>
 </div>
+{% endif %}
 
 {% endblock %}

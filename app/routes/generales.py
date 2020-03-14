@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment
-from ..modeles.tags_images import get_first_image
+from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
 

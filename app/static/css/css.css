@@ -42,3 +42,12 @@ body{
     border: 2px solid #be122a;
     border-radius: 30px;
 }
+
+.formulaire{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+    text-align: center;
+}

@@ -1,19 +1,19 @@
-    <tr valign="top">
-        <td style="text-align:center;">
-            <a href="{{ url_for('utilisateur', user_name=comment.auteur.user_name) }}">
-                <img src="{{ comment.auteur.avatar(36) }}"><br>
-                {{ comment.auteur.user_name }}
-            </a>
-        </td>
-        <td>
+<tr valign="top">
+    <td style="text-align:center;">
+        <a href="{{ url_for('utilisateur', user_name=comment.auteur.user_name) }}">
+            <img src="{{ comment.auteur.avatar(36) }}"><br>
+            {{ comment.auteur.user_name }}
+        </a>
+    </td>
+    <td>
 
-            {% if comment.comment_html %}
-            {{ comment.comment_html | safe }}
-            {% else %}
-            {{ comment.comment_message }}
-            {% endif %}
-        </td>
-        <td>
-            {{ comment.comment_date }}
-        </td>
-    </tr>
+        {% if comment.comment_html %}
+        {{ comment.comment_html | safe }}
+        {% else %}
+        {{ comment.comment_message }}
+        {% endif %}
+    </td>
+    <td>
+        {{ comment.comment_date }}
+    </td>
+</tr>

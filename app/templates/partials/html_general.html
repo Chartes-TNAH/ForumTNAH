@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        {%block titre%}{%endblock%}
+<head>
+    {% block titre %}{% endblock %}
 
-        <!-- favicon pour le navigateur -->
-        <link rel="icon" href="{{ url_for('static', filename='img/logo_forumTNAH.png') }}" type="image/png">
+    <!-- favicon pour le navigateur -->
+    <link rel="icon" href="{{ url_for('static', filename='img/logo_forumTNAH.png') }}" type="image/png">
 
-        <!-- métadonnées de la page HTML -->
-        <meta charset="utf-8">
-        <meta name="description" content="Forum pour les masters TNAH de l'Ecole des Chartes">
-        <meta name="keywords" content="Forum, Ecole, Chartes, Master, TNAH, ENC">
-        <meta name="author" content="Maxime Challon">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- métadonnées de la page HTML -->
+    <meta charset="utf-8">
+    <meta name="description" content="Forum pour les masters TNAH de l'Ecole des Chartes">
+    <meta name="keywords" content="Forum, Ecole, Chartes, Master, TNAH, ENC">
+    <meta name="author" content="Maxime Challon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        {%block styles%}{%endblock%}
-    </head>
-    <body>
-        {%block navbar%}{%endblock%}
-        {%block content%}
-            {%block connexion%}{%endblock%}
-            {%block app_content%}{%endblock%}
-        {%endblock%}
-        {%block scripts%}{%endblock%}
-    </body>
-    {%block footer%}{%endblock%}
+    {% block styles %}{% endblock %}
+</head>
+<body>
+{% block navbar %}{% endblock %}
+{% block content %}
+{% block connexion %}{% endblock %}
+{% block app_content %}{% endblock %}
+{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+{% block footer %}{% endblock %}
 </html>

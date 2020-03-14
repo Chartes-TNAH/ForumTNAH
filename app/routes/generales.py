@@ -4,7 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
-from ..modeles.donnees import Post, User, Comment, Competences
+from ..modeles.donnees import Post, User, Comment, Competences, skills
 from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
@@ -207,8 +207,32 @@ def competences():
     return render_template('pages/competences/competences.html',
                            nom="Compétences",
                            competences=dictionnaire_distinct,
-                           compteur_tags=compteur_competences)
+                           compteur_competences=compteur_competences)
 
+
+@app.route('/competences/<competence>')
+@login_required
+def competence(competence):
+    """
+    Route permettant l'affichage des utilisateurs en fonction de la compétence demandée
+    :param competence: châine de caractère correspondant au mot-clé
+    :type competence: str
+    :return: template competence.html
+    :rtype: template
+    """
+    competence_donnee = Competences.query.filter(Competences.competence_label == competence).all()
+
+    # récupération des utilisateurs correspondant à la compétence choisie
+    utilisateurs = User.query.filter(User.competences.contains(competence_donnee[0])).all()
+
+    # création d'une liste vide qui prendra toutes les compétences des utilisateurs, sans doublons
+    competences = Competences.query.all()
+
+    return render_template('pages/competences/competence.html',
+                           nom=competence,
+                           utilisateurs=utilisateurs,
+                           competence=competence,
+                           competences=competences)
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

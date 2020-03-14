@@ -14,6 +14,7 @@
         <br>
         <br>
         <form class="big_form" action="" method="POST">
+            <!-- L'attribut action est laissé vide, comme l'explique Miguel Grinberg. The action attribute of the form is used to tell the browser the URL that should be used when submitting the information the user entered in the form. When the action is set to an empty string the form is submitted to the URL that is currently in the address bar, which is the URL that rendered the form on the page. -->
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.user_name.label }}<br>

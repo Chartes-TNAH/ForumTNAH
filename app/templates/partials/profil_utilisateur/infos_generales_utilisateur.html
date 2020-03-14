@@ -1,10 +1,10 @@
 <div class="container">
 <table class="table table-borderless">
     <tr>
-        <td>
+        <td style="vertical-align: middle;">
             <img src="{{user.avatar(120)}}">
     </td>
-        <td style="width:30%;">
+        <td style="width:30%; vertical_align: middle;">
             <h1>{{ user.user_name }}</h1>
 
             {%if user.user_firstname%}
@@ -20,7 +20,7 @@
             {%endif%}
 
         </td>
-        <td style="width:30%;">
+        <td style="width:30%; vertical-align: middle;">
             {%if user.user_linkedin%}
             <a class="btn btn-link" href="{{user.user_linkedin}}">
             <p>Lien vers le profil LinkedIn de {{user.user_name}}</p>
@@ -33,7 +33,7 @@
             </a>
             {%endif%}
         </td>
-        <td style="width:30%;">
+        <td style="width:30%; vertical-align: middle;">
             {%if user.user_last_seen%}
             <p>Dernière activité le : {{user.user_last_seen}} (GMT)</p>
             {%endif%}

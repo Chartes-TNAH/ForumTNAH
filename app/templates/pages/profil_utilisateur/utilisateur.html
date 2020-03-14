@@ -3,7 +3,7 @@
 {% block app_content %}
 
 <div class="row">
-    <div class="col-sm-8 commentaire">
+    <div class="col-sm-8 experiences">
         {% include 'partials/profil_utilisateur/infos_generales_utilisateur.html' %}
     </div>
     <div class="col-sm-3 stats_home">
@@ -16,12 +16,20 @@
     </div>
 </div>
 
+{% if cvs_classes %}
 <div class="row experiences">
-    <div class="col-sm-12">
+    <div class="col-sm-9">
         <p>Expériences professionnelles</p>
         {% include 'partials/profil_utilisateur/cv_liste.html' %}
     </div>
+    <div class="col-sm-2">
+        <h5>Quelques chiffres à propos du ForumTNAH</h5>
+            <ul>
+                <li>{{ compteur_experiences }} expériences</li>
+            </ul>
+    </div>
 </div>
+{% endif %}
 
 <div class="row ensemble_posts">
     <div class="col-sm-12">

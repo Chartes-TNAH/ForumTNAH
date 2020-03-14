@@ -59,3 +59,11 @@ body{
     border: 2px dashed #be122a;
     border-radius: 30px;
 }
+
+.experiences{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px dotted #be122a;
+    border-radius: 30px;
+}

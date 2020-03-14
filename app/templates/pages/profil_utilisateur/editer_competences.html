@@ -1,12 +1,20 @@
-{%extends './base.html'%}
+{% extends './base.html' %}
 
-{%block app_content%}
-<form class="big_form" action="" method="POST">
-    {{ form.hidden_tag() }}
-    <p>
-        Compétences:
-        {{ form.competences }}
-    </p>
-    <div class="form-group">{{ form.submit() }}</div>
-</form>
-{%endblock%}
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-3">
+
+    </div>
+    <div class="col-sm-5 formulaire">
+        <form class="big_form" action="" method="POST">
+            {{ form.hidden_tag() }}
+            <h2>Compétences</h2>
+            <p>{{ form.competences }}</p>
+            <div class="form-group">{{ form.submit() }}</div>
+        </form>
+    </div>
+    <div class="col-sm-3">
+
+    </div>
+</div>
+{% endblock %}

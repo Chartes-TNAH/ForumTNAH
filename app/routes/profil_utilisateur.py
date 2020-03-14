@@ -33,6 +33,12 @@ def utilisateur(user_name):
     # classement des expériences par ordre chronologique dans cvs_classes
     cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
+    # répartition géographique des postes de l'utilisateur dans un dictionnaire avec le lieu comme clé et le nombre en valeur
+    dictionnaire_lieux = {}
+    for lieu in utilisateur.cvs:
+        compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
+        dictionnaire_lieux[lieu.cv_ville] = compteur + 1
+
     # comptage du nombre d'expériences
     compteur_experiences = utilisateur.cvs.count()
 
@@ -43,7 +49,8 @@ def utilisateur(user_name):
                            posts=posts.items,
                            pagination=posts,
                            cvs_classes=cvs_classes,
-                           compteur_experiences=compteur_experiences)
+                           compteur_experiences=compteur_experiences,
+                           lieux=dictionnaire_lieux)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])

@@ -30,8 +30,11 @@
             <li>{{ compteur_experiences }} expériences</li>
             <li>Lieux d'exercice:</li>
             <ul>
-                {% for lieu in lieux %}
-                <li>{{ lieux.get(lieu) }} postes à {{ lieu }}</li>
+                {% for lieu in images_lieux %}
+                <li>
+                    <img src="{{ images_lieux.get(lieu) }}" alt="{{ lieu }}" width="30px;">
+                    {{ lieu }}
+                </li>
                 {% endfor %}
             </ul>
         </ul>

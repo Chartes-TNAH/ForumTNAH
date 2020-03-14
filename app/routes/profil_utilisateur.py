@@ -40,15 +40,6 @@ def utilisateur(user_name):
     # classement des expériences par ordre chronologique dans cvs_classes
     cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
-    # répartition géographique des postes de l'utilisateur dans un dictionnaire avec le lieu comme clé et le nombre en valeur
-    dictionnaire_lieux = {}
-    for lieu in utilisateur.cvs:
-        if lieu.cv_ville not in dictionnaire_lieux:
-            compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
-            dictionnaire_lieux[lieu.cv_ville] = compteur + 1
-        else:
-            dictionnaire_lieux[lieu.cv_ville]=dictionnaire_lieux.get(lieu.cv_ville)+1
-
     # comptage du nombre d'expériences
     compteur_experiences = utilisateur.cvs.count()
 
@@ -68,6 +59,15 @@ def utilisateur(user_name):
             # remplissage du dictionnaire
             dictionnaire_distinct[competence.competence_label] = image
 
+    # récupération des lieux de travail de l'utilisateur dans un dictionnaire avec la ville en clé et l'url de l'image en valeur
+    lieux_travail = {}
+    for cv in cvs_classes:
+        if cv.cv_ville not in lieux_travail:
+            # récupération de l'image
+            image = get_first_image(cv.cv_ville)
+            # remplissage du dictionnaire
+            lieux_travail[cv.cv_ville] = image
+
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
@@ -77,8 +77,8 @@ def utilisateur(user_name):
                            cvs_classes=cvs_classes,
                            compteur_experiences=compteur_experiences,
                            compteur_posts=compteur_posts,
-                           lieux=dictionnaire_lieux,
-                           dictionnaire_competences=dictionnaire_distinct)
+                           dictionnaire_competences=dictionnaire_distinct,
+                           images_lieux=lieux_travail)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])

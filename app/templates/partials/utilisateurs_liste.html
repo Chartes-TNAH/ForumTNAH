@@ -1,0 +1,53 @@
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col" style="width:10%;">Utilisateur</th>
+        <th scope="col" style="width:40%;">Nom/prénom</th>
+        <th scope="col">Promotion</th>
+        <th scope="col">Compétences</th>
+        <th scope="col">Dernier post</th>
+        <th scope="col">Dernier commentaire</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for utilisateur in utilisateurs %}
+    <tr valign="top">
+        <td style="text-align:center; width=10%;">
+            <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">
+                <img src="{{ utilisateur.avatar(36) }}"><br>
+                {{ utilisateur.user_name }}
+            </a>
+        </td>
+        <td style="width:20%;">
+            {{ utilisateur.user_firstname }} {{ utilisateur.user_surname }}
+        </td>
+        <td style="width:10%;">
+            {{ utilisateur.user_promotion_date }}
+        </td>
+        <td style="width=15%;">
+            <ul>{% for competence in utilisateur.competences %}
+                <li>{{ competence.competence_label }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td style="width=15%;">{{ dates_posts[utilisateur.user_name].post_date }}</td>
+        <td style="width=15%;">{{ dates_comments[utilisateur.user_name].comment_date }}</td>
+        <td style="width=15%;">
+            <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Profil</span>
+            </a>
+            <br>
+            <a href="{{ url_for('suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Suivre</span>
+            </a>
+            <br>
+            <a href="{{ url_for('ne_plus_suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Ne plus suivre</span>
+            </a>
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>

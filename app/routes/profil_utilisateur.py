@@ -3,6 +3,7 @@ from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
 from ..modeles.utilisateurs import EditProfileForm, CVForm, CompetencesForm
 from ..modeles.donnees import Post, User, Comment, CV
+from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE
 
 
@@ -48,6 +49,19 @@ def utilisateur(user_name):
     # comptage du nombre de posts de l'utilisateur
     compteur_posts = utilisateur.posts.count()
 
+    # récupération des compétences de l'utilisateur
+    competences = utilisateur.competences.all()
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for competence in competences:
+        # si la compétence de l'utilisateur n'est pas présente dans la liste, alors il est ajouté; s'il y est, alors il n'y est pas ajouté
+        if competence.competence_label not in dictionnaire_distinct:
+            # récupération de l'image
+            image = get_first_image(competence.competence_label)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[competence.competence_label] = image
+
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
@@ -57,7 +71,8 @@ def utilisateur(user_name):
                            cvs_classes=cvs_classes,
                            compteur_experiences=compteur_experiences,
                            compteur_posts=compteur_posts,
-                           lieux=dictionnaire_lieux)
+                           lieux=dictionnaire_lieux,
+                           dictionnaire_competences=dictionnaire_distinct)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])

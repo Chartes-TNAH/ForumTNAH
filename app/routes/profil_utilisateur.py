@@ -33,13 +33,17 @@ def utilisateur(user_name):
     # classement des expériences par ordre chronologique dans cvs_classes
     cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
+    # comptage du nombre d'expériences
+    compteur_experiences = utilisateur.cvs.count()
+
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
                            pagination=posts,
-                           cvs_classes=cvs_classes)
+                           cvs_classes=cvs_classes,
+                           compteur_experiences=compteur_experiences)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])
@@ -82,6 +86,7 @@ def editer_profil(user_name):
         form.user_birthyear.data = current_user.user_birthyear
         form.user_linkedin.data = current_user.user_linkedin
         form.user_github.data = current_user.user_github
+
     return render_template('pages/profil_utilisateur/editer.html',
                            nom="Editer le profil",
                            form=form,

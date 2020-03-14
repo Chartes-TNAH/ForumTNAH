@@ -6,6 +6,12 @@ from ..modeles.donnees import Post, User, Comment, CV
 from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE
 
+# par ordre d'apparition:
+# /utilisateur/<user_name>
+# /editer_profil/<user_name>
+# /editer_profil/<user_name>/competences
+# /editer_profil/<user_name>/CV
+# /editer_profil/<user_name>/CV/<int:id>
 
 @app.route('/utilisateur/<user_name>')
 def utilisateur(user_name):

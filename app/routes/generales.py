@@ -4,21 +4,23 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
-from ..modeles.donnees import Post, User, Comment
+from ..modeles.donnees import Post, User, Comment, Competences
 from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
 
-# routes présentes dans l'ordre:
-# /racine
+# dans l'ordre:
+# /
 # /home
 # /discussions
 # /thematiques
-# /thematique
+# /thematiques/<thematique>
+# /competences
+# /competences/<competence>
 # /inscription
 # /connexion
 # /deconnexion
-# /utilisateurs
+# /explorer
 # /suivre
 # /ne_plus_suivre
 
@@ -177,6 +179,36 @@ def thematique(thematique):
                            posts=posts,
                            sujet=thematique,
                            sujets=liste_distincte)
+
+
+@app.route('/competences')
+@login_required
+def competences():
+    """
+        Route permettant l'affichage des competences
+        :return: template competences.html
+        :rtype: template
+    """
+    # récupération de toutes les compétences
+    competences = Competences.query.all()
+
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for competence in competences:
+        # récupération de l'image
+        image = get_first_image(competence.competence_label)
+        # remplissage du dictionnaire
+        dictionnaire_distinct[competence.competence_label] = image
+
+    # comptage du nombre de nombre de mots-clés
+    compteur_competences = len(dictionnaire_distinct)
+
+    return render_template('pages/competences/competences.html',
+                           nom="Compétences",
+                           competences=dictionnaire_distinct,
+                           compteur_tags=compteur_competences)
+
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

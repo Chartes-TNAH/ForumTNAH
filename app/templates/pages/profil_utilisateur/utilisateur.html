@@ -23,10 +23,16 @@
         {% include 'partials/profil_utilisateur/cv_liste.html' %}
     </div>
     <div class="col-sm-2">
-        <h5>Quelques chiffres à propos du ForumTNAH</h5>
+        <h5>Quelques chiffres à propos des expériences de {{ user.user_name }}</h5>
+        <ul>
+            <li>{{ compteur_experiences }} expériences</li>
+            <li>Lieux d'exercice:</li>
             <ul>
-                <li>{{ compteur_experiences }} expériences</li>
+                {% for lieu in lieux %}
+                <li>{{ lieux.get(lieu) }} postes à {{ lieu }}</li>
+                {% endfor %}
             </ul>
+        </ul>
     </div>
 </div>
 {% endif %}

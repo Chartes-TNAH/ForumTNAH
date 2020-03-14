@@ -1,0 +1,27 @@
+{% extends './base.html' %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-9">
+<h1>Compétences présentes sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h1>
+    </div>
+    <div class="col-sm-2 stats_home">
+            <p>Il y a {{ compteur_competences }} compétences.</p>
+    </div>
+</div>
+
+<div class="row">
+
+    {% for competence in competences %}
+
+    <div class="card">
+        <img src={{ competences.get(competence) }} class="card-img-top" alt={{ competence }}  width="120px">
+        <div class="card-body">
+            <h5 class="card-title">{{ competence }}</h5>
+            <a href="{{ url_for('competence', competence=competence) }}" class="btn btn-primary">Voir les utilisateurs</a>
+        </div>
+    </div>
+
+    {% endfor%}
+</div>
+{% endblock %}

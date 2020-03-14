@@ -36,8 +36,11 @@ def utilisateur(user_name):
     # répartition géographique des postes de l'utilisateur dans un dictionnaire avec le lieu comme clé et le nombre en valeur
     dictionnaire_lieux = {}
     for lieu in utilisateur.cvs:
-        compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
-        dictionnaire_lieux[lieu.cv_ville] = compteur + 1
+        if lieu.cv_ville not in dictionnaire_lieux:
+            compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
+            dictionnaire_lieux[lieu.cv_ville] = compteur + 1
+        else:
+            dictionnaire_lieux[lieu.cv_ville]=dictionnaire_lieux.get(lieu.cv_ville)+1
 
     # comptage du nombre d'expériences
     compteur_experiences = utilisateur.cvs.count()

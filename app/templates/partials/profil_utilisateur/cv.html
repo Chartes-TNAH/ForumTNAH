@@ -7,7 +7,7 @@
         <td>{{cv.cv_description_poste}}</td>
         <td>
             {%if current_user == cv.utilisateur%}
-            <a href="{{url_for('editer_cv', user_name=cv.utilisateur, id=cv.cv_id)}}">
+            <a href="{{url_for('editer_cv', user_name=cv.utilisateur.user_name, id=cv.cv_id)}}">
                 <span class="label label-default">Mettre à jour</span>
             </a>
             {%endif%}

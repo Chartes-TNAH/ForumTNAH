@@ -5,6 +5,11 @@ from ..modeles.utilisateurs import PostForm, CommentForm
 from ..modeles.donnees import Post, User, Comment
 from ..constantes import POSTS_PAR_PAGE, COMMENTS_PAR_PAGE
 
+# routes présentes dans l'ordre:
+# /poster
+# /editer_post
+# /post
+
 
 @app.route('/fil', methods=['GET', 'POST'])
 def poster():

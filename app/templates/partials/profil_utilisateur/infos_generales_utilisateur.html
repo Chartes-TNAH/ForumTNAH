@@ -1,57 +1,57 @@
 <div class="container">
-<table class="table table-borderless">
-    <tr>
-        <td>
-            <img src="{{user.avatar(120)}}">
-    </td>
-        <td style="width:30%;">
-            <h1>{{ user.user_name }}</h1>
+    <table class="table table-borderless">
+        <tr>
+            <td style="vertical-align: middle;">
+                <img src="{{ user.avatar(120) }}">
+            </td>
+            <td style="width:30%; vertical_align: middle;">
+                <h1>{{ user.user_name }}</h1>
 
-            {%if user.user_firstname%}
-            <p>{{user.user_firstname}} {%if user.user_surname%}{{user.user_surname}}{%endif%}</p>
-            {%endif%}
+                {% if user.user_firstname %}
+                <p>{{ user.user_firstname }} {% if user.user_surname %}{{ user.user_surname }}{% endif %}</p>
+                {% endif %}
 
-            {%if user.user_promotion_date%}
-            <p>Promotion {{user.user_promotion_date}}</p>
-            {%endif%}
+                {% if user.user_promotion_date %}
+                <p>Promotion {{ user.user_promotion_date }}</p>
+                {% endif %}
 
-            {%if user.user_description%}
-            <p>{{user.user_description}}</p>
-            {%endif%}
+                {% if user.user_description %}
+                <p>{{ user.user_description }}</p>
+                {% endif %}
 
-        </td>
-        <td style="width:30%;">
-            {%if user.user_linkedin%}
-            <a class="btn btn-link" href="{{user.user_linkedin}}">
-            <p>Lien vers le profil LinkedIn de {{user.user_name}}</p>
-            </a>
-            {%endif%}
+            </td>
+            <td style="width:30%; vertical-align: middle;">
+                {% if user.user_linkedin %}
+                <a class="btn btn-link" href="{{ user.user_linkedin }}">
+                    <p>Lien vers le profil LinkedIn de {{ user.user_name }}</p>
+                </a>
+                {% endif %}
 
-            {%if user.user_github%}
-            <a class="btn btn-link" href="{{user.user_github}}">
-            <p>Lien vers le profil GitHub de {{user.user_name}}</p>
-            </a>
-            {%endif%}
-        </td>
-        <td style="width:30%;">
-            {%if user.user_last_seen%}
-            <p>Dernière activité le : {{user.user_last_seen}} (GMT)</p>
-            {%endif%}
+                {% if user.user_github %}
+                <a class="btn btn-link" href="{{ user.user_github }}">
+                    <p>Lien vers le profil GitHub de {{ user.user_name }}</p>
+                </a>
+                {% endif %}
+            </td>
+            <td style="width:30%; vertical-align: middle;">
+                {% if user.user_last_seen %}
+                <p>Dernière activité le : {{ user.user_last_seen }} (GMT)</p>
+                {% endif %}
 
-            {%if user == current_user%}
-            <p>
-                <a class="btn btn-primary" href="{{url_for('editer_profil', user_name=user.user_name)}}">Mettre à jour mon profil</a>
-            </p>
-            {%elif not current_user.is_following(user)%}
-            <p>
-                <a href="{{ url_for('suivre', user_name=user.user_name) }}">Suivre</a>
-            </p>
-            {% else %}
-            <p><a href="{{ url_for('ne_plus_suivre', user_name=user.user_name) }}">Ne plus suivre</a></p>
-            {%endif%}
+                {% if user == current_user %}
+                <p>
+                    <a class="btn btn-primary" href="{{ url_for('editer_profil', user_name=user.user_name) }}">Mettre à jour mon profil</a>
+                </p>
+                {% elif not current_user.is_following(user) %}
+                <p>
+                    <a href="{{ url_for('suivre', user_name=user.user_name) }}">Suivre</a>
+                </p>
+                {% else %}
+                <p><a href="{{ url_for('ne_plus_suivre', user_name=user.user_name) }}">Ne plus suivre</a></p>
+                {% endif %}
 
-            <p>{{ user.followers.count() }} suivent, {{ user.followed.count() }} suivies</p>
-        </td>
-    </tr>
-</table>
-    </div>
+                <p>{{ user.followers.count() }} suivent, {{ user.followed.count() }} suivies</p>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -33,13 +33,31 @@ def utilisateur(user_name):
     # classement des expériences par ordre chronologique dans cvs_classes
     cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
+    # répartition géographique des postes de l'utilisateur dans un dictionnaire avec le lieu comme clé et le nombre en valeur
+    dictionnaire_lieux = {}
+    for lieu in utilisateur.cvs:
+        if lieu.cv_ville not in dictionnaire_lieux:
+            compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
+            dictionnaire_lieux[lieu.cv_ville] = compteur + 1
+        else:
+            dictionnaire_lieux[lieu.cv_ville]=dictionnaire_lieux.get(lieu.cv_ville)+1
+
+    # comptage du nombre d'expériences
+    compteur_experiences = utilisateur.cvs.count()
+
+    # comptage du nombre de posts de l'utilisateur
+    compteur_posts = utilisateur.posts.count()
+
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
                            user=utilisateur,
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
                            pagination=posts,
-                           cvs_classes=cvs_classes)
+                           cvs_classes=cvs_classes,
+                           compteur_experiences=compteur_experiences,
+                           compteur_posts=compteur_posts,
+                           lieux=dictionnaire_lieux)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])
@@ -82,6 +100,7 @@ def editer_profil(user_name):
         form.user_birthyear.data = current_user.user_birthyear
         form.user_linkedin.data = current_user.user_linkedin
         form.user_github.data = current_user.user_github
+
     return render_template('pages/profil_utilisateur/editer.html',
                            nom="Editer le profil",
                            form=form,

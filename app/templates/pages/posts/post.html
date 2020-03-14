@@ -1,48 +1,63 @@
 {% extends "./base.html" %}
 
 {% block app_content %}
-{%include 'partials/posts/posts_liste.html'%}
+<div class="row ensemble_posts">
+    <div class=""col-sm-12>
+        {% include 'partials/posts/posts_liste.html' %}
+    </div>
+</div>
 
-<h4>Commenter ce post</h4>
-<form action="" method="post">
-        {{ form.hidden_tag() }}
-        {{super()}}
-        {{pagedown.include_pagedown()}}
-        <p>
-            {{ form.message.label }}<br>
-            {{ form.message(cols=70, rows=7) }}<br>
-            {% for error in form.message.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-{%for comment in comments%}
-{%include 'partials/comments.html'%}
-{%endfor%}
-<!-- gestion de la pagination -->
-    <nav aria-label="research-pagination">
-  <ul class="pagination">
-    {%- for page in pagination.iter_pages() %}
-        {% if page %}
+<div class="row formulaire">
+    <div class="col-sm-12">
+        <h4>Commenter ce post</h4>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            {{ super() }}
+            {{ pagedown.include_pagedown() }}
+            <p>
+                {{ form.message.label }}<br>
+                {{ form.message(cols=70, rows=7) }}<br>
+                {% for error in form.message.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>
 
-          {% if page != pagination.page %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for('post', id=post, page=page) }}">{{page}}</a>
-            </li>
-          {% else %}
-            <li class="page-item active disabled">
-              <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
-            </li>
-          {% endif %}
+{% if comments %}
+<div class="row commentaire">
+    <div class="col-sm-12">
+        {% for comment in comments %}
+        {% include 'partials/comments.html' %}
+        {% endfor %}
+        <!-- gestion de la pagination -->
+        <nav aria-label="research-pagination">
+            <ul class="pagination">
+                {%- for page in pagination.iter_pages() %}
+                {% if page %}
 
-        {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">...</a>
-            </li>
-        {% endif %}
+                {% if page != pagination.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('post', id=post, page=page) }}">{{page}}</a>
+                </li>
+                {% else %}
+                <li class="page-item active disabled">
+                    <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                </li>
+                {% endif %}
 
-    {%- endfor %}
-  </ul>
-</nav>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                {% endif %}
+
+                {%- endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endif %}
 {%endblock%}

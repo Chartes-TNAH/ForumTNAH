@@ -1,13 +1,27 @@
 {% extends './base.html' %}
 
 {% block app_content %}
-
+<div class="row">
+    <div class="col-sm-9">
 <h1>Thèmes présents sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h1>
+    </div>
+    <div class="col-sm-2 stats_home">
+            <p>Il y a {{ compteur_tags }} mots-clés.</p>
+    </div>
+</div>
 
-{% for sujet in sujets %}
-<a href="{{ url_for('thematique', thematique=sujet) }}">
-    <p>{{ sujet }}</p>
-</a>
-{% endfor%}
+<div class="row">
 
+    {% for sujet in sujets %}
+
+    <div class="card">
+        <img src={{ sujets.get(sujet) }} class="card-img-top" alt={{ sujet }}  width="120px">
+        <div class="card-body">
+            <h5 class="card-title">{{ sujet }}</h5>
+            <a href="{{ url_for('thematique', thematique=sujet) }}" class="btn btn-primary">Voir les messages</a>
+        </div>
+    </div>
+
+    {% endfor%}
+</div>
 {% endblock %}

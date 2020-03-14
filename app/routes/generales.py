@@ -5,9 +5,12 @@ from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment
-from ..constantes import POSTS_PAR_PAGE_DISCUSSION
+from ..modeles.tags_images import get_first_image
+from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
+import random
 
 # routes présentes dans l'ordre:
+# /racine
 # /home
 # /discussions
 # /thematiques
@@ -34,24 +37,65 @@ def before_request():
 
 
 @app.route('/')
+def racine():
+    """
+    Route sur laquelle l'utilisateur arrive en ouvrant le site, il doit se connecter pour accéder au ForumTNAH
+    :return: template racine.html
+    :rtype: template
+    """
+    return render_template('pages/racine.html')
+
+
 @app.route('/home')
+@login_required
 def home():
     """
     Route permettant l'affichage de la page d'accueil
     :return: template home.html de la page d'accueil
     :rtype: template
     """
+    # comptage du nombre d'utilisateurs du forum
+    compteur_utilisateur = User.query.count()
+    # comptage du nombre de posts
+    compteur_posts = Post.query.count()
+    # comptage du nombre de commentaires
+    compteur_comments = Comment.query.count()
+
+    # choix de posts au hasard
+    posts = Post.query.all()
+    hasard = random.sample(posts, POSTS_HASARD)
+
     return render_template("pages/home.html",
+                           compteur_utilisateur=compteur_utilisateur,
+                           compteur_posts=compteur_posts,
+                           compteur_comments=compteur_comments,
+                           posts=hasard,
+                           nb_posts=POSTS_HASARD,
                            nom="Accueil")
 
 
 @app.route('/discussions')
+@login_required
 def discussions():
     """
     Route permettant l'affichage de tous les posts du forum du plus récent au plus ancien.
     :return: template discussions;html
     :rtype: template
     """
+    # comptage du nombre de posts
+    compteur_posts = Post.query.count()
+    # comptage du nombre de commentaires
+    compteur_comments = Comment.query.count()
+
+    # récupération de tous les posts
+    tous_posts = Post.query.all()
+    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
+    liste_distincte = []
+    for post in tous_posts:
+        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        if post.post_indexation not in liste_distincte:
+            liste_distincte.append(post.post_indexation)
+
     # gestion de la pagination des posts
     page = request.args.get('page', 1, type=int)
     # récupération des posts du forum, classés par date de création
@@ -69,9 +113,14 @@ def discussions():
                            nom="Discussions",
                            dernier_commentaire=dernier_commentaire,
                            posts=posts.items,
-                           pagination=posts)
+                           pagination=posts,
+                           compteur_posts=compteur_posts,
+                           compteur_comments=compteur_comments,
+                           mots_cles=liste_distincte)
+
 
 @app.route('/thematiques')
+@login_required
 def thematiques():
     """
     Route permettant l'affichage des thématiques des posts
@@ -80,19 +129,28 @@ def thematiques():
     """
     # récupération de tous les posts
     posts = Post.query.all()
-    # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
-    liste_distincte = []
+    # création d'un dictionnaire vide qui aura comme clé le mot clé et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
     for post in posts:
         # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
-        if post.post_indexation not in liste_distincte:
-            liste_distincte.append(post.post_indexation)
+        if post.post_indexation not in dictionnaire_distinct:
+            # récupération de l'image
+            image = get_first_image(post.post_indexation)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[post.post_indexation] = image
+
+    # comptage du nombre de nombre de mots-clés
+    compteur_tags = len(dictionnaire_distinct)
 
     return render_template('pages/thematiques/thematiques.html',
                            nom="Thématiques",
-                           sujets=liste_distincte)
+                           sujets=dictionnaire_distinct,
+                           compteur_tags=compteur_tags)
 
 
 @app.route('/thematiques/<thematique>')
+@login_required
 def thematique(thematique):
     """
     Route permettant l'affichage des posts en fonction du mot-clé demandé
@@ -210,8 +268,11 @@ def utilisateurs():
     :return: template explorer.html
     :rtype: template
     """
-    #récupération de l'ensemble des utilisateurs
+    # récupération de l'ensemble des utilisateurs
     utilisateurs = User.query.all()
+
+    # comptage du nombre d'utilisateurs
+    compteur_utilisateurs = User.query.count()
 
     # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
     derniers_posts = {}
@@ -229,7 +290,8 @@ def utilisateurs():
                            nom='Explorer',
                            utilisateurs=utilisateurs,
                            dates_posts=derniers_posts,
-                           dates_comments=derniers_commentaires)
+                           dates_comments=derniers_commentaires,
+                           compteur_utilisateurs=compteur_utilisateurs)
 
 
 @app.route('/suivre/<user_name>')

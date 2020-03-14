@@ -1,54 +1,79 @@
-{%extends './base.html'%}
+{% extends './base.html' %}
 
-{%block app_content%}
+{% block app_content %}
 
 <div class="row">
-    <div class="col-sm-8">
-        {%include 'partials/profil_utilisateur/infos_generales_utilisateur.html'%}
+    <div class="col-sm-8 experiences">
+        {% include 'partials/profil_utilisateur/infos_generales_utilisateur.html' %}
     </div>
-    <div class="col-sm-4">
-        <p>Compétences de {{ user.user_name }}</p>
+    <div class="col-sm-3 stats_home">
+        <h5>Compétences de {{ user.user_name }}</h5>
         <ul>
-        {% for competence in user.competences %}
-        <li>{{ competence.competence_label }}</li>
-        {% endfor %}
+            {% for competence in user.competences %}
+            <li>{{ competence.competence_label }}</li>
+            {% endfor %}
         </ul>
     </div>
 </div>
 
-<div class="row">
-    <p>Expériences professionnelles</p>
-    {%include 'partials/profil_utilisateur/cv_liste.html'%}
+{% if cvs_classes %}
+<div class="row ensemble_posts">
+    <div class="col-sm-9 experiences" style="text-align: center;">
+        <h5>Expériences professionnelles</h5>
+        {% include 'partials/profil_utilisateur/cv_liste.html' %}
+    </div>
+    <div class="col-sm-2 stats_home" style="text-align: center;">
+        <h5>Quelques chiffres à propos des expériences de {{ user.user_name }}</h5>
+        <ul>
+            <li>{{ compteur_experiences }} expériences</li>
+            <li>Lieux d'exercice:</li>
+            <ul>
+                {% for lieu in lieux %}
+                <li>{{ lieux.get(lieu) }} postes à {{ lieu }}</li>
+                {% endfor %}
+            </ul>
+        </ul>
+    </div>
 </div>
+{% endif %}
 
-<div class="row">
-    <p>Messages récents</p>
-    {%include 'partials/posts/posts_liste.html'%}
-    <!-- gestion de la pagination -->
-    <nav aria-label="research-pagination">
-  <ul class="pagination">
-    {%- for page in pagination.iter_pages() %}
-        {% if page %}
+{% if posts %}
+<div class="row ensemble_posts">
+    <div class="col-sm-9">
+        <h5>Messages récents</h5>
+        {% include 'partials/posts/posts_liste.html' %}
+        <nav aria-label="research-pagination">
+            <ul class="pagination">
+                {%- for page in pagination.iter_pages() %}
+                {% if page %}
 
-          {% if page != pagination.page %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for('utilisateur', user_name=user.user_name, page=page) }}">{{page}}</a>
-            </li>
-          {% else %}
-            <li class="page-item active disabled">
-              <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
-            </li>
-          {% endif %}
+                {% if page != pagination.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('utilisateur', user_name=user.user_name, page=page) }}">{{page}}</a>
+                </li>
+                {% else %}
+                <li class="page-item active disabled">
+                    <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                </li>
+                {% endif %}
 
-        {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">...</a>
-            </li>
-        {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                {% endif %}
 
-    {%- endfor %}
-  </ul>
-</nav>
+                {%- endfor %}
+            </ul>
+        </nav>
+    </div>
+    <div class="col-sm-2 stats_home" style="text-align: center;">
+        <h5>Quelques chiffres à propos des messages de {{ user.user_name }}</h5>
+        <ul>
+            <li>{{ compteur_posts }} messages</li>
+        </ul>
+    </div>
 </div>
+{% endif %}
 
 {% endblock %}

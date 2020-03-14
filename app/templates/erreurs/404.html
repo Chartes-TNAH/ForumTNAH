@@ -2,7 +2,9 @@
 
 {%block app_content%}
 <h1>La page que vous recherchez n'a pas été trouvée.</h1>
-<p>
-    <a href="{{url_for('home')}}">Retour à la page d'accueil</a>
-</p>
+
+<a href="{{url_for('home')}}">
+    <button type="button" class="btn btn-primary">Retour à la page d'accueil</button>
+</a>
+
 {%endblock%}

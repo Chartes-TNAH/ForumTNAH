@@ -6,19 +6,23 @@
     <span style="font-size: 30px; color: #be122a;">
         <i class="fas fa-tag"></i>
     </span>
-      {{ sujet }}</h1>
+    {{ sujet }}</h1>
 
 <div class="row">
-
-{% include 'partials/posts/posts_liste.html'%}
-
-    <div class="col-sm-5">
+    <div class="col-sm-9 ensemble_posts">
+        {% include 'partials/posts/posts_liste.html'%}
+    </div>
+    <div class="col-sm-2 stats_home">
         <h3>Sujets sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h3>
-        {% for sujet in sujets %}
-            <a href="{{ url_for('thematique', thematique=sujet) }}">
-                <p>{{ sujet }}</p>
-            </a>
-        {% endfor%}
+        <ul>
+            {% for sujet in sujets %}
+            <li><span style="font-size: 12px; color: #be122a;">
+                <i class="fas fa-tag"></i>
+            </span>
+                <a href="{{ url_for('thematique', thematique=sujet) }}">{{ sujet }}</a>
+            </li>
+            {% endfor%}
+        </ul>
     </div>
 </div>
 

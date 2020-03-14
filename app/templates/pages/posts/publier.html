@@ -1,60 +1,67 @@
 {% extends "./base.html" %}
 
 {% block app_content %}
-    <h1>{{ current_user.user_name }}, commence ici une discussion!</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.titre.label }}<br>
-            {{ form.titre(size=70) }}<br>
-            {% for error in form.titre.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.indexation.label }}<br>
-            {{ form.indexation(size=48) }}<br>
-            {% for error in form.indexation.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        {{super()}}
-        {{pagedown.include_pagedown()}}
-        <p>
-            {{ form.message.label }}<br>
-            {{ form.message(cols=70, rows=7) }}<br>
-            {% for error in form.message.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+<div class="row formulaire">
+    <div class="col-sm-12">
+        <h1>{{ current_user.user_name }}, commence ici une discussion!</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.titre.label }}<br>
+                {{ form.titre(size=70) }}<br>
+                {% for error in form.titre.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.indexation.label }}<br>
+                {{ form.indexation(size=48) }}<br>
+                {% for error in form.indexation.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            {{super()}}
+            {{pagedown.include_pagedown()}}
+            <p>
+                {{ form.message.label }}<br>
+                {{ form.message(cols=70, rows=7) }}<br>
+                {% for error in form.message.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>
 
-    <h2>Les dernières discussions du forum</h2>
+<div class="row ensemble_posts">
+    <div class="col-sm-12">
+        <h2>Les dernières discussions du forum</h2>
         {%include 'partials/posts/posts_liste.html'%}
-<!-- gestion de la pagination -->
-    <nav aria-label="research-pagination">
-  <ul class="pagination">
-    {%- for page in pagination.iter_pages() %}
-        {% if page %}
+        <nav aria-label="research-pagination">
+            <ul class="pagination">
+                {%- for page in pagination.iter_pages() %}
+                {% if page %}
 
-          {% if page != pagination.page %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for('poster',  page=page) }}">{{page}}</a>
-            </li>
-          {% else %}
-            <li class="page-item active disabled">
-              <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
-            </li>
-          {% endif %}
+                {% if page != pagination.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('poster',  page=page) }}">{{page}}</a>
+                </li>
+                {% else %}
+                <li class="page-item active disabled">
+                    <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                </li>
+                {% endif %}
 
-        {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">...</a>
-            </li>
-        {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                {% endif %}
 
-    {%- endfor %}
-  </ul>
-</nav>
+                {%- endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
 {% endblock %}

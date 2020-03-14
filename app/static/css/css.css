@@ -1,0 +1,70 @@
+/* gestion des marges du body en général */
+
+body{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* pour la page d'accueil */
+
+.liens_rapides_home{
+    margin: 13px;
+    padding-bottom: 5px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}
+
+.stats_home{
+    margin: 13px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    border: 2px dotted #be122a;
+    border-radius: 30px;
+}
+
+/* styles globaux */
+
+.ensemble_posts{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}
+
+.card{
+    width: 18rem;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}
+
+.formulaire{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.commentaire{
+    margin: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px dashed #be122a;
+    border-radius: 30px;
+}
+
+.experiences{
+    margin: 13px;
+    text-align: center;
+    padding-top: 10px;
+    padding-left: 10px;
+    border: 2px dotted #be122a;
+    border-radius: 30px;
+}

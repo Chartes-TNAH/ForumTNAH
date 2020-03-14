@@ -9,8 +9,8 @@
     <div class="col-sm-3 stats_home">
         <h5>Compétences de {{ user.user_name }}</h5>
         <ul>
-            {% for competence in user.competences %}
-            <li>{{ competence.competence_label }}</li>
+            {% for competence in dictionnaire_competences %}
+            <li><img src="{{ dictionnaire_competences.get(competence) }}" width="30px" alt="{{ competence }}">  {{ competence }}</li>
             {% endfor %}
         </ul>
     </div>

@@ -229,11 +229,26 @@ def competence(competence):
     # création d'une liste vide qui prendra toutes les compétences des utilisateurs, sans doublons
     competences = Competences.query.all()
 
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
+    derniers_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        derniers_posts[utilisateur.user_name] = derniere_date
+
+    # pour afficher la date du dernier commentaire de l'utilisateur
+    derniers_commentaires = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
+        derniers_commentaires[utilisateur.user_name] = derniere_date
+
     return render_template('pages/competences/competence.html',
                            nom=competence,
                            utilisateurs=utilisateurs,
                            competence=competence,
-                           competences=competences)
+                           competences=competences,
+                           dates_posts=derniers_posts,
+                           dates_comments=derniers_commentaires,
+                           )
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

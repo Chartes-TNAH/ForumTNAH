@@ -4,7 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
-from ..modeles.donnees import Post, User, Comment, Competences
+from ..modeles.donnees import Post, User, Comment, Competences, CV
 from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
@@ -17,6 +17,8 @@ import random
 # /thematiques/<thematique>
 # /competences
 # /competences/<competence>
+# /lieux
+# /lieux/<lieu>
 # /inscription
 # /connexion
 # /deconnexion
@@ -249,6 +251,35 @@ def competence(competence):
                            dates_posts=derniers_posts,
                            dates_comments=derniers_commentaires,
                            )
+
+
+@app.route('/lieux')
+@login_required
+def lieux():
+    """
+        Route permettant l'affichage des lieux
+        :return: template lieux.html
+        :rtype: template
+    """
+    # récupération de toutes les lieux
+    experiences = CV.query.all()
+
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for experience in experiences:
+        # récupération de l'image
+        image = get_first_image(experience.cv_ville)
+        # remplissage du dictionnaire
+        dictionnaire_distinct[experience.cv_ville] = image
+
+    # comptage du nombre de nombre de mots-clés
+    compteur_lieux = len(dictionnaire_distinct)
+
+    return render_template('pages/lieux/lieux.html',
+                           nom="Lieux",
+                           lieux=dictionnaire_distinct,
+                           compteur_lieux=compteur_lieux)
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

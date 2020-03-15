@@ -282,6 +282,55 @@ def lieux():
                            compteur_lieux=compteur_lieux)
 
 
+@app.route('/lieux/<lieu>')
+@login_required
+def lieu(lieu):
+    """
+    Route permettant l'affichage des utilisateurs en fonction du lieu de travail
+    :param lieu: châine de caractère correspondant au lieu
+    :type lieu: str
+    :return: template lieu.html
+    :rtype: template
+    """
+    # récupération de la classe du lieu
+    lieu_donne = CV.query.filter(CV.cv_ville == lieu).all()
+    print(lieu_donne)
+
+    # récupération des utilisateurs correspondant au lieu choisi
+    utilisateurs =[]
+    for lieu in lieu_donne:
+        utilisateurs += User.query.filter(User.cvs.contains(lieu)).all()
+
+    # récupération de tous les cvs
+    cvs = CV.query.all()
+    # création d'une liste vide qui prendra tous les lieux , sans doublons
+    liste_distincte = []
+    for cv in cvs:
+        if cv.cv_ville not in liste_distincte:
+            liste_distincte.append(cv.cv_ville)
+
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
+    derniers_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        derniers_posts[utilisateur.user_name] = derniere_date
+
+    # pour afficher la date du dernier commentaire de l'utilisateur
+    derniers_commentaires = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
+        derniers_commentaires[utilisateur.user_name] = derniere_date
+
+    return render_template('pages/lieux/lieu.html',
+                           nom=lieu.cv_ville,
+                           utilisateurs=utilisateurs,
+                           lieu=lieu,
+                           lieux=liste_distincte,
+                           dates_posts=derniers_posts,
+                           dates_comments=derniers_commentaires,
+                           )
+
+
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
     """

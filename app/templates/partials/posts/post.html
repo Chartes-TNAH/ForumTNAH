@@ -25,7 +25,7 @@
         {{ post.post_date }}
     </td>
     <td>{{ post.comments.count() }}</td>
-    <td>{{ post.comments.comment_date }}</td>
+    <td>{{ post.comments[-1].comment_date }}</td>
     <td>
         <a href="{{ url_for('post', id=post.post_id) }}">
             <span class="label label-default">Lien unique</span>

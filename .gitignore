@@ -4,3 +4,4 @@ __pycache__/
 migrations/
 app.sqlite
 app.db
+app.sqlite-journal

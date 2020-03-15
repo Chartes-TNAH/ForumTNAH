@@ -1,0 +1,25 @@
+{% extends './base.html' %}
+
+{% block app_content %}
+
+<h1>Utilisateurs ayant {{ lieu.cv_ville }}  comme ville d'exercice</h1>
+
+<div class="row">
+    <div class="col-sm-9 ensemble_posts">
+        {% include 'partials/utilisateurs_liste.html' %}
+    </div>
+    <div class="col-sm-2 stats_home">
+        <h3>Lieux sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h3>
+        <ul>
+            {% for lieu in lieux %}
+            <li><span style="font-size: 12px; color: #be122a;">
+                <i class="fas fa-tag"></i>
+            </span>
+                <a href="{{ url_for('lieu', lieu=lieu) }}">{{ lieu }}</a>
+            </li>
+            {% endfor%}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

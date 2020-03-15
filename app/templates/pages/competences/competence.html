@@ -1,0 +1,29 @@
+{% extends './base.html' %}
+
+{% block app_content %}
+
+<h1>Utilisateurs ayant
+    <span style="font-size: 30px; color: #be122a;">
+        <i class="fas fa-tag"></i>
+    </span>
+    {{ competence }}  comme compétence</h1>
+
+<div class="row">
+    <div class="col-sm-9 ensemble_posts">
+        {% include 'partials/utilisateurs_liste.html' %}
+    </div>
+    <div class="col-sm-2 stats_home">
+        <h3>Compétences sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h3>
+        <ul>
+            {% for competence in competences %}
+            <li><span style="font-size: 12px; color: #be122a;">
+                <i class="fas fa-tag"></i>
+            </span>
+                <a href="{{ url_for('competence', competence=competence.competence_label) }}">{{ competence.competence_label }}</a>
+            </li>
+            {% endfor%}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

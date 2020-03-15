@@ -4,21 +4,25 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
-from ..modeles.donnees import Post, User, Comment
-from ..modeles.tags_images import get_first_image
+from ..modeles.donnees import Post, User, Comment, Competences, CV
+from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
 import random
 
-# routes présentes dans l'ordre:
-# /racine
+# dans l'ordre:
+# /
 # /home
 # /discussions
 # /thematiques
-# /thematique
+# /thematiques/<thematique>
+# /competences
+# /competences/<competence>
+# /lieux
+# /lieux/<lieu>
 # /inscription
 # /connexion
 # /deconnexion
-# /utilisateurs
+# /explorer
 # /suivre
 # /ne_plus_suivre
 
@@ -177,6 +181,154 @@ def thematique(thematique):
                            posts=posts,
                            sujet=thematique,
                            sujets=liste_distincte)
+
+
+@app.route('/competences')
+@login_required
+def competences():
+    """
+        Route permettant l'affichage des competences
+        :return: template competences.html
+        :rtype: template
+    """
+    # récupération de toutes les compétences
+    competences = Competences.query.all()
+
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for competence in competences:
+        # récupération de l'image
+        image = get_first_image(competence.competence_label)
+        # remplissage du dictionnaire
+        dictionnaire_distinct[competence.competence_label] = image
+
+    # comptage du nombre de nombre de mots-clés
+    compteur_competences = len(dictionnaire_distinct)
+
+    return render_template('pages/competences/competences.html',
+                           nom="Compétences",
+                           competences=dictionnaire_distinct,
+                           compteur_competences=compteur_competences)
+
+
+@app.route('/competences/<competence>')
+@login_required
+def competence(competence):
+    """
+    Route permettant l'affichage des utilisateurs en fonction de la compétence demandée
+    :param competence: châine de caractère correspondant au mot-clé
+    :type competence: str
+    :return: template competence.html
+    :rtype: template
+    """
+    # récupération de la classe de la compétence
+    competence_donnee = Competences.query.filter(Competences.competence_label == competence).all()
+
+    # récupération des utilisateurs correspondant à la compétence choisie
+    utilisateurs = User.query.filter(User.competences.contains(competence_donnee[0])).all()
+
+    # création d'une liste vide qui prendra toutes les compétences des utilisateurs, sans doublons
+    competences = Competences.query.all()
+
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
+    derniers_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        derniers_posts[utilisateur.user_name] = derniere_date
+
+    # pour afficher la date du dernier commentaire de l'utilisateur
+    derniers_commentaires = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
+        derniers_commentaires[utilisateur.user_name] = derniere_date
+
+    return render_template('pages/competences/competence.html',
+                           nom=competence,
+                           utilisateurs=utilisateurs,
+                           competence=competence,
+                           competences=competences,
+                           dates_posts=derniers_posts,
+                           dates_comments=derniers_commentaires,
+                           )
+
+
+@app.route('/lieux')
+@login_required
+def lieux():
+    """
+        Route permettant l'affichage des lieux
+        :return: template lieux.html
+        :rtype: template
+    """
+    # récupération de toutes les lieux
+    experiences = CV.query.all()
+
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for experience in experiences:
+        # récupération de l'image
+        image = get_first_image(experience.cv_ville)
+        # remplissage du dictionnaire
+        dictionnaire_distinct[experience.cv_ville] = image
+
+    # comptage du nombre de nombre de mots-clés
+    compteur_lieux = len(dictionnaire_distinct)
+
+    return render_template('pages/lieux/lieux.html',
+                           nom="Lieux",
+                           lieux=dictionnaire_distinct,
+                           compteur_lieux=compteur_lieux)
+
+
+@app.route('/lieux/<lieu>')
+@login_required
+def lieu(lieu):
+    """
+    Route permettant l'affichage des utilisateurs en fonction du lieu de travail
+    :param lieu: châine de caractère correspondant au lieu
+    :type lieu: str
+    :return: template lieu.html
+    :rtype: template
+    """
+    # récupération de la classe du lieu
+    lieu_donne = CV.query.filter(CV.cv_ville == lieu).all()
+    print(lieu_donne)
+
+    # récupération des utilisateurs correspondant au lieu choisi
+    utilisateurs =[]
+    for lieu in lieu_donne:
+        utilisateurs += User.query.filter(User.cvs.contains(lieu)).all()
+
+    # récupération de tous les cvs
+    cvs = CV.query.all()
+    # création d'une liste vide qui prendra tous les lieux , sans doublons
+    liste_distincte = []
+    for cv in cvs:
+        if cv.cv_ville not in liste_distincte:
+            liste_distincte.append(cv.cv_ville)
+
+    # création d'un dictionnaire avec le nom de l'utilisateur en clé et la dernière date de post en valeur
+    derniers_posts = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.posts.order_by(Post.post_date.desc()).first()
+        derniers_posts[utilisateur.user_name] = derniere_date
+
+    # pour afficher la date du dernier commentaire de l'utilisateur
+    derniers_commentaires = {}
+    for utilisateur in utilisateurs:
+        derniere_date = utilisateur.comments.order_by(Comment.comment_date.desc()).first()
+        derniers_commentaires[utilisateur.user_name] = derniere_date
+
+    return render_template('pages/lieux/lieu.html',
+                           nom=lieu.cv_ville,
+                           utilisateurs=utilisateurs,
+                           lieu=lieu,
+                           lieux=liste_distincte,
+                           dates_posts=derniers_posts,
+                           dates_comments=derniers_commentaires,
+                           )
 
 
 @app.route('/inscription', methods=['GET', 'POST'])

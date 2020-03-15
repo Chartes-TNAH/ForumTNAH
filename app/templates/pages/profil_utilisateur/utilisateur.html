@@ -9,8 +9,10 @@
     <div class="col-sm-3 stats_home">
         <h5>Compétences de {{ user.user_name }}</h5>
         <ul>
-            {% for competence in user.competences %}
-            <li>{{ competence.competence_label }}</li>
+            {% for competence in dictionnaire_competences %}
+            <li><img src="{{ dictionnaire_competences.get(competence) }}" width="30px" alt="{{ competence }}">
+                <a href="{{ url_for('competence', competence=competence) }}">{{ competence }}</a>
+            </li>
             {% endfor %}
         </ul>
     </div>
@@ -28,8 +30,11 @@
             <li>{{ compteur_experiences }} expériences</li>
             <li>Lieux d'exercice:</li>
             <ul>
-                {% for lieu in lieux %}
-                <li>{{ lieux.get(lieu) }} postes à {{ lieu }}</li>
+                {% for lieu in images_lieux %}
+                <li>
+                    <img src="{{ images_lieux.get(lieu) }}" alt="{{ lieu }}" width="30px;">
+                    {{ lieu }}
+                </li>
                 {% endfor %}
             </ul>
         </ul>

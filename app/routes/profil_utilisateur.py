@@ -3,8 +3,15 @@ from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
 from ..modeles.utilisateurs import EditProfileForm, CVForm, CompetencesForm
 from ..modeles.donnees import Post, User, Comment, CV
+from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE
 
+# par ordre d'apparition:
+# /utilisateur/<user_name>
+# /editer_profil/<user_name>
+# /editer_profil/<user_name>/competences
+# /editer_profil/<user_name>/CV
+# /editer_profil/<user_name>/CV/<int:id>
 
 @app.route('/utilisateur/<user_name>')
 def utilisateur(user_name):
@@ -33,20 +40,33 @@ def utilisateur(user_name):
     # classement des expériences par ordre chronologique dans cvs_classes
     cvs_classes = utilisateur.cvs.order_by(CV.cv_annee_debut.desc()).all()
 
-    # répartition géographique des postes de l'utilisateur dans un dictionnaire avec le lieu comme clé et le nombre en valeur
-    dictionnaire_lieux = {}
-    for lieu in utilisateur.cvs:
-        if lieu.cv_ville not in dictionnaire_lieux:
-            compteur = utilisateur.cvs.filter(lieu.cv_ville == lieu).count()
-            dictionnaire_lieux[lieu.cv_ville] = compteur + 1
-        else:
-            dictionnaire_lieux[lieu.cv_ville]=dictionnaire_lieux.get(lieu.cv_ville)+1
-
     # comptage du nombre d'expériences
     compteur_experiences = utilisateur.cvs.count()
 
     # comptage du nombre de posts de l'utilisateur
     compteur_posts = utilisateur.posts.count()
+
+    # récupération des compétences de l'utilisateur
+    competences = utilisateur.competences.all()
+    # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
+    dictionnaire_distinct = {}
+
+    for competence in competences:
+        # si la compétence de l'utilisateur n'est pas présente dans la liste, alors il est ajouté; s'il y est, alors il n'y est pas ajouté
+        if competence.competence_label not in dictionnaire_distinct:
+            # récupération de l'image
+            image = get_first_image(competence.competence_label)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[competence.competence_label] = image
+
+    # récupération des lieux de travail de l'utilisateur dans un dictionnaire avec la ville en clé et l'url de l'image en valeur
+    lieux_travail = {}
+    for cv in cvs_classes:
+        if cv.cv_ville not in lieux_travail:
+            # récupération de l'image
+            image = get_first_image(cv.cv_ville)
+            # remplissage du dictionnaire
+            lieux_travail[cv.cv_ville] = image
 
     return render_template("pages/profil_utilisateur/utilisateur.html",
                            nom=user_name,
@@ -57,7 +77,8 @@ def utilisateur(user_name):
                            cvs_classes=cvs_classes,
                            compteur_experiences=compteur_experiences,
                            compteur_posts=compteur_posts,
-                           lieux=dictionnaire_lieux)
+                           dictionnaire_competences=dictionnaire_distinct,
+                           images_lieux=lieux_travail)
 
 
 @app.route('/editer_profil/<user_name>', methods=['GET', 'POST'])

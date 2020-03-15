@@ -1,7 +1,9 @@
 <tr valign="top">
     <td>{{ cv.cv_nom_poste }}</td>
     <td>{{ cv.cv_nom_employeur }}</td>
-    <td>{{ cv.cv_ville }}</td>
+    <td>
+        <a href="{{ url_for('lieu', lieu=cv.cv_ville) }}">{{ cv.cv_ville }}</a>
+    </td>
     <td>{{ cv.cv_annee_debut }}</td>
     <td>{{ cv.cv_annee_fin }}</td>
     <td>{{ cv.cv_description_poste }}</td>

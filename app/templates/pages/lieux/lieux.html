@@ -1,0 +1,27 @@
+{% extends './base.html' %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-9">
+<h1>Lieux présents sur le <a href="{{ url_for('home') }}">ForumTNAH</a></h1>
+    </div>
+    <div class="col-sm-2 stats_home">
+            <p>Il y a {{ compteur_lieux }} lieux.</p>
+    </div>
+</div>
+
+<div class="row">
+
+    {% for lieu in lieux %}
+
+    <div class="card">
+        <img src={{ lieux.get(lieu) }} class="card-img-top" alt={{ lieu }}  width="120px">
+        <div class="card-body">
+            <h5 class="card-title">{{ lieu }}</h5>
+            <a href="{{ url_for('lieu', lieu=lieu) }}" class="btn btn-primary">Voir les utilisateurs</a>
+        </div>
+    </div>
+
+    {% endfor%}
+</div>
+{% endblock %}

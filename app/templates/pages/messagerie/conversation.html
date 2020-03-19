@@ -37,30 +37,24 @@
             </p>
         </div>
         <div class="col-sm-10 message_prive">
-            <p class="message">
+            <p>
                 {% if message.message_html %}
                 {{ message.message_html | safe }}
                 {% else %}
                 {{ message.message_message }}
                 {% endif %}</p>
-            <p class="date">
-                {{ message.message_date }}
-            </p>
         </div>
     </div>
 
     {% else %}
     <div class="row align-items-center">
         <div class="col-sm-10 message_prive">
-            <p class="message">
+            <p>
                 {% if message.message_html %}
                 {{ message.message_html | safe }}
                 {% else %}
                 {{ message.message_message }}
                 {% endif %}</p>
-            <p class="date">
-                {{ message.message_date }}
-            </p>
         </div>
         <div class="col-sm-1">
             <p>
@@ -68,7 +62,8 @@
             </p>
             <p>
                 {{ message.message_date }}
-            </p></div>
+            </p>
+        </div>
     </div>
     {% endif %}
     {% endfor %}

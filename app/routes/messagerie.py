@@ -2,7 +2,7 @@ from ..app import app, db
 from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
 from sqlalchemy import or_
-from ..modeles.utilisateurs import AddConversationForm
+from ..modeles.utilisateurs import AddConversationForm, PrivateMessageForm
 from ..modeles.donnees import User, Message
 from ..constantes import  POSTS_PAR_PAGE
 
@@ -57,6 +57,8 @@ def conversation(user_name):
     messages = Message.query.filter(or_(Message.message_destinataire_id == current_user.id, Message.message_destinataire_id == utilisateur.id))\
         .filter(or_(Message.message_expediteur_id == utilisateur.id, Message.message_expediteur_id == current_user.id))\
         .order_by(Message.message_date.desc()).all()
+
+    # formulaire de discussion
 
     return render_template('pages/messagerie/conversation.html',
                            nom="Conversation avec "+user_name,

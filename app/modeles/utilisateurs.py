@@ -111,3 +111,9 @@ class AddConversationForm(FlaskForm):
     message = PageDownField("Ecrivez ici votre message (MarkDown possible)", validators=[DataRequired()])
 
     submit = SubmitField('Envoyer')
+
+# création de la classe du formulaire d'écriture d'un message dans la discussion privée
+class PrivateMessageForm(FlaskForm):
+    message = PageDownField("Ecrivez ici votre message (MarkDown possible)", validators=[DataRequired()])
+
+    submit = SubmitField('Envoyer')

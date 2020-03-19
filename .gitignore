@@ -5,3 +5,4 @@ migrations/
 app.sqlite
 app.db
 app.sqlite-journal
+doc/

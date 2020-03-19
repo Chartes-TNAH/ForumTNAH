@@ -3,10 +3,7 @@
 {% block app_content %}
 <div class="row">
     <div class="col-sm-8 ensemble_posts">
-        {% for message in messages %}
-        <p>Expéditeur: {{ message.message_expediteur_id }}</p>
-        <p>Destinataire: {{ message.message_destinataire_id }}</p>
-        {% endfor %}
+        {% include 'partials/messagerie/conversations_liste.html' %}
     </div>
     <div class="col-sm-3 formulaire">
         <h4>Engager une conversation</h4>

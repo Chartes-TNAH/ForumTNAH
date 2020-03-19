@@ -1,0 +1,14 @@
+<tr valign="top">
+    <td style="text-align:center;">
+        <a>
+            {% for user in users %}
+            {% if user.id == utilisateur.message_expediteur_id%}
+            <a href="{{ url_for('utilisateur', user_name=user.user_name) }}">
+            <img src="{{ user.avatar(36) }}"><br>
+            {{ user.user_name}}
+            </a>
+            {% endif %}
+            {% endfor %}
+        </a>
+    </td>
+</tr>

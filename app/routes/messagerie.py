@@ -29,11 +29,17 @@ def messagerie():
 
     # gestion de la pagination des posts
     page = request.args.get('page', 1, type=int)
-    # récupération des conversations de l'utilisateur
-    messages = Message.query.filter(Message.message_destinataire_id == current_user.id).order_by(Message.message_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+    # récupération des personnes distinctes de conversation
+    utilisateurs  = Message.query.filter(Message.message_destinataire_id == current_user.id).\
+        group_by(Message.message_expediteur_id).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+
+    # en raisons de difficultés à effectuer la double jointure sur User à partir de Message (erreur AmbiguousForeignKeys),
+    # # je récupère ici tous les utilisateurs de manière à faire cette jointure tout de même
+    users = User.query.all()
 
     return render_template('pages/messagerie/messagerie.html',
                            nom='Messagerie personnelle',
                            form=form,
-                           messages=messages.items,
-                           pagination=messages)
+                           utilisateurs=utilisateurs.items,
+                           pagination=utilisateurs,
+                           users=users)

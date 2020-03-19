@@ -1,0 +1,15 @@
+<div class="col-sm-12">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" style="width:10%;">Utilisateur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for utilisateur in utilisateurs %}
+        {% include 'partials/messagerie/presentation_conversation.html' %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

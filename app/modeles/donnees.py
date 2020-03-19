@@ -1,10 +1,13 @@
 from ..app import db, login
 from datetime import datetime
+import locale
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
 from markdown import markdown
 import bleach
+
+locale.setlocale(locale.LC_TIME, '')
 
 
 # création de la table d'association des followers

@@ -61,7 +61,7 @@
                 <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">{{ utilisateur.user_name }}</a>
             </p>
             <p>
-                Le {{ message.message_date.strftime("%A %d. %B %Y") }} à {{ message.message_date.strftime("%Hh%M") }}
+                Le {{ message.message_date.strftime("%A %d %B %Y") }} à {{ message.message_date.strftime("%Hh%M") }}
             </p>
         </div>
     </div>

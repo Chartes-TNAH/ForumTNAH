@@ -1,6 +1,7 @@
 from ..app import app, db
 from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
+from sqlalchemy import or_
 from ..modeles.utilisateurs import AddConversationForm
 from ..modeles.donnees import User, Message
 from ..constantes import  POSTS_PAR_PAGE
@@ -10,6 +11,7 @@ from ..constantes import  POSTS_PAR_PAGE
 # /messagerie/<user_name>
 
 @app.route('/messagerie', methods=['GET', 'POST'])
+@login_required
 def messagerie():
     # gestion du formulaire de premier message privé avec un utilisateur
     utilisateurs_disponibles = User.query.all()
@@ -43,3 +45,19 @@ def messagerie():
                            utilisateurs=utilisateurs.items,
                            pagination=utilisateurs,
                            users=users)
+
+
+@app.route('/messagerie/<user_name>', methods=['GET', 'POST'])
+@login_required
+def conversation(user_name):
+    # le choix a été fait de ne pas paginer cette page car c'est un fil de discussion
+    # récupération de l'id de l'utilisateur
+    utilisateur = User.query.filter(User.user_name == user_name).first()
+    # récupération des messages concernés, ordonnés dans l'ordre chronologique descendant
+    messages = Message.query.filter(or_(Message.message_destinataire_id == current_user.id, Message.message_destinataire_id == utilisateur.id))\
+        .filter(or_(Message.message_expediteur_id == utilisateur.id, Message.message_expediteur_id == current_user.id))\
+        .order_by(Message.message_date.desc()).all()
+
+    return render_template('pages/messagerie/conversation.html',
+                           nom="Conversation avec "+user_name,
+                           messages=messages)

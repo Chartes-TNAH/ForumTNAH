@@ -1,0 +1,29 @@
+{% extends "./base.html" %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-8 ensemble_posts">
+        {% include 'partials/messagerie/conversations_liste.html' %}
+    </div>
+    <div class="col-sm-3 formulaire">
+        <h4>Engager une conversation</h4>
+        <form action="" method="post">
+            <!-- L'attribut action est laissé vide, comme l'explique Miguel Grinberg. The action attribute of the form is used to tell the browser the URL that should be used when submitting the information the user entered in the form. When the action is set to an empty string the form is submitted to the URL that is currently in the address bar, which is the URL that rendered the form on the page. -->
+            {{ form.hidden_tag() }}
+            {{ super() }}
+            {{ pagedown.include_pagedown() }}
+            <p>
+                {{ form.destinataire_id }}
+            </p>
+            <p>
+                {{ form.message.label }}<br>
+                {{ form.message(cols=30, rows=7) }}<br>
+                {% for error in form.message.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "./base.html" %}
+
+{% block app_content %}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-9 formulaire">
+        <h4>Message pour {{ utilisateur.user_name }}</h4>
+        <form action="" method="post">
+            <!-- L'attribut action est laissé vide, comme l'explique Miguel Grinberg. The action attribute of the form is used to tell the browser the URL that should be used when submitting the information the user entered in the form. When the action is set to an empty string the form is submitted to the URL that is currently in the address bar, which is the URL that rendered the form on the page. -->
+            {{ form.hidden_tag() }}
+            {{ super() }}
+            {{ pagedown.include_pagedown() }}
+            <p>
+                {{ form.message.label }}<br>
+                {{ form.message(cols=30, rows=3) }}<br>
+                {% for error in form.message.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+<div class="discussion_privee">
+    {% for message in messages %}
+    {% if message.message_expediteur_id == current_user.id %}
+    <div class="row align-items-center">
+        <div class="col-sm-1">
+            <p>
+                <a href="{{ url_for('utilisateur', user_name=current_user.user_name) }}">Moi</a>
+            </p>
+            <p>
+                {{ message.message_date }}
+            </p>
+        </div>
+        <div class="col-sm-10 message_prive">
+            <p>
+                {% if message.message_html %}
+                {{ message.message_html | safe }}
+                {% else %}
+                {{ message.message_message }}
+                {% endif %}</p>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="row align-items-center">
+        <div class="col-sm-10 message_prive">
+            <p>
+                {% if message.message_html %}
+                {{ message.message_html | safe }}
+                {% else %}
+                {{ message.message_message }}
+                {% endif %}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>
+                <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">{{ utilisateur.user_name }}</a>
+            </p>
+            <p>
+                {{ message.message_date }}
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

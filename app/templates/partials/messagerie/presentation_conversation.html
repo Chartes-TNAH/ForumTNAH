@@ -1,0 +1,13 @@
+<div class="card">
+    {% for user in users %}
+    {% if user.id == utilisateur.message_expediteur_id%}
+    <a href="{{ url_for('utilisateur', user_name=user.user_name) }}">
+        <img src="{{ user.avatar(288) }}" class="card-img-top" alt="{{ user.user_name }}"  width="120px">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.user_name }}</h5>
+            <a href="{{ url_for('conversation', user_name=user.user_name) }}" class="btn btn-primary">Voir la conversation</a>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>

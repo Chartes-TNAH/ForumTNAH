@@ -57,8 +57,7 @@ class User(UserMixin, db.Model):
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
-    )
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     competences = db.relationship('Competences',
                                   secondary=skills,
@@ -241,6 +240,43 @@ class Comment(db.Model):
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 
 
+# création de la table des messages privés
+class Message(db.Model):
+    message_id = db.Column(db.Integer, primary_key=True)
+    message_message = db.Column(db.Text)
+    message_html = db.Column(db.Text)
+    message_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    # les relations portant toutes sur la table User, SQLalchemy ne peut pas résoudre seul les relations qui sont similaires, d'où
+    # la spécification des clés-étrangères.
+    # En chargeant la relation Message.message_expediteur depuis un objet de Message utilisera la valeur présente dans
+    # message_expediteur_id de manière à identifier la ligne dans User qui doit être chargée; de même pour message_destinataire
+    message_expediteur_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    message_destinataire_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    message_expediteur = db.relationship('User',
+                                         foreign_keys=[message_expediteur_id])
+    message_destinataire= db.relationship('User',
+                                          foreign_keys=[message_destinataire_id])
+
+    @staticmethod
+    def au_changement(target, value, oldvalue, initiator):
+        """
+        Permet de convertir le MarkDown en HTML à chaque fois qu'un changement est effectué dans le champ html de la table
+        """
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i',
+                        'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        # la fonction markdown fait une conversion en html; la fonction clean permet de nettoyer le code des balises qui ne sont pas dans
+        # allowed_tags; linkify fait la conversion des URL en balises <a>
+        target.message_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True
+        ))
+
+
+db.event.listen(Message.message_message, 'set', Message.au_changement)
+
+
 # création de la table des expériences professionnelles
 class CV(db.Model):
     cv_id = db.Column(db.Integer, primary_key=True)
@@ -262,4 +298,4 @@ class Competences(db.Model):
 
 @login.user_loader
 def get_user_by_id(id):
-        return User.query.get(int(id))
+    return User.query.get(int(id))

@@ -3,6 +3,7 @@ from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
 from ..modeles.utilisateurs import AddConversationForm
 from ..modeles.donnees import User, Message
+from ..constantes import  POSTS_PAR_PAGE
 
 # routes présentes dans l'ordre
 # /messagerie
@@ -25,7 +26,14 @@ def messagerie():
         db.session.commit()
         flash("Message envoyé")
         return redirect(url_for('messagerie'))
-    
+
+    # gestion de la pagination des posts
+    page = request.args.get('page', 1, type=int)
+    # récupération des conversations de l'utilisateur
+    messages = Message.query.filter(Message.message_destinataire_id == current_user.id).order_by(Message.message_date.desc()).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
+
     return render_template('pages/messagerie/messagerie.html',
                            nom='Messagerie personnelle',
-                           form=form)
+                           form=form,
+                           messages=messages.items,
+                           pagination=messages)

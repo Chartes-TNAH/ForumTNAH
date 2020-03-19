@@ -1,8 +1,14 @@
 {% extends "./base.html" %}
 
 {% block app_content %}
-<div class="row formulaire">
-    <div class="col-sm-12">
+<div class="row">
+    <div class="col-sm-8 ensemble_posts">
+        {% for message in messages %}
+        <p>Expéditeur: {{ message.message_expediteur_id }}</p>
+        <p>Destinataire: {{ message.message_destinataire_id }}</p>
+        {% endfor %}
+    </div>
+    <div class="col-sm-3 formulaire">
         <h4>Engager une conversation</h4>
         <form action="" method="post">
             <!-- L'attribut action est laissé vide, comme l'explique Miguel Grinberg. The action attribute of the form is used to tell the browser the URL that should be used when submitting the information the user entered in the form. When the action is set to an empty string the form is submitted to the URL that is currently in the address bar, which is the URL that rendered the form on the page. -->
@@ -14,7 +20,7 @@
             </p>
             <p>
                 {{ form.message.label }}<br>
-                {{ form.message(cols=70, rows=7) }}<br>
+                {{ form.message(cols=30, rows=7) }}<br>
                 {% for error in form.message.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}

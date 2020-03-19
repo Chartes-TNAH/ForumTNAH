@@ -35,7 +35,7 @@
             </td>
             <td style="width:30%; vertical-align: middle;">
                 {% if user.user_last_seen %}
-                <p>Dernière activité le {{ user.user_last_seen.strftime("%A %d. %B %Y") }} à {{ user.user_last_seen.strftime("%I: %M%p") }} (GMT)</p>
+                <p>Dernière activité le {{ user.user_last_seen.strftime("%A %d. %B %Y") }} à {{ user.user_last_seen.strftime("%H: %M") }} (GMT)</p>
                 {% endif %}
 
                 {% if user == current_user %}

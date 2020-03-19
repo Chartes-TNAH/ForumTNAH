@@ -59,7 +59,18 @@ def conversation(user_name):
         .order_by(Message.message_date.desc()).all()
 
     # formulaire de discussion
+    form = PrivateMessageForm()
+    if form.validate_on_submit():
+        message = Message(message_message=form.message.data,
+                          message_expediteur_id=current_user.id,
+                          message_destinataire_id=utilisateur.id)
+        db.session.add(message)
+        db.session.commit()
+        flash("Votre message a bien été envoyé")
+        return redirect(url_for('conversation', user_name=user_name))
 
     return render_template('pages/messagerie/conversation.html',
                            nom="Conversation avec "+user_name,
-                           messages=messages)
+                           messages=messages,
+                           utilisateur=utilisateur,
+                           form=form)

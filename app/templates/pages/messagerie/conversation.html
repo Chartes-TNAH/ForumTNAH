@@ -33,7 +33,7 @@
                 <a href="{{ url_for('utilisateur', user_name=current_user.user_name) }}">Moi</a>
             </p>
             <p>
-                {{ message.message_date }}
+                Le {{ message.message_date.strftime("%A %d. %B %Y") }} à {{ message.message_date.strftime("%Hh%M") }}
             </p>
         </div>
         <div class="col-sm-10 message_prive">
@@ -61,7 +61,7 @@
                 <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">{{ utilisateur.user_name }}</a>
             </p>
             <p>
-                {{ message.message_date }}
+                Le {{ message.message_date.strftime("%A %d. %B %Y") }} à {{ message.message_date.strftime("%Hh%M") }}
             </p>
         </div>
     </div>

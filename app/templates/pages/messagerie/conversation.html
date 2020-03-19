@@ -30,7 +30,7 @@
     <div class="row align-items-center">
         <div class="col-sm-1">
             <p>
-                Moi
+                <a href="{{ url_for('utilisateur', user_name=current_user.user_name) }}">Moi</a>
             </p>
             <p>
                 {{ message.message_date }}
@@ -64,7 +64,7 @@
         </div>
         <div class="col-sm-1">
             <p>
-                {{ utilisateur.user_name }}
+                <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">{{ utilisateur.user_name }}</a>
             </p>
             <p>
                 {{ message.message_date }}

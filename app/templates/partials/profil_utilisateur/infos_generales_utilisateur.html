@@ -51,6 +51,12 @@
                 {% endif %}
 
                 <p>{{ user.followers.count() }} suivent, {{ user.followed.count() }} suivies</p>
+
+                {% if user.id != current_user.id %}
+                <p>
+                    <a href="{{ url_for('conversation', user_name=user.user_name) }}">Discuter avec {{ user.user_name }}</a>
+                </p>
+                {% endif %}
             </td>
         </tr>
     </table>

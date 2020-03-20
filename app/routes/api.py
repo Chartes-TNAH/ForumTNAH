@@ -21,7 +21,8 @@ def Json_404():
 @app.route(API_ROUTE)
 @login_required
 def api():
-    return render_template('pages/api.html', nom='Accueil API')
+    return render_template('pages/api.html',
+                           nom='Accueil API')
 
 @app.route(API_ROUTE+"/posts/<int:post_id>")
 @login_required

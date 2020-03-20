@@ -204,6 +204,7 @@ class User(UserMixin, db.Model):
                 "firstname": self.user_firstname,
                 "surname": self.user_surname,
                 "promotion_date": self.user_promotion_date,
+                "inscription_date": self.user_inscription_date,
                 "description": self.user_description,
                 "last_activity": self.user_last_seen,
                 "github": self.user_github,

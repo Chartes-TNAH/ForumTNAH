@@ -190,7 +190,7 @@ class User(UserMixin, db.Model):
                 "followers": []
             },
             "included": {
-                "skills": [],
+                "competences": [],
                 "experiences": [],
                 "posts": [],
                 "comments": []
@@ -401,6 +401,20 @@ class CV(db.Model):
 class Competences(db.Model):
     competence_id = db.Column(db.Integer, primary_key=True)
     competence_label = db.Column(db.String(48))
+
+    def competences_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table Compétences
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "type": "competence",
+            "id": self.competence_id,
+            "attributes": {
+                "skill_label": self.competence_label
+            }
+        }
 
 
 @login.user_loader

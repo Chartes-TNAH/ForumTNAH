@@ -288,6 +288,9 @@ class Post(db.Model):
                         "data": {
                             "type": "people",
                             "id": self.post_auteur
+                        },
+                        "links": {
+                            "json": url_for('api_utilisateurs_single', user_id=self.post_auteur)
                         }
                     }
                 },

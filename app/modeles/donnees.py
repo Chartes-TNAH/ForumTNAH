@@ -184,18 +184,27 @@ class User(UserMixin, db.Model):
         return {
             "type": "people",
             "id": self.id,
-            "attributes": {},
+            "attributes": {
+                "user_name": self.user_name,
+                "promotion_date": self.user_promotion_date,
+                "description": self.user_description,
+                "last_activity": self.user_last_seen,
+                "github": self.user_github,
+                "linkedin": self.user_linkedin
+            },
             "relationships": {
                 "follow": [],
                 "followers": []
             },
             "included": {
-                "competences": [],
-                "experiences": [],
-                "posts": [],
-                "comments": []
+                "competences": [competence.competences_to_json() for competence in self.competences],
+                "experiences": [experience.cv_to_json() for experience in self.cvs],
+                "posts": [post.post_to_json() for post in self.posts],
+                "comments": [comment.comment_to_json() for comment in self.comments]
             },
-            "links": {}
+            "links": {
+                "self": url_for('utilisateur', user_name=self.user_name)
+            }
         }
 
 # création de la table des posts

@@ -378,6 +378,24 @@ class CV(db.Model):
 
     cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def cv_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table CV
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "type": "experience",
+            "id": self.cv_id,
+            "attributes": {
+                "job_name": self.cv_nom_poste,
+                "employer": self.cv_nom_employeur,
+                "job_location": self.cv_ville,
+                "job_beginning": self.cv_annee_debut,
+                "job_ending": self.cv_annee_fin
+            }
+        }
+
 
 # création de la table des compétences
 class Competences(db.Model):

@@ -541,6 +541,42 @@ def recherche_posts():
         resultats=resultats,
         titre=titre,
         keyword=motclef,
-        nom="Recherche de "+motclef
+        nom="Recherche"
+    )
+
+
+@app.route("/recherche/utilisateurs")
+@login_required
+def recherche_utilisateurs():
+    """ Route permettant la recherche d'utilisateurs
+    """
+    # On préfèrera l'utilisation de .get() ici
+    #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])
+    motclef = request.args.get("keyword", None)
+    page = request.args.get("page", 1)
+
+    if isinstance(page, str) and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
+    # On crée une liste vide de résultat (qui restera vide par défaut
+    #   si on n'a pas de mot clé)
+    resultats = []
+
+    # On fait de même pour le titre de la page
+    titre = "Recherche"
+    if motclef:
+        resultats = User.query.filter(
+            User.user_name.like("%{}%".format(motclef))
+        ).paginate(page=page, per_page=RESULTATS_PAR_PAGE)
+        titre = "Résultat pour la recherche `" + motclef + "`"
+
+    return render_template(
+        "pages/recherche/recherche_utilisateurs.html",
+        resultats=resultats,
+        titre=titre,
+        keyword=motclef,
+        nom="Recherche"
     )
 

@@ -248,7 +248,8 @@ class Post(db.Model):
                     "comments": [comment.comment_to_json() for comment in self.comments]
                 },
                 "links": {
-                    "self": url_for('post', id=self.post_id)
+                    "self": url_for('post', id=self.post_id),
+                    "json": url_for('api_posts_single', post_id=self.post_id)
                 }
             }
 

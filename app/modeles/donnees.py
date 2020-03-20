@@ -175,6 +175,19 @@ class User(UserMixin, db.Model):
             "a":'a'
         }
 
+    def follower_to_json(self):
+        return {
+            "id": self.id,
+            "type": "people",
+            "attributes": {
+                "user_name": self.user_name
+            },
+            "links": {
+                "self": url_for('utilisateur', user_name=self.user_name)
+            }
+        }
+
+
     def user_to_json(self):
         """
         Fonction retournant un dictionnaire json des données de la table User
@@ -193,8 +206,7 @@ class User(UserMixin, db.Model):
                 "linkedin": self.user_linkedin
             },
             "relationships": {
-                "follow": [],
-                "followers": []
+                "followers": [follow.follower_to_json() for follow in self.followed]
             },
             "included": {
                 "competences": [competence.competences_to_json() for competence in self.competences],

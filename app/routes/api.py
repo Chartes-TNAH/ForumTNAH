@@ -14,6 +14,11 @@ def Json_404():
 
 @app.route(API_ROUTE+"/posts/<int:post_id>")
 def api_posts_single(post_id):
+    """ Route permettant la recherche d'un post en particulier selon son id
+    On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
+    :param post_id: id du post demandé
+    :type post_id: int
+    """
     try:
         query = Post.query.get(post_id)
         return jsonify(query.post_to_json())
@@ -24,7 +29,6 @@ def api_posts_single(post_id):
 @app.route(API_ROUTE+"/posts")
 def api_posts_browse():
     """ Route permettant la recherche plein-texte et la navigation classique
-
     On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
     """
     # q est très souvent utilisé pour indiquer une capacité de recherche

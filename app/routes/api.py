@@ -1,4 +1,4 @@
-from flask import request, url_for, jsonify
+from flask import request, url_for, jsonify, render_template
 from flask_login import login_required
 from urllib.parse import urlencode
 
@@ -17,6 +17,11 @@ def Json_404():
     response.status_code = 404
     return response
 
+
+@app.route(API_ROUTE)
+@login_required
+def api():
+    return render_template('pages/api.html', nom='Accueil API')
 
 @app.route(API_ROUTE+"/posts/<int:post_id>")
 @login_required

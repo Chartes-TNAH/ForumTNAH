@@ -200,6 +200,8 @@ class User(UserMixin, db.Model):
             "id": self.id,
             "attributes": {
                 "user_name": self.user_name,
+                "firstname": self.user_firstname,
+                "surname": self.user_surname,
                 "promotion_date": self.user_promotion_date,
                 "description": self.user_description,
                 "last_activity": self.user_last_seen,

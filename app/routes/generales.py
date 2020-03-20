@@ -349,7 +349,8 @@ def inscription():
     if form.validate_on_submit():
         # la variable user stcoke provisoirement les données du formulaire réconciliées avec les champs de la base de données
         user = User(user_name=form.username.data,
-                    user_mail=form.email.data)
+                    user_mail=form.email.data,
+                    user_inscription_date=datetime.utcnow())
         user.set_password(form.password.data)
         # ajout et commit des données de user dans la base de données
         db.session.add(user)

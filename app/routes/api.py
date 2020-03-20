@@ -53,13 +53,20 @@ def api_posts_browse():
         return Json_404()
 
     dict_resultats = {
+        "jsonapi": {
+            "version": "1.0"
+        },
         "links": {
             "self": request.url
         },
         "data": [
             post.post_to_json()
             for post in resultats.items
-        ]
+        ],
+        "meta": {
+            "copyright": "2020 - Ecole nationale des Chartes",
+            "results": resultats.total
+        }
     }
 
     if resultats.has_next:

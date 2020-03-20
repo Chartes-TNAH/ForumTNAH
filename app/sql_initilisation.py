@@ -1,7 +1,7 @@
 users = 'INSERT INTO User(user_name, user_firstname, user_surname, user_mail, user_birthyear, user_promotion_date, user_description, user_last_seen, user_linkedin, user_github, user_password_hash, user_inscription_date)\
                VALUES ("Marie", "Marie", "Lefevre", "marie.lefevre@gmail.com", 1998, "2019-2021", "Je suis étudiante en M1 TNAH cette année, en Livres et Médias. Je suis inscrite ici pour en apprendre plus sur les domaines sur lesquels nous allons travailler en M2", "2020-02-17 23:58:44.761000", "https://www.linkedin.com/in/marie-lefevre", "https://www.github.com/marie-lefevre", "pbkdf2:sha256:150000$koCdnv2k$8cb86eb892afe0931cb2515daaac22c1a29655d55b1b57d028d17db354bcf23a", "2020-01-28 09:58:47.761000"),\
                       ("John", "John", "Dupont", "john.dupont@chartes.psl.eu", 1990, "2012-2014", "Je suis sorti en 2014 du M2 et je suis aujourd\'hui intervenant pour le cours de bases de données SQL dans ce même master. Si vous avez des questions, n\'hésitez pas.", "2020-03-24 12:58:47.761000", "https://www.linkedin.com/in/john-dupont", "https://www.github.com/john-dupont", "pbkdf2:sha256:150000$koCdnv2k$8cb86eb992afe0931cb2315dvfac22c1a29655d55b1b57d028d17db354bcf23a", "2015-08-26 21:57:26.729436"),\
-                      ("Maxime", "Maxime", "Challon", "un_email@gmail.com", 1997, "2018-2020", "Les cours sont fini depuis quelques semaines. Ceci est le devoir de Python", "2020-03-31 15:31:54.000000", "https://www.linkedin.com/in/maxime-challon", "https://www.github.com/MaximeChallon", "pbkdf2:sha256:150000$koCdnv2k$8cb86eb992afe0931cb2315daaac22c1a29655d55b1b57d028d17db354bcf23a", "2020-01-01 00:00:00.000000"),\
+                      ("Maxime", "Maxime", "Challon", "un_email@gmail.com", 1997, "2018-2020", "Les cours sont finis depuis quelques semaines. Ceci est le devoir de Python", "2020-03-31 15:31:54.000000", "https://www.linkedin.com/in/maxime-challon", "https://www.github.com/MaximeChallon", "pbkdf2:sha256:150000$koCdnv2k$8cb86eb992afe0931cb2315daaac22c1a29655d55b1b57d028d17db354bcf23a", "2020-01-01 00:00:00.000000"),\
                       ("Sarah", "Sarah", "Leconte", "sarahLeconte@free.fr", 1980, "2013-2015", "Je suis sortie en 2015 du master, puis j\'ai eu un CDD dans le public, où je suis encore actuellement. Ponctuellement, j\'enseigne l\'EAD aux M2.", "2020-03-08 21:25:44.761000", "https://www.linkedin.com/in/sarah-leconte", "https://www.github.com/sarah-leconte", "", "2018-04-25 21:10:25.2563247"),\
                       ("Jean", "Jean", "Du Chêne", "jean.duchene@chartes.psl.eu", 1997, "2018-2020", "Je suis encore étudiant en M2 cette année, mais la fin est proche. Je fais normalement (si la santé le permet) mon stage dans une bibliothèque de province, à Rodez. Je suis plutôt axé Bibliothèques.", "2020-03-15 12:45:44.761000", "https://www.linkedin.com/in/duchene-jean", "https://www.github.com/leCheneAveyronnais", "", "2020-02-12 21:55:28.2563247"),\
                       ("Fleur", "Fleur", "DesChamps", "fleur.deschamps@chartes.psl.eu", 1997, "2018-2020", "Je suis étudiante en M2 cette année. J\'ai une préférence pour les archives, donc je vais en stage à Lille aux archives départementales.", "2020-03-23 09:36:44.761000", "https://www.linkedin.com/in/fleurdeschamps", "https://www.github.com/fleurDeschamps", "", "2020-03-15 08:52:28.2563247"),\
@@ -37,7 +37,14 @@ skills = 'INSERT INTO skills\
          VALUES (1, 1), (1, 3), (2, 2)'
 
 followers = 'INSERT INTO followers\
-                VALUES (1, 2), (2, 1), (1, 3), (3, 2)'
+                VALUES (1, 2), (1, 4), (1, 6),\
+                 (2, 1), (2, 3), (2, 4), (2, 5),\
+                 (3, 1), (3, 2), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8),\
+                 (4, 1), (4, 2), (4, 6), (4, 7),\
+                 (5, 2), (5, 3), (5, 4), (5, 6), (5, 8),\
+                 (6, 1), (6, 2), (6, 3), (6, 5), (6, 7), (6, 8),\
+                 (7, 4), (7, 6), (7, 8), (7, 3),\
+                 (8, 1), (8, 2), (8, 3), (8, 7), (8, 6)'
 
 messages = 'INSERT INTO Message(message_message, message_html, message_date, message_expediteur_id, message_destinataire_id)\
            VALUES ("#Bonjour\n Mon **message** est très important", "<h1>Bonjour</h1><br><p>Mon <i>message</i> est très important</p>","2020-03-19 10:00:44.761000", 1, 3),\

@@ -84,3 +84,12 @@ body{
     border-radius: 30px;
     background-color:#e0e0e0;
 }
+
+.texte{
+    margin: 20px;
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 10px;
+    border: 2px solid #be122a;
+    border-radius: 30px;
+}

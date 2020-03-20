@@ -2,9 +2,31 @@
 
 {% block app_content %}
 
-<h1>Le <a href="{{ url_for('home') }}">ForumTNAH</a> ouvre ses données en JSON!</h1>
+<div class="row">
 
-<p>Chaque utilisateur connecté peut consulter les données qui le concernent, ou non (seuls les utilisateurs connectés donc enregistrés peuvent consulter ces données).</p>
-<p>L'API permet aussi de consulter et d'exporter les posts au format JSON.</p>
+    <div class="col-sm-7 texte">
+        <h1>Le <a href="{{ url_for('home') }}">ForumTNAH</a> ouvre ses données !</h1>
+        <p>Chaque utilisateur connecté peut consulter les données qui le concernent, ou non (seuls les utilisateurs connectés donc enregistrés peuvent consulter ces données), au format JSON.</p>
+        <p>L'API permet aussi de consulter et d'exporter les posts au format JSON.</p>
+    </div>
+
+    <div class="col-sm-4 formulaire">
+        <div class="row" style="margin-left: 20px;">
+            <h6>Recherche dans les posts visibles de tous</h6>
+            <form class="form-inline my-2 my-lg-0" style="margin-left: 30px;" action="{{url_for('api_posts_browse')}}" method="GET">
+                <input type="search" name="q" class="form-control mr-sm-10" type="text" placeholder="Recherche dans les messages">
+                <button>Rechercher</button>
+            </form>
+        </div>
+        <br>
+        <div class="row" style="margin-left: 20px;">
+            <h6>Recherche dans les utilisateurs</h6>
+            <form class="form-inline my-2 my-lg-0" style="margin-left: 30px;" action="{{url_for('api_utilisateurs_browse')}}" method="GET">
+                <input type="search" name="q" class="form-control mr-sm-10" type="text" placeholder="Recherche dans les utilisateurs">
+                <button>Rechercher</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -574,7 +574,7 @@ def recherche_utilisateurs():
 
     return render_template(
         "pages/recherche/recherche_utilisateurs.html",
-        resultats=resultats,
+        utilisateurs=resultats,
         titre=titre,
         keyword=motclef,
         nom="Recherche"

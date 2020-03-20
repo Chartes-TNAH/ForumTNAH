@@ -10,18 +10,67 @@
 </div>
 
 
-{% if resultats %}
-<h1>{{resultats.total}} résultats pour la recherche "{{ keyword }}" :</h1>
-<ul>
-    {% for resultat in resultats.items %}
-    <li>{{ resultat.user_name }}</li>
-    {% endfor %}
-</ul>
+{% if utilisateurs %}
+<h1>{{utilisateurs.total}} résultats pour la recherche "{{ keyword }}" :</h1>
+<div class="row">
+    <div class="col-sm-12">
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col" style="width:10%;">Utilisateur</th>
+        <th scope="col" style="width:40%;">Nom/prénom</th>
+        <th scope="col">Promotion</th>
+        <th scope="col">Compétences</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for utilisateur in utilisateurs.items %}
+    <tr valign="top">
+        <td style="text-align:center; width=10%;">
+            <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">
+                <img src="{{ utilisateur.avatar(36) }}"><br>
+                {{ utilisateur.user_name }}
+            </a>
+        </td>
+        <td style="width:20%;">
+            {{ utilisateur.user_firstname }} {{ utilisateur.user_surname }}
+        </td>
+        <td style="width:10%;">
+            {{ utilisateur.user_promotion_date }}
+        </td>
+        <td style="width=15%;">
+            <ul>{% for competence in utilisateur.competences %}
+                <li>{{ competence.competence_label }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td style="width=15%;">
+            <a href="{{ url_for('utilisateur', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Profil</span>
+            </a>
+            {% if utilisateur.user_name != current_user.user_name %}
+            <br>
+            <a href="{{ url_for('suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Suivre</span>
+            </a>
+            <br>
+            <a href="{{ url_for('ne_plus_suivre', user_name=utilisateur.user_name) }}">
+                <span class="label label-default">Ne plus suivre</span>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
 <nav aria-label="research-pagination">
     <ul class="pagination">
-        {%- for page in resultats.iter_pages() %}
+        {%- for page in utilisateurs.iter_pages() %}
         {% if page %}
-        {% if page != resultats.page %}
+        {% if page != utilisateurs.page %}
         <li class="page-item">
             <a class="page-link" href="{{ url_for('recherche_utilisateurs', keyword=keyword, page=page) }}">{{page}}</a>
         </li>
@@ -40,5 +89,7 @@
         {%- endfor %}
     </ul>
 </nav>
+    </div>
+</div>
 {% endif %}
 {% endblock %}

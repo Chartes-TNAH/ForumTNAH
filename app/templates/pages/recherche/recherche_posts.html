@@ -12,38 +12,80 @@
 
 {% if resultats %}
 <h1>{{resultats.total}} résultats pour la recherche "{{ keyword }}" :</h1>
-<ul>
-    {% for resultat in resultats.items %}
-    <li><b>{{ resultat.post_titre }}</b><br/>
-        {% if resultat.html %}
-        {{ resultat.html | safe }}
-        {% else %}
-        {{ resultat.post_message }}
-        {% endif %}</li>
-    {% endfor %}
-</ul>
-<nav aria-label="research-pagination">
-    <ul class="pagination">
-        {%- for page in resultats.iter_pages() %}
-        {% if page %}
-        {% if page != resultats.page %}
-        <li class="page-item">
-            <a class="page-link" href="{{ url_for('recherche_posts', keyword=keyword, page=page) }}">{{page}}</a>
-        </li>
-        {% else %}
-        <li class="page-item active disabled">
-            <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
-        </li>
-        {% endif %}
 
-        {% else %}
-        <li class="page-item disabled">
-            <a class="page-link">...</a>
-        </li>
-        {% endif %}
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col" style="width:20%;">Titre</th>
+                <th scope="col" style="width:40%;">Discussion</th>
+                <th scope="col" style="width:10%;">Mot-clé</th>
+                <th scope="col" style="width:10%;">Création</th>
+                <th scope="col" style="width:10%;">Réponses</th>
+                <th scope="col" style="width:10%;" >Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for resultat in resultats.items %}
+            <tr valign="top">
+                <td>{{ resultat.post_titre }}</td>
+                <td>
+                    {% if resultat.html %}
+                    {{ resultat.html | safe }}
+                    {% else %}
+                    {{ resultat.post_message }}
+                    {% endif %}</td>
+                <td>
+                    <span style="font-size: 12px; color: #be122a;">
+                        <i class="fas fa-tag"></i>
+                    </span>
+                    <a href="{{ url_for('thematique', thematique=resultat.post_indexation) }}">{{ resultat.post_indexation}}</a>
+                </td>
+                <td>{{ resultat.post_date }}</td>
+                <td>{{ resultat.comments.count() }}</td>
+                <td>
+                    <a href="{{ url_for('post', id=resultat.post_id) }}">
+                        <span class="label label-default">Lien unique</span>
+                    </a><br>
+                    <a href="{{ url_for('post', id=resultat.post_id) }}">
+                        <span class="label label-default">Commenter</span>
+                    </a><br>
+                    {% if current_user == resultat.post_auteur %}
+                    <a href="{{ url_for('editer_post', id=resultat.post_id) }}">
+                        <span class="label label-default">Mettre à jour</span>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-        {%- endfor %}
-    </ul>
-</nav>
+        <nav aria-label="research-pagination">
+            <ul class="pagination">
+                {%- for page in resultats.iter_pages() %}
+                {% if page %}
+                {% if page != resultats.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('recherche_posts', keyword=keyword, page=page) }}">{{page}}</a>
+                </li>
+                {% else %}
+                <li class="page-item active disabled">
+                    <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                </li>
+                {% endif %}
+
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                {% endif %}
+
+                {%- endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
 {% endif %}
 {% endblock %}

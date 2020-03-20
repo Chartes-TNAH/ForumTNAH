@@ -509,8 +509,9 @@ def ne_plus_suivre(user_name):
     return redirect(url_for('utilisateur', user_name=user_name))
 
 
-@app.route("/recherche")
-def recherche():
+@app.route("/recherche/posts")
+@login_required
+def recherche_posts():
     """ Route permettant la recherche plein-texte dans le corps des messages publics
     """
     # On préfèrera l'utilisation de .get() ici
@@ -536,7 +537,7 @@ def recherche():
         titre = "Résultat pour la recherche `" + motclef + "`"
 
     return render_template(
-        "pages/recherche.html",
+        "pages/recherche/recherche_posts.html",
         resultats=resultats,
         titre=titre,
         keyword=motclef,

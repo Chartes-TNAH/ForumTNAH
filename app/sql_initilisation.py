@@ -1,15 +1,15 @@
 users = 'INSERT INTO User(user_name, user_firstname, user_surname, user_mail, user_birthyear, user_promotion_date,\
-                        user_description, user_last_seen, user_linkedin, user_github, user_password_hash)\
+                        user_description, user_last_seen, user_linkedin, user_github, user_password_hash, user_inscription_date)\
                       VALUES ("John", "John", "DUPONT", "john@example.com", "1995", "2016-2018",\
                                 "Je suis un employé lambda", "2020-02-17 23:58:44.761000",\
-                                "https://www.linkedin.com/in/john-dupont", "https://www.github.com/john-dupont", ""),\
+                                "https://www.linkedin.com/in/john-dupont", "https://www.github.com/john-dupont", "", "2020-02-17 23:58:44.761000"),\
                       ("Marie", "Marie", "LEFEVRE", "marie@chartes.psl.eu", "1992", "2014-2016",\
                         "Je suis fonctionnaire dans un ministère", "2020-02-24 12:58:47.761000",\
-                        "https://www.linkedin.com/in/marie-lefevre", "https://www.github.com/marie-lefevre", ""),\
+                        "https://www.linkedin.com/in/marie-lefevre", "https://www.github.com/marie-lefevre", "", "2020-02-24 12:58:47.761000"),\
                       ("Maxime", "Maxime", "CHALLON", "maxime.challon@undomaine.com", "1997", "2018-2020",\
                         "Je suis encore étudiant pour quelques mois.", "2020-03-11 09:58:47.761000",\
                         "https://www.linkedin.com/in/maxime-challon", "https://www.github.com/MaximeChallon",\
-                        "pbkdf2:sha256:150000$koCdnv2k$8cb86eb992afe0931cb2315daaac22c1a29655d55b1b57d028d17db354bcf23a")'
+                        "pbkdf2:sha256:150000$koCdnv2k$8cb86eb992afe0931cb2315daaac22c1a29655d55b1b57d028d17db354bcf23a", "2020-03-11 09:58:47.761000")'
 
 posts = 'INSERT INTO Post(post_titre, post_message, post_date, html, post_auteur, post_indexation)\
                       VALUES ("Un renseignement serait le bienvenu", "#Bonjour, voici mon titre \n Mon message ici.",\

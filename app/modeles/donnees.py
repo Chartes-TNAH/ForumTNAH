@@ -40,6 +40,7 @@ class User(UserMixin, db.Model):
     user_promotion_date = db.Column(db.String(9))
     user_description = db.Column(db.String(140))
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    user_inscription_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_linkedin = db.Column(db.String(120))
     user_github = db.Column(db.String(120))

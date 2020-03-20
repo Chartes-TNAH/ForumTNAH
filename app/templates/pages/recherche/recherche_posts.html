@@ -1,11 +1,17 @@
 {% extends "./base.html" %}
 
 {% block app_content %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-7 formulaire">
+        <form class="form-inline my-2 my-lg-0" action="{{url_for('recherche_posts')}}" method="GET">
+            <input type="search" style="width: 80%; margin: 10px" name="keyword" class="form-control mr-sm-10" type="text" placeholder="Faire une recherche dans les messages">
+            <button class="btn btn-primary mb-2" href="{{url_for('recherche_posts')}}" type="submit">Rechercher</button>
+        </form>
+    </div>
+    <div class="col-sm-2"></div>
+</div>
 
-<form class="form-inline my-2 my-lg-0" action="{{url_for('recherche_posts')}}" method="GET">
-  <input type="search" name="keyword" class="form-control mr-sm-2" type="text" placeholder="Faire une recherche dans les messages">
-  <button class="btn btn-primary mb-1" href="{{url_for('recherche_posts')}}" type="submit">Rechercher</button>
-</form>
 
 {% if resultats %}
 <h1>{{resultats.total}} résultats pour la recherche "{{ keyword }}" :</h1>

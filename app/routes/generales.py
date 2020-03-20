@@ -372,7 +372,7 @@ def connexion():
     # vérification si l'utilisateur est déjà connecté: si c'est le cas, il est redirigé vers la page d'accueil
     if current_user.is_authenticated is True:
         flash("Vous êtes déjà connecté", "info")
-        return redirect("/")
+        return redirect("/home")
 
     # utilisation du formulaire de classe LoginForm
     form = LoginForm()

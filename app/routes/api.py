@@ -2,7 +2,7 @@ from flask import request, url_for, jsonify
 from urllib.parse import urlencode
 
 from ..app import app
-from ..constantes import POSTS_PAR_PAGE, API_ROUTE
+from ..constantes import RESULTATS_PAR_PAGE, API_ROUTE
 from ..modeles.donnees import Post
 
 
@@ -48,7 +48,7 @@ def api_posts_browse():
         query = Post.query
 
     try:
-        resultats = query.paginate(page=page, per_page=POSTS_PAR_PAGE)
+        resultats = query.paginate(page=page, per_page=RESULTATS_PAR_PAGE)
     except Exception:
         return Json_404()
 

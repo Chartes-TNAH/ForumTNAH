@@ -6,7 +6,7 @@ from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment, Competences, CV
 from ..modeles.utilitaires import get_first_image
-from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD, POSTS_PAR_PAGE
+from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD, RESULTATS_PAR_PAGE
 import random
 
 # dans l'ordre:
@@ -511,7 +511,7 @@ def ne_plus_suivre(user_name):
 
 @app.route("/recherche")
 def recherche():
-    """ Route permettant la recherche plein-texte
+    """ Route permettant la recherche plein-texte dans le corps des messages publics
     """
     # On préfèrera l'utilisation de .get() ici
     #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])
@@ -532,7 +532,7 @@ def recherche():
     if motclef:
         resultats = Post.query.filter(
             Post.post_message.like("%{}%".format(motclef))
-        ).paginate(page=page, per_page=POSTS_PAR_PAGE)
+        ).paginate(page=page, per_page=RESULTATS_PAR_PAGE)
         titre = "Résultat pour la recherche `" + motclef + "`"
 
     return render_template(

@@ -175,6 +175,28 @@ class User(UserMixin, db.Model):
             "a":'a'
         }
 
+    def user_to_json(self):
+        """
+        Fonction retournant un dictionnaire json des données de la table User
+        :return: dictionnaire json des données
+        :rtype: dict
+        """
+        return {
+            "type": "people",
+            "id": self.id,
+            "attributes": {},
+            "relationships": {
+                "follow": [],
+                "followers": []
+            },
+            "included": {
+                "skills": [],
+                "experiences": [],
+                "posts": [],
+                "comments": []
+            },
+            "links": {}
+        }
 
 # création de la table des posts
 class Post(db.Model):

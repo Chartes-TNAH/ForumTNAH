@@ -1,4 +1,5 @@
 from flask import request, url_for, jsonify
+from flask_login import login_required
 from urllib.parse import urlencode
 
 from ..app import app
@@ -18,6 +19,7 @@ def Json_404():
 
 
 @app.route(API_ROUTE+"/posts/<int:post_id>")
+@login_required
 def api_posts_single(post_id):
     """ Route permettant la recherche d'un post en particulier selon son id
     On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
@@ -32,6 +34,7 @@ def api_posts_single(post_id):
 
 
 @app.route(API_ROUTE+"/posts")
+@login_required
 def api_posts_browse():
     """ Route permettant la recherche plein-texte et la navigation classique
     On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
@@ -96,6 +99,7 @@ def api_posts_browse():
 
 
 @app.route(API_ROUTE+"/utilisateurs")
+@login_required
 def api_utilisateurs_browse():
     """ Route permettant le retour des données des utilisateurs
     On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
@@ -160,6 +164,7 @@ def api_utilisateurs_browse():
 
 
 @app.route(API_ROUTE+"/utilisateurs/<int:user_id>")
+@login_required
 def api_utilisateurs_single(user_id):
     """ Route permettant la recherche d'un utilisateur en particulier selon son id
     On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%

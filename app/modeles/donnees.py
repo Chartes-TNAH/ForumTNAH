@@ -165,6 +165,16 @@ class User(UserMixin, db.Model):
         miens = Post.query.filter_by(post_auteur=self.id)
         return followed.union(miens).order_by(Post.post_date.desc())
 
+    def user_abstract_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table User
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "a":'a'
+        }
+
 
 # création de la table des posts
 class Post(db.Model):
@@ -234,6 +244,9 @@ class Post(db.Model):
                         }
                     }
                 },
+                "included": {
+                    "comments": [comment.comment_to_json() for comment in self.comments]
+                },
                 "links": {
                     "self": url_for('post', id=self.post_id)
                 }
@@ -266,6 +279,26 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True
         ))
 
+    def comment_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table Comment
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+                "type": "comments",
+                "id": self.id,
+                "attributes": {
+                    "body": self.comment_message,
+                    "created": self.comment_date
+                },
+                "relationships": {
+                    "author": self.comment_auteur
+                },
+                "links": {
+                    "related": url_for('post', id=self.comment_post)
+                }
+            }
 
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 

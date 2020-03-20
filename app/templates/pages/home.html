@@ -4,6 +4,16 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="col-sm-5 formulaire">
+            {% include './partials/recherche/recherche_posts.html' %}
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5 formulaire">
+            {% include './partials/recherche/recherche_utilisateurs.html' %}
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-sm-3 liens_rapides_home">
             <div class="text-center">
                         <span style="font-size: 48px; color: #be122a;">
@@ -44,6 +54,7 @@
             </ul>
         </div>
     </div>
+
     <div class="row">
         <h5>Voici {{ nb_posts }} messages pris au hasard</h5>
         {% include 'partials/posts/posts_liste.html' %}

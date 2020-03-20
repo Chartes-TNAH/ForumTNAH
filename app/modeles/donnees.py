@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from hashlib import md5
 from markdown import markdown
 import bleach
+from flask import url_for
 
 locale.setlocale(locale.LC_TIME, '')
 
@@ -211,6 +212,32 @@ class Post(db.Model):
             if caractere in string:
                 chaine_nettoyee = string.replace(caractere, "_")
         self.post_indexation = chaine_nettoyee
+
+    def post_to_json(self):
+        """
+        Fonction retournant un dictionnaire json des données de la table Post
+        :return: dictionnaire json des données
+        :rtype: dict
+        """
+        return {"type": "post",
+                "id": self.post_id,
+                "attributes": {
+                    "title": self.post_titre,
+                    "body": self.post_message,
+                    "created": self.post_date
+                },
+                "relationships": {
+                    "author": {
+                        "data": {
+                            "type": "people",
+                            "id": self.post_auteur
+                        }
+                    }
+                },
+                "links": {
+                    "self": url_for('post', id=self.post_id)
+                }
+            }
 
 db.event.listen(Post.post_message, 'set', Post.au_changement)
 

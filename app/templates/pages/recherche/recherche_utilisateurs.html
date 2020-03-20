@@ -4,10 +4,7 @@
 <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-7 formulaire">
-        <form class="form-inline my-2 my-lg-0" action="{{url_for('recherche_utilisateurs')}}" method="GET">
-            <input type="search" style="width: 80%; margin: 10px" name="keyword" class="form-control mr-sm-10" type="text" placeholder="Faire une recherche dans les utilisateurs">
-            <button class="btn btn-primary mb-2" href="{{url_for('recherche_utilisateurs')}}" type="submit">Rechercher</button>
-        </form>
+{% include './partials/recherche/recherche_utilisateurs.html' %}
     </div>
     <div class="col-sm-2"></div>
 </div>

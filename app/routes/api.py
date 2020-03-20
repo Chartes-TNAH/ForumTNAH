@@ -86,4 +86,5 @@ def api_posts_browse():
         dict_resultats["links"]["prev"] = url_for("api_posts_browse", _external=True)+"?"+urlencode(arguments)
 
     response = jsonify(dict_resultats)
+    response.headers['Content-Type'] = 'application/vnd.api+json'
     return response

@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from hashlib import md5
 from markdown import markdown
 import bleach
+from flask import url_for
 
 locale.setlocale(locale.LC_TIME, '')
 
@@ -164,6 +165,63 @@ class User(UserMixin, db.Model):
         miens = Post.query.filter_by(post_auteur=self.id)
         return followed.union(miens).order_by(Post.post_date.desc())
 
+    def user_abstract_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table User
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "a":'a'
+        }
+
+    def follower_to_json(self):
+        return {
+            "id": self.id,
+            "type": "people",
+            "attributes": {
+                "user_name": self.user_name
+            },
+            "links": {
+                "self": url_for('utilisateur', user_name=self.user_name),
+                "json": url_for('api_utilisateurs_single', user_id=self.id)
+            }
+        }
+
+
+    def user_to_json(self):
+        """
+        Fonction retournant un dictionnaire json des données de la table User
+        :return: dictionnaire json des données
+        :rtype: dict
+        """
+        return {
+            "type": "people",
+            "id": self.id,
+            "attributes": {
+                "user_name": self.user_name,
+                "firstname": self.user_firstname,
+                "surname": self.user_surname,
+                "promotion_date": self.user_promotion_date,
+                "description": self.user_description,
+                "last_activity": self.user_last_seen,
+                "github": self.user_github,
+                "linkedin": self.user_linkedin
+            },
+            "relationships": {
+                "followers": [follow.follower_to_json() for follow in self.followed]
+            },
+            "included": {
+                "competences": [competence.competences_to_json() for competence in self.competences],
+                "experiences": [experience.cv_to_json() for experience in self.cvs],
+                "posts": [post.post_to_json() for post in self.posts],
+                "comments": [comment.comment_to_json() for comment in self.comments]
+            },
+            "links": {
+                "self": url_for('utilisateur', user_name=self.user_name),
+                "json": url_for('api_utilisateurs_single', user_id=self.id)
+            }
+        }
 
 # création de la table des posts
 class Post(db.Model):
@@ -212,6 +270,41 @@ class Post(db.Model):
                 chaine_nettoyee = string.replace(caractere, "_")
         self.post_indexation = chaine_nettoyee
 
+    def post_to_json(self):
+        """
+        Fonction retournant un dictionnaire json des données de la table Post
+        :return: dictionnaire json des données
+        :rtype: dict
+        """
+        return {"type": "post",
+                "id": self.post_id,
+                "attributes": {
+                    "title": self.post_titre,
+                    "markdown_body": self.post_message,
+                    "html_body": self.html,
+                    "created": self.post_date,
+                    "keyword": self.post_indexation
+                },
+                "relationships": {
+                    "author": {
+                        "data": {
+                            "type": "people",
+                            "id": self.post_auteur
+                        },
+                        "links": {
+                            "json": url_for('api_utilisateurs_single', user_id=self.post_auteur)
+                        }
+                    }
+                },
+                "included": {
+                    "comments": [comment.comment_to_json() for comment in self.comments]
+                },
+                "links": {
+                    "self": url_for('post', id=self.post_id),
+                    "json": url_for('api_posts_single', post_id=self.post_id)
+                }
+            }
+
 db.event.listen(Post.post_message, 'set', Post.au_changement)
 
 
@@ -239,6 +332,27 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True
         ))
 
+    def comment_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table Comment
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+                "type": "comments",
+                "id": self.id,
+                "attributes": {
+                    "markdown_body": self.comment_message,
+                    "html_body": self.comment_html,
+                    "created": self.comment_date
+                },
+                "relationships": {
+                    "author": self.comment_auteur
+                },
+                "links": {
+                    "related": url_for('post', id=self.comment_post)
+                }
+            }
 
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 
@@ -292,11 +406,43 @@ class CV(db.Model):
 
     cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def cv_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table CV
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "type": "experience",
+            "id": self.cv_id,
+            "attributes": {
+                "job_name": self.cv_nom_poste,
+                "employer": self.cv_nom_employeur,
+                "job_location": self.cv_ville,
+                "job_beginning": self.cv_annee_debut,
+                "job_ending": self.cv_annee_fin
+            }
+        }
+
 
 # création de la table des compétences
 class Competences(db.Model):
     competence_id = db.Column(db.Integer, primary_key=True)
     competence_label = db.Column(db.String(48))
+
+    def competences_to_json(self):
+        """
+            Fonction retournant un dictionnaire json des données de la table Compétences
+            :return: dictionnaire json des données
+            :rtype: dict
+        """
+        return {
+            "type": "competence",
+            "id": self.competence_id,
+            "attributes": {
+                "skill_label": self.competence_label
+            }
+        }
 
 
 @login.user_loader

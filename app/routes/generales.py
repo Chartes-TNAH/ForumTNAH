@@ -6,7 +6,7 @@ from werkzeug.urls import url_parse
 from ..modeles.utilisateurs import LoginForm, RegistrationForm
 from ..modeles.donnees import Post, User, Comment, Competences, CV
 from ..modeles.utilitaires import get_first_image
-from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD
+from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD, RESULTATS_PAR_PAGE
 import random
 
 # dans l'ordre:
@@ -25,6 +25,7 @@ import random
 # /explorer
 # /suivre
 # /ne_plus_suivre
+# /recherche
 
 
 # mise à jour de la date de visite dans la base de données dès que l'utilisateur fait une action
@@ -506,3 +507,76 @@ def ne_plus_suivre(user_name):
     flash('Vous ne suivez plus {} désormais.'.format(user_name))
 
     return redirect(url_for('utilisateur', user_name=user_name))
+
+
+@app.route("/recherche/posts")
+@login_required
+def recherche_posts():
+    """ Route permettant la recherche plein-texte dans le corps des messages publics
+    """
+    # On préfèrera l'utilisation de .get() ici
+    #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])
+    motclef = request.args.get("keyword", None)
+    page = request.args.get("page", 1)
+
+    if isinstance(page, str) and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
+    # On crée une liste vide de résultat (qui restera vide par défaut
+    #   si on n'a pas de mot clé)
+    resultats = []
+
+    # On fait de même pour le titre de la page
+    titre = "Recherche"
+    if motclef:
+        resultats = Post.query.filter(
+            Post.post_message.like("%{}%".format(motclef))
+        ).paginate(page=page, per_page=RESULTATS_PAR_PAGE)
+        titre = "Résultat pour la recherche `" + motclef + "`"
+
+    return render_template(
+        "pages/recherche/recherche_posts.html",
+        resultats=resultats,
+        titre=titre,
+        keyword=motclef,
+        nom="Recherche"
+    )
+
+
+@app.route("/recherche/utilisateurs")
+@login_required
+def recherche_utilisateurs():
+    """ Route permettant la recherche d'utilisateurs
+    """
+    # On préfèrera l'utilisation de .get() ici
+    #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])
+    motclef = request.args.get("keyword", None)
+    page = request.args.get("page", 1)
+
+    if isinstance(page, str) and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
+    # On crée une liste vide de résultat (qui restera vide par défaut
+    #   si on n'a pas de mot clé)
+    resultats = []
+
+    # On fait de même pour le titre de la page
+    titre = "Recherche"
+    if motclef:
+        resultats = User.query.filter(
+            User.user_name.like("%{}%".format(motclef))
+        ).paginate(page=page, per_page=RESULTATS_PAR_PAGE)
+        titre = "Résultat pour la recherche `" + motclef + "`"
+
+    return render_template(
+        "pages/recherche/recherche_utilisateurs.html",
+        utilisateurs=resultats,
+        titre=titre,
+        keyword=motclef,
+        nom="Recherche"
+    )
+

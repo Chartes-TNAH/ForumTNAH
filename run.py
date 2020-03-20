@@ -1,6 +1,6 @@
 from app.app import app, db
 from app.constantes import DEBUG
-from app.sql_initilisation import users, posts, comments, cvs, competences, skills, messages
+from app.sql_initilisation import users, posts, comments, cvs, competences, skills, messages, followers
 
 if __name__ == "__main__":
     db.drop_all()
@@ -12,4 +12,5 @@ if __name__ == "__main__":
     db.engine.execute(competences)
     db.engine.execute(skills)
     db.engine.execute(messages)
+    db.engine.execute(followers)
     app.run(debug=DEBUG)

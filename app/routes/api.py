@@ -12,6 +12,15 @@ def Json_404():
     return response
 
 
+@app.route(API_ROUTE+"/posts/<int:post_id>")
+def api_posts_single(post_id):
+    try:
+        query = Post.query.get(post_id)
+        return jsonify(query.post_to_json())
+    except:
+        return Json_404()
+
+
 @app.route(API_ROUTE+"/posts")
 def api_posts_browse():
     """ Route permettant la recherche plein-texte et la navigation classique

@@ -157,3 +157,17 @@ def api_utilisateurs_browse():
     response = jsonify(dict_resultats)
     response.headers['Content-Type'] = 'application/vnd.api+json'
     return response
+
+
+@app.route(API_ROUTE+"/utilisateurs/<int:user_id>")
+def api_utilisateurs_single(user_id):
+    """ Route permettant la recherche d'un utilisateur en particulier selon son id
+    On s'inspirera de http://jsonapi.org/ faute de pouvoir trouver temps d'y coller à 100%
+    :param post_id: id de l'utilisateur demandé
+    :type post_id: int
+    """
+    try:
+        query = User.query.get(user_id)
+        return jsonify(query.user_to_json())
+    except:
+        return Json_404()

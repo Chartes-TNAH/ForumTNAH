@@ -183,7 +183,8 @@ class User(UserMixin, db.Model):
                 "user_name": self.user_name
             },
             "links": {
-                "self": url_for('utilisateur', user_name=self.user_name)
+                "self": url_for('utilisateur', user_name=self.user_name),
+                "json": url_for('api_utilisateurs_single', user_id=self.id)
             }
         }
 
@@ -215,7 +216,8 @@ class User(UserMixin, db.Model):
                 "comments": [comment.comment_to_json() for comment in self.comments]
             },
             "links": {
-                "self": url_for('utilisateur', user_name=self.user_name)
+                "self": url_for('utilisateur', user_name=self.user_name),
+                "json": url_for('api_utilisateurs_single', user_id=self.id)
             }
         }
 

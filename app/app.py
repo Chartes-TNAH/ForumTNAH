@@ -35,4 +35,4 @@ login = LoginManager(app)
 #pour la saisie en MarkDown
 pagedown = PageDown(app)
 
-from .routes import generales, erreurs, posts, profil_utilisateur, messagerie
+from .routes import generales, erreurs, posts, profil_utilisateur, messagerie, api

@@ -233,8 +233,10 @@ class Post(db.Model):
                 "id": self.post_id,
                 "attributes": {
                     "title": self.post_titre,
-                    "body": self.post_message,
-                    "created": self.post_date
+                    "markdown_body": self.post_message,
+                    "html_body": self.html,
+                    "created": self.post_date,
+                    "keyword": self.post_indexation
                 },
                 "relationships": {
                     "author": {
@@ -290,7 +292,8 @@ class Comment(db.Model):
                 "type": "comments",
                 "id": self.id,
                 "attributes": {
-                    "body": self.comment_message,
+                    "markdown_body": self.comment_message,
+                    "html_body": self.comment_html,
                     "created": self.comment_date
                 },
                 "relationships": {

@@ -282,7 +282,7 @@ def lieux():
             dictionnaire_distinct[experience.cv_ville] = image
         except:
             dictionnaire_distinct[experience.cv_ville] = "http://www.istockphoto.com/vector/city-icons-set-signs-and-symbols-gm497023616-78886163"
-    print(dictionnaire_distinct)
+
     # comptage du nombre de nombre de mots-clés
     compteur_lieux = len(dictionnaire_distinct)
 

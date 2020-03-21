@@ -140,10 +140,13 @@ def thematiques():
     for post in posts:
         # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
         if post.post_indexation not in dictionnaire_distinct:
-            # récupération de l'image
-            image = get_first_image(post.post_indexation)
-            # remplissage du dictionnaire
-            dictionnaire_distinct[post.post_indexation] = image
+            try:
+                # récupération de l'image
+                image = get_first_image(post.post_indexation)
+                # remplissage du dictionnaire
+                dictionnaire_distinct[post.post_indexation] = image
+            except:
+                dictionnaire_distinct[post.post_indexation] = "http://commons.wikimedia.org/wiki/File:High-contrast-emblem-photos.svg"
 
     # comptage du nombre de nombre de mots-clés
     compteur_tags = len(dictionnaire_distinct)
@@ -199,10 +202,13 @@ def competences():
     dictionnaire_distinct = {}
 
     for competence in competences:
-        # récupération de l'image
-        image = get_first_image(competence.competence_label)
-        # remplissage du dictionnaire
-        dictionnaire_distinct[competence.competence_label] = image
+        try:
+            # récupération de l'image
+            image = get_first_image(competence.competence_label)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[competence.competence_label] = image
+        except:
+            dictionnaire_distinct[competence.competence_label] = "https://thenounproject.com/term/skills/369287/"
 
     # comptage du nombre de nombre de mots-clés
     compteur_competences = len(dictionnaire_distinct)
@@ -269,10 +275,13 @@ def lieux():
     dictionnaire_distinct = {}
 
     for experience in experiences:
-        # récupération de l'image
-        image = get_first_image(experience.cv_ville)
-        # remplissage du dictionnaire
-        dictionnaire_distinct[experience.cv_ville] = image
+        try:
+            # récupération de l'image
+            image = get_first_image(experience.cv_ville)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[experience.cv_ville] = image
+        except:
+            dictionnaire_distinct[experience.cv_ville] = "http://www.istockphoto.com/vector/city-icons-set-signs-and-symbols-gm497023616-78886163"
 
     # comptage du nombre de nombre de mots-clés
     compteur_lieux = len(dictionnaire_distinct)
@@ -349,7 +358,8 @@ def inscription():
     if form.validate_on_submit():
         # la variable user stcoke provisoirement les données du formulaire réconciliées avec les champs de la base de données
         user = User(user_name=form.username.data,
-                    user_mail=form.email.data)
+                    user_mail=form.email.data,
+                    user_inscription_date=datetime.utcnow())
         user.set_password(form.password.data)
         # ajout et commit des données de user dans la base de données
         db.session.add(user)
@@ -371,7 +381,7 @@ def connexion():
     # vérification si l'utilisateur est déjà connecté: si c'est le cas, il est redirigé vers la page d'accueil
     if current_user.is_authenticated is True:
         flash("Vous êtes déjà connecté", "info")
-        return redirect("/")
+        return redirect("/home")
 
     # utilisation du formulaire de classe LoginForm
     form = LoginForm()

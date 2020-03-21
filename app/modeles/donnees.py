@@ -40,6 +40,7 @@ class User(UserMixin, db.Model):
     user_promotion_date = db.Column(db.String(9))
     user_description = db.Column(db.String(140))
     user_last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    user_inscription_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_linkedin = db.Column(db.String(120))
     user_github = db.Column(db.String(120))
@@ -203,6 +204,7 @@ class User(UserMixin, db.Model):
                 "firstname": self.user_firstname,
                 "surname": self.user_surname,
                 "promotion_date": self.user_promotion_date,
+                "inscription_date": self.user_inscription_date,
                 "description": self.user_description,
                 "last_activity": self.user_last_seen,
                 "github": self.user_github,

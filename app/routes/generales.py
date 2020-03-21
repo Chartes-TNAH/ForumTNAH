@@ -140,10 +140,13 @@ def thematiques():
     for post in posts:
         # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
         if post.post_indexation not in dictionnaire_distinct:
-            # récupération de l'image
-            image = get_first_image(post.post_indexation)
-            # remplissage du dictionnaire
-            dictionnaire_distinct[post.post_indexation] = image
+            try:
+                # récupération de l'image
+                image = get_first_image(post.post_indexation)
+                # remplissage du dictionnaire
+                dictionnaire_distinct[post.post_indexation] = image
+            except:
+                dictionnaire_distinct[post.post_indexation] = "http://commons.wikimedia.org/wiki/File:High-contrast-emblem-photos.svg"
 
     # comptage du nombre de nombre de mots-clés
     compteur_tags = len(dictionnaire_distinct)

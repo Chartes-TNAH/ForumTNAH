@@ -9,6 +9,7 @@ Plusieurs fonctionnalités sont proposées:
 * indexation des messages et recherche de messages par thème
 * création de comptes utilisateurs donnant la possibilité de renseigner ses expériences, ses compétences, ses liens (mail, GitHub, LinkedIn) et des informations sur la scolarité à l'EnC
 * possibilité de saisie en MarkDown des messages et des commentaires
+* possibilité d'envoyer des messages privés
 
 ## Développement de l'application
 

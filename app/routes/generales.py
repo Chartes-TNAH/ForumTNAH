@@ -202,10 +202,13 @@ def competences():
     dictionnaire_distinct = {}
 
     for competence in competences:
-        # récupération de l'image
-        image = get_first_image(competence.competence_label)
-        # remplissage du dictionnaire
-        dictionnaire_distinct[competence.competence_label] = image
+        try:
+            # récupération de l'image
+            image = get_first_image(competence.competence_label)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[competence.competence_label] = image
+        except:
+            dictionnaire_distinct[competence.competence_label] = "https://thenounproject.com/term/skills/369287/"
 
     # comptage du nombre de nombre de mots-clés
     compteur_competences = len(dictionnaire_distinct)
@@ -272,11 +275,14 @@ def lieux():
     dictionnaire_distinct = {}
 
     for experience in experiences:
-        # récupération de l'image
-        image = get_first_image(experience.cv_ville)
-        # remplissage du dictionnaire
-        dictionnaire_distinct[experience.cv_ville] = image
-
+        try:
+            # récupération de l'image
+            image = get_first_image(experience.cv_ville)
+            # remplissage du dictionnaire
+            dictionnaire_distinct[experience.cv_ville] = image
+        except:
+            dictionnaire_distinct[experience.cv_ville] = "http://www.istockphoto.com/vector/city-icons-set-signs-and-symbols-gm497023616-78886163"
+    print(dictionnaire_distinct)
     # comptage du nombre de nombre de mots-clés
     compteur_lieux = len(dictionnaire_distinct)
 

@@ -97,11 +97,7 @@ class CVForm(FlaskForm):
 
 # création de la classe du formulaire pour le choix des compétences principales
 class CompetencesForm(FlaskForm):
-    competences = RadioField('competences', choices=[
-        ('1', 'IIIF'),
-        ('2', 'Python'),
-        ('3', "SQL")
-    ])
+    competences = RadioField('competences', coerce=int, validators=[InputRequired()])
 
     submit = SubmitField('Enregistrer')
 

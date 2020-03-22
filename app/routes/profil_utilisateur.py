@@ -2,7 +2,7 @@ from ..app import app, db
 from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
 from ..modeles.utilisateurs import EditProfileForm, CVForm, CompetencesForm
-from ..modeles.donnees import Post, User, Comment, CV
+from ..modeles.donnees import Post, User, Comment, CV, Competences
 from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE
 
@@ -137,8 +137,14 @@ def editer_competences(user_name):
         """
     # récupération de l'utilisateur à partir du paramètre fourni
     utilisateur = User.query.filter_by(user_name=user_name).first_or_404()
+    # gestion du formulaire de premier message privé avec un utilisateur
+    competences_disponibles = Competences.query.all()
+    # création de la liste de tuples pour le RadioField du formulaire
+    competences_liste = [(c.competence_id, c.competence_label) for c in competences_disponibles]
     # utilisation du formulaire de la classe EditProfileForm
     form = CompetencesForm()
+    # passage de la liste dans le formulaire
+    form.competences.choices = competences_liste
     # validate_on_submit fonctionne avec la méthode POST
     if form.validate_on_submit():
         competence = form.competences.data

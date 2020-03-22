@@ -1,6 +1,7 @@
 from ..app import db, login
 from datetime import datetime
 import locale
+from .utilitaires import normalisation
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
@@ -270,7 +271,7 @@ class Post(db.Model):
         for caractere in caracteres_interdits:
             if caractere in string:
                 chaine_nettoyee = string.replace(caractere, "_")
-        self.post_indexation = chaine_nettoyee
+        self.post_indexation = normalisation(chaine_nettoyee)
 
     def post_to_json(self):
         """

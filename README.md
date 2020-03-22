@@ -18,7 +18,7 @@ Ce projet a été réalisé dans le cadre de l'évaluation du cours Python. Il e
 ## Lancement du ForumTNAH
 
 * Installer Python3
-* Cloner ce dépôt Git: `git clone https://github.com/MaximeChallon/ForumTNAH.git`
+* Cloner ce dépôt Git: `git clone https://github.com/MaximeChallon/ForumTNAH.git`; rentrer dedans
 * Installer, configurer et lancer un environnement virtuel avec Python3: `virtualenv -p python3 env` pour l'installation, `source env/bin/activate` pour le lancement
 * Installer les requirements.txt: `pip install requirements.txt`
 * Lancer l'application avec la commande `python3 run.py`

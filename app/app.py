@@ -12,7 +12,7 @@ templates = os.path.join(chemin_actuel, "templates")
 statics = os.path.join(chemin_actuel, "static")
 
 app = Flask(
-    "Application",
+    "ForumTNAH",
     template_folder=templates,
     static_folder=statics
 )

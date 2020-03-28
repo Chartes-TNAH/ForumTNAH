@@ -1,0 +1,8 @@
+INSERT INTO followers VALUES (1, 2), (1, 4), (1, 6)
+INSERT INTO followers VALUES (2, 1), (2, 3), (2, 4), (2, 5)
+INSERT INTO followers VALUES (3, 1), (3, 2), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)
+INSERT INTO followers VALUES (4, 1), (4, 2), (4, 6), (4, 7)
+INSERT INTO followers VALUES (5, 2), (5, 3), (5, 4), (5, 6), (5, 8)
+INSERT INTO followers VALUES (6, 1), (6, 2), (6, 3), (6, 5), (6, 7), (6, 8)
+INSERT INTO followers VALUES (7, 4), (7, 6), (7, 8), (7, 3)
+INSERT INTO followers VALUES (8, 1), (8, 2), (8, 3), (8, 7), (8, 6)

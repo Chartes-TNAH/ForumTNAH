@@ -1,7 +1,8 @@
 from warnings import warn
 
-DEBUG = True
+DEBUG = False
 
+SQL_INIT = 'app/sql_init/'
 POSTS_HASARD = 2
 POSTS_PAR_PAGE = 3
 POSTS_PAR_PAGE_DISCUSSION = 6

@@ -5,6 +5,8 @@ from flask_login import LoginManager
 import os
 from .constantes import SECRET_KEY
 from flask_pagedown import PageDown
+from .constantes import SQL_INIT
+from tqdm import tqdm
 
 # définition des chemins
 chemin_actuel =os.path.dirname(os.path.abspath(__file__))
@@ -36,3 +38,15 @@ login = LoginManager(app)
 pagedown = PageDown(app)
 
 from .routes import generales, erreurs, posts, profil_utilisateur, messagerie, api
+
+def init_db():
+    print("Initialisation de la base de données en cours")
+    db.drop_all()
+    print("Création des tables de la base de données")
+    db.create_all()
+    # insertion des données d'exemple
+    for fichier in tqdm(os.listdir(SQL_INIT)):
+        with open(SQL_INIT + fichier, 'r') as f:
+            print("Insertion de données d'exemple dans la table  " + fichier.replace('.sql', ''))
+            for line in tqdm(f):
+                db.engine.execute(line)

@@ -9,6 +9,7 @@ from markdown import markdown
 import bleach
 from flask import url_for
 
+# pour avoir la date et l'heure française
 locale.setlocale(locale.LC_TIME, '')
 
 
@@ -160,6 +161,8 @@ class User(UserMixin, db.Model):
     def followed_posts(self):
         """
         Fonction permettant de récupérer les posts des personnes suivies
+        :return: liste de posts
+        :rtype: list
         """
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.post_auteur)).filter(
@@ -167,17 +170,13 @@ class User(UserMixin, db.Model):
         miens = Post.query.filter_by(post_auteur=self.id)
         return followed.union(miens).order_by(Post.post_date.desc())
 
-    def user_abstract_to_json(self):
-        """
-            Fonction retournant un dictionnaire json des données de la table User
-            :return: dictionnaire json des données
-            :rtype: dict
-        """
-        return {
-            "a":'a'
-        }
-
+    # pour l'API, je créé des fonctions qui retournent certaines données en JSON
     def follower_to_json(self):
+        """
+        Fonction retournant les followers en JSON, sous la forme d'un dictionnaire Python pour le moment (il sera dumpé ensuite)
+        :return: dictionnaire JSON des données des followers de la personne
+        :rtype: dict
+        """
         return {
             "id": self.id,
             "type": "people",
@@ -189,7 +188,6 @@ class User(UserMixin, db.Model):
                 "json": url_for('api_utilisateurs_single', user_id=self.id)
             }
         }
-
 
     def user_to_json(self):
         """
@@ -244,14 +242,14 @@ class Post(db.Model):
 
     # gestion de la saisie MarkDown
     @staticmethod
-    def au_changement(target, value, oldvalue, initiator):
+    def au_changement(target, value):
         """
         Permet de convertir le MarkDown en HTML à chaque fois qu'un changement est effectué dans le champ html de la table
         """
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i',
                         'li', 'ol', 'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-        # la fonction markdown fait une conversion en html; la fonction clean permet de nettoyer le code des balises qui ne sont pas dans
-        # allowed_tags; linkify fait la conversion des URL en balises <a>
+        # la fonction markdown fait une conversion en html; la fonction clean permet de nettoyer le code
+        # des balises qui ne sont pas dans allowed_tags; linkify fait la conversion des URL en balises <a>
         target.html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True
@@ -260,7 +258,7 @@ class Post(db.Model):
     # gestion des mots clés d'indexation
     def nettoyer_mot(self, string):
         """
-        Permet de nettoyer la chaîne de caractères envoyée de toute sa ponctauation pour tenter de normaliser un peu les mots
+        Permet de nettoyer la chaîne de caractères envoyée de toute sa ponctuation pour tenter de normaliser les mots
         :param string: chaîne de caractères rentrée dans le formualire du mot clé
         :type string: str
         :return: None
@@ -273,6 +271,7 @@ class Post(db.Model):
                 chaine_nettoyee = string.replace(caractere, "_")
         self.post_indexation = normalisation(chaine_nettoyee)
 
+    # création des dictionnaires qui seront dumpés pour le JSON de l'API
     def post_to_json(self):
         """
         Fonction retournant un dictionnaire json des données de la table Post
@@ -308,6 +307,7 @@ class Post(db.Model):
                 }
             }
 
+# pour afficher la sortie HTML simultanément à l'écriture du MarkDown, j'utilise event.listen
 db.event.listen(Post.post_message, 'set', Post.au_changement)
 
 
@@ -322,7 +322,7 @@ class Comment(db.Model):
     comment_post = db.Column(db.Integer, db.ForeignKey('post.post_id'))
 
     @staticmethod
-    def au_changement(target, value, oldvalue, initiator):
+    def au_changement(target, value):
         """
         Permet de convertir le MarkDown en HTML à chaque fois qu'un changement est effectué dans le champ html de la table
         """
@@ -335,6 +335,7 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True
         ))
 
+    # passage des données de la table Comments en dictionnaire pour le JSON de l'API
     def comment_to_json(self):
         """
             Fonction retournant un dictionnaire json des données de la table Comment
@@ -357,6 +358,7 @@ class Comment(db.Model):
                 }
             }
 
+# de même que pour les posts, écoute des changements du champ d'écriture Markdown pour afficher le résultat simultanément
 db.event.listen(Comment.comment_message, 'set', Comment.au_changement)
 
 
@@ -367,8 +369,8 @@ class Message(db.Model):
     message_html = db.Column(db.Text)
     message_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    # les relations portant toutes sur la table User, SQLalchemy ne peut pas résoudre seul les relations qui sont similaires, d'où
-    # la spécification des clés-étrangères.
+    # les relations portant toutes sur la table User, SQLalchemy ne peut pas résoudre seul les relations qui sont
+    # similaires, d'où la spécification des clés-étrangères.
     # En chargeant la relation Message.message_expediteur depuis un objet de Message utilisera la valeur présente dans
     # message_expediteur_id de manière à identifier la ligne dans User qui doit être chargée; de même pour message_destinataire
     message_expediteur_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -380,7 +382,7 @@ class Message(db.Model):
                                           foreign_keys=[message_destinataire_id])
 
     @staticmethod
-    def au_changement(target, value, oldvalue, initiator):
+    def au_changement(target, value):
         """
         Permet de convertir le MarkDown en HTML à chaque fois qu'un changement est effectué dans le champ html de la table
         """
@@ -393,9 +395,8 @@ class Message(db.Model):
             tags=allowed_tags, strip=True
         ))
 
-
 db.event.listen(Message.message_message, 'set', Message.au_changement)
-
+# comme il s'agit de messages personnels, ils ne sont pas mis dans l'API
 
 # création de la table des expériences professionnelles
 class CV(db.Model):
@@ -409,6 +410,7 @@ class CV(db.Model):
 
     cv_utilisateur = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    # création d'un dictionnaire accueillant les données de la table CV pour l'API
     def cv_to_json(self):
         """
             Fonction retournant un dictionnaire json des données de la table CV
@@ -433,6 +435,7 @@ class Competences(db.Model):
     competence_id = db.Column(db.Integer, primary_key=True)
     competence_label = db.Column(db.String(48))
 
+    # création d'un dictionnaire accueillant les données de la table Compétences pour l'API
     def competences_to_json(self):
         """
             Fonction retournant un dictionnaire json des données de la table Compétences

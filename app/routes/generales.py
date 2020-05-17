@@ -84,7 +84,7 @@ def home():
 def discussions():
     """
     Route permettant l'affichage de tous les posts du forum du plus récent au plus ancien.
-    :return: template discussions;html
+    :return: template discussions.html
     :rtype: template
     """
     # comptage du nombre de posts
@@ -268,7 +268,7 @@ def lieux():
         :return: template lieux.html
         :rtype: template
     """
-    # récupération de toutes les lieux
+    # récupération de toutes les expériences
     experiences = CV.query.all()
 
     # création d'un dictionnaire vide qui aura comme clé la compétence et comme valeur l'url de l'image
@@ -304,7 +304,6 @@ def lieu(lieu):
     """
     # récupération de la classe du lieu
     lieu_donne = CV.query.filter(CV.cv_ville == lieu).all()
-    print(lieu_donne)
 
     # récupération des utilisateurs correspondant au lieu choisi
     utilisateurs =[]
@@ -589,4 +588,3 @@ def recherche_utilisateurs():
         keyword=motclef,
         nom="Recherche"
     )
-

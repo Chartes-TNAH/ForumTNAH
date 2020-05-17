@@ -61,7 +61,7 @@ def normalisation(mot):
 
 def get_first_image(tag):
     """
-    Fonction permettant de renvoyer une seule url à partir d'un tag
+    Fonction permettant de renvoyer une seule url d'image à partir d'un tag
     :param tag: chaîne de caractères correspondant au mot clé d'un post
     :type tag: str
     :return: une url
@@ -71,13 +71,14 @@ def get_first_image(tag):
     # normalisation du mot entré
     tag = normalisation(tag)
 
+    # requête
     r = requests.get("https://api.qwant.com/api/search/images",
         params={
             'count': 1,
             'q': tag,
             't': 'images',
             'safesearch': 1,
-            'locale': 'en_US',
+            'locale': 'fr_FR',
             'uiv': 4
         },
         headers={
@@ -85,5 +86,5 @@ def get_first_image(tag):
         }
     )
 
-    response = r.json().get('data').get('result').get('items')
-    return response[0]["media"]
+    reponse = r.json().get('data').get('result').get('items')
+    return reponse[0]["media"]

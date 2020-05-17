@@ -4,6 +4,8 @@ from wtforms.validators import DataRequired, Email, EqualTo, InputRequired
 from app.modeles.donnees import User
 from flask_pagedown.fields import PageDownField
 
+# ce modèle comprend l'ensemble des formulaires Flask utilisés dans l'application
+
 # création de la classe du formulaire pour la connexion
 class LoginForm(FlaskForm):
     user_name = StringField('Nom d\'utilisateur', validators=[DataRequired()])
@@ -32,7 +34,8 @@ class RegistrationForm(FlaskForm):
         :return: None
         :rtype: None
         """
-        # récupération du premier utilisateur dont le nom est le même que celui donné en paramètre
+        # récupération du premier utilisateur dont le nom est le même que celui donné en paramètre (un seul résultat positif
+        # suffit à afficher l'erreur)
         user = User.query.filter_by(user_name=username.data).first()
         # s'il y a un retour d'un utilisateur, alors une erreur s'affiche
         if user is not None:

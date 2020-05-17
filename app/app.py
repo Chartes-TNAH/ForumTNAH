@@ -13,6 +13,7 @@ chemin_actuel =os.path.dirname(os.path.abspath(__file__))
 templates = os.path.join(chemin_actuel, "templates")
 statics = os.path.join(chemin_actuel, "static")
 
+# création de l'application Flask
 app = Flask(
     "ForumTNAH",
     template_folder=templates,
@@ -39,12 +40,15 @@ pagedown = PageDown(app)
 
 from .routes import generales, erreurs, posts, profil_utilisateur, messagerie, api
 
+# fonction permettant de créer et charger la base de données à chaque lancement de l'application
 def init_db():
     print("Initialisation de la base de données en cours")
+    # on supprime d'abord les données existantes, si la base existe déjà
     db.drop_all()
     print("Création des tables de la base de données")
+    # création ensuite des tables
     db.create_all()
-    # insertion des données d'exemple
+    # insertion des données d'exemple à partir de chacun des fichiers du dossier "sql_init"
     for fichier in tqdm(os.listdir(SQL_INIT)):
         with open(SQL_INIT + fichier, 'r') as f:
             print("Insertion de données d'exemple dans la table  " + fichier.replace('.sql', ''))

@@ -1,3 +1,4 @@
+Commentaire.md
 env/
 __pycache__/
 .idea/
@@ -5,3 +6,4 @@ migrations/
 app.sqlite
 app.db
 app.sqlite-journal
+*.sqlite

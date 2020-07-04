@@ -1,4 +1,9 @@
 import requests
+import requests_cache
+
+requests_cache.install_cache()
+requests_cache.install_cache('qwant_cache')
+
 
 def normalisation(mot):
     """
@@ -87,4 +92,6 @@ def get_first_image(tag):
     )
 
     reponse = r.json().get('data').get('result').get('items')
-    return reponse[0]["media"]
+    if len(reponse):
+        return reponse[0]["media"]
+    return None

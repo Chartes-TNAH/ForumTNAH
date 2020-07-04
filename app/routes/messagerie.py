@@ -6,9 +6,11 @@ from ..modeles.utilisateurs import AddConversationForm, PrivateMessageForm
 from ..modeles.donnees import User, Message
 from ..constantes import  POSTS_PAR_PAGE
 
-# routes présentes dans l'ordre
-# /messagerie
-# /messagerie/<user_name>
+"""
+routes présentes dans l'ordre
+/messagerie
+/messagerie/<user_name>
+"""
 
 @app.route('/messagerie', methods=['GET', 'POST'])
 @login_required
@@ -36,7 +38,7 @@ def messagerie():
         group_by(Message.message_expediteur_id).paginate(page=int(page), per_page=int(POSTS_PAR_PAGE))
 
     # en raisons de difficultés à effectuer la double jointure sur User à partir de Message (erreur AmbiguousForeignKeys),
-    # # je récupère ici tous les utilisateurs de manière à faire cette jointure tout de même
+    # je récupère ici tous les utilisateurs de manière à faire cette jointure tout de même
     users = User.query.all()
 
     return render_template('pages/messagerie/messagerie.html',

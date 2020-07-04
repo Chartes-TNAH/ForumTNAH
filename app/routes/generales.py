@@ -9,23 +9,25 @@ from ..modeles.utilitaires import get_first_image
 from ..constantes import POSTS_PAR_PAGE_DISCUSSION, POSTS_HASARD, RESULTATS_PAR_PAGE
 import random
 
-# dans l'ordre:
-# /
-# /home
-# /discussions
-# /thematiques
-# /thematiques/<thematique>
-# /competences
-# /competences/<competence>
-# /lieux
-# /lieux/<lieu>
-# /inscription
-# /connexion
-# /deconnexion
-# /explorer
-# /suivre
-# /ne_plus_suivre
-# /recherche
+"""
+dans l'ordre:
+/
+/home
+/discussions
+/thematiques
+/thematiques/<thematique>
+/competences
+/competences/<competence>
+/lieux
+/lieux/<lieu>
+/inscription
+/connexion
+/deconnexion
+/explorer
+/suivre
+/ne_plus_suivre
+/recherche
+"""
 
 
 # mise à jour de la date de visite dans la base de données dès que l'utilisateur fait une action
@@ -97,7 +99,7 @@ def discussions():
     # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
     liste_distincte = []
     for post in tous_posts:
-        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        # si le mot clé du post n'est pas présent dans la liste, alors il est ajouté; s'il y est, alors il n'y est pas ajouté
         if post.post_indexation not in liste_distincte:
             liste_distincte.append(post.post_indexation)
 
@@ -138,7 +140,7 @@ def thematiques():
     dictionnaire_distinct = {}
 
     for post in posts:
-        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        # si le mot clé du post n'est pas présent dans la liste, alors il est ajouté; s'il y est, alors il n'y est pas ajouté
         if post.post_indexation not in dictionnaire_distinct:
             try:
                 # récupération de l'image
@@ -162,7 +164,7 @@ def thematiques():
 def thematique(thematique):
     """
     Route permettant l'affichage des posts en fonction du mot-clé demandé
-    :param thematique: châine de caractère correspondant au mot-clé
+    :param thematique: chaîne de caractères correspondant au mot-clé
     :type thematique: str
     :return: template thematique.html
     :rtype: template
@@ -176,7 +178,7 @@ def thematique(thematique):
     # création d'une liste vide qui prendra tous les mots clés des posts, sans doublons
     liste_distincte = []
     for post in post_liste:
-        # si le mot clé du post n'est pas présent dans la liste, alors il est jouté; s'il y est, alors il n'y est pas ajouté
+        # si le mot clé du post n'est pas présent dans la liste, alors il est ajouté; s'il y est, alors il n'y est pas ajouté
         if post.post_indexation not in liste_distincte:
             liste_distincte.append(post.post_indexation)
 
@@ -191,7 +193,7 @@ def thematique(thematique):
 @login_required
 def competences():
     """
-        Route permettant l'affichage des competences
+        Route permettant l'affichage des compétences
         :return: template competences.html
         :rtype: template
     """
@@ -224,7 +226,7 @@ def competences():
 def competence(competence):
     """
     Route permettant l'affichage des utilisateurs en fonction de la compétence demandée
-    :param competence: châine de caractère correspondant au mot-clé
+    :param competence: chaîne de caractères correspondant au mot-clé
     :type competence: str
     :return: template competence.html
     :rtype: template
@@ -373,7 +375,8 @@ def inscription():
 
 @app.route("/connexion", methods=["POST", "GET"])
 def connexion():
-    """ Route gérant la connexion de l'utilisateur
+    """
+    Route gérant la connexion de l'utilisateur
     :return: template connexion.html
     :rtype: template
     """
@@ -521,7 +524,10 @@ def ne_plus_suivre(user_name):
 @app.route("/recherche/posts")
 @login_required
 def recherche_posts():
-    """ Route permettant la recherche plein-texte dans le corps des messages publics
+    """
+    Route permettant la recherche plein-texte dans le corps des messages publics
+    :return: template recherche_posts.html
+    :rtype: template
     """
     # On préfèrera l'utilisation de .get() ici
     #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])
@@ -557,7 +563,10 @@ def recherche_posts():
 @app.route("/recherche/utilisateurs")
 @login_required
 def recherche_utilisateurs():
-    """ Route permettant la recherche d'utilisateurs
+    """
+    Route permettant la recherche d'utilisateurs
+    :return: template recherche_utilisateurs.html
+    :rtype: template
     """
     # On préfèrera l'utilisation de .get() ici
     #   qui nous permet d'éviter un if long (if "clef" in dictionnaire and dictonnaire["clef"])

@@ -6,11 +6,13 @@ from ..app import app
 from ..constantes import RESULTATS_PAR_PAGE, API_ROUTE
 from ..modeles.donnees import Post, User
 
-# routes dans l'ordre
-# /api/posts/<int:post_id>
-# /api/posts
-# /api/utilisateurs
-# /api/utilisateurs/<int:user_id>
+"""
+routes dans l'ordre:
+/api/posts/<int:post_id>
+/api/posts
+/api/utilisateurs
+/api/utilisateurs/<int:user_id>
+"""
 
 # gestion des erreurs 404 pour l'API
 def Json_404():
@@ -29,7 +31,8 @@ def api():
 @app.route(API_ROUTE+"/posts/<int:post_id>")
 @login_required
 def api_posts_single(post_id):
-    """ Route permettant la recherche d'un post en particulier selon son id.
+    """
+    Route permettant la recherche d'un post en particulier selon son id.
     :param post_id: id du post demandé
     :type post_id: int
     """
@@ -43,7 +46,8 @@ def api_posts_single(post_id):
 @app.route(API_ROUTE+"/posts")
 @login_required
 def api_posts_browse():
-    """ Route permettant la recherche plein-texte et la navigation classique.
+    """
+    Route permettant la recherche plein-texte et la navigation classique.
     """
     # q est le paramètre d'URL prenant la recherche utilisateur
     motclef = request.args.get("q", None)
@@ -114,7 +118,8 @@ def api_posts_browse():
 @app.route(API_ROUTE+"/utilisateurs")
 @login_required
 def api_utilisateurs_browse():
-    """ Route permettant le retour des données des utilisateurs
+    """
+    Route permettant le retour des données des utilisateurs
     """
     # les commentaires sont similaires à ceux de la route api_posts_browse
     motclef = request.args.get("q", None)
@@ -178,7 +183,8 @@ def api_utilisateurs_browse():
 @app.route(API_ROUTE+"/utilisateurs/<int:user_id>")
 @login_required
 def api_utilisateurs_single(user_id):
-    """ Route permettant la recherche d'un utilisateur en particulier selon son id
+    """
+    Route permettant la recherche d'un utilisateur en particulier selon son id
     :param post_id: id de l'utilisateur demandé
     :type post_id: int
     """
